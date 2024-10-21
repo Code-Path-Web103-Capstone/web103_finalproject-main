@@ -4,7 +4,7 @@ Reference the Writing User Stories final project guide in the course portal for 
 
 ## Outline User Roles
 
-[👉🏾👉🏾👉🏾 Include at least at least 1, but no more than 3, user roles.]
+Budgeter - a user who manages and tracks their finances by setting income and expense goals and analyzing spending habits.
 
 ## Draft User Stories
 
