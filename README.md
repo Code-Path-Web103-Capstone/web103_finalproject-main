@@ -65,16 +65,16 @@ Backend:
 
 ### Additional Features
 
-#### The user can create an account through Auth options
+#### The user can create an account through various auth options
 
 - [ ] The user can create an account through email:password or sign-in through a GitHub account.
 
 [gif goes here]
 
 
-#### Bank/Credit Statement PDF Input box (parses data) 
+#### The user can input a PDF Bank/Credit Statement 
 
-- [ ] The user should be able to upload their bank statement in PDF format and see their spending automatically. 
+- [ ] The user should be able to upload their bank statement in PDF format and the site will parse and input their spending automatically. 
 
 [gif goes here]
 
@@ -86,16 +86,33 @@ Backend:
 [gif goes here]
 
 
-#### The user can see their dashboard
+#### The user has a budget dashboard
 
 - [ ] This dashboard allows the user to see their current budget, expenses, and spending habits divided by time periods (default set to monthly).
 
 [gif goes here]
 
 
-#### User can filter spending by category
+#### The user can add recurring expenses
+
+- [ ] Within the budget plan users can set recurring expenses such as rent, subscriptions, traveling fees, or savings account investments.
+
+[gif goes here]
+
+
+#### The user can filter spending by category
 
 - [ ] The user should be able to see spending categories on a daily, weekly, monthly, or yearly timeframe.
+
+[gif goes here]
+
+
+#### The user can enable spending limit notifications 
+
+- [ ] User can opt-in to receive SMS or email notifications when spending limits have been exceeded
+
+[gif goes here]
+
 
 ## Installation Instructions
 
