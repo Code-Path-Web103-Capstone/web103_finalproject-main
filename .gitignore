@@ -1,8 +1,3 @@
-# Node.js
-node_modules/
-npm-debug.log
-yarn-error.log
-
 # Logs
 logs/
 *.log
@@ -10,13 +5,20 @@ pids/
 *.pid
 *.seed
 *.pid.lock
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # Dependency directories
 jspm_packages/
 bower_components/
+node_modules
 
 # Build directories
 dist/
+dist-ssr/
 build/
 
 # IDEs and editors
@@ -27,6 +29,7 @@ build/
 *.njsproj
 *.sln
 *.sw?
+!.vscode/extensions.json
 
 # OS files
 .DS_Store
