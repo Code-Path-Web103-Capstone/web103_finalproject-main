@@ -113,6 +113,12 @@ Backend:
 
 [gif goes here]
 
+#### The user can see a previous history of it's budgets
+
+- [ ] The user can see a previos history of his created budgets.
+
+[gif goes here]
+
 
 ## Installation Instructions
 
