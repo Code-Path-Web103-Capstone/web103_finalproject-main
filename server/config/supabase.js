@@ -1,8 +1,15 @@
-import '../config/dotenv.js';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
+import "./dotenv.js";
 
-const createServerClient = (context) => {
-  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
-};
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
-export default createServerClient;
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+    detectSessionInUrl: false,
+  },
+});
+
+export default supabase;

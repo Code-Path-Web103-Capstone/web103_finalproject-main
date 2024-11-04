@@ -1,5 +1,5 @@
 {
-  "name": "boltbucket",
+  "name": "server",
   "type": "module",
   "scripts": {
     "dev": "nodemon --require dotenv/config server.js",
@@ -8,26 +8,12 @@
     "reset": "node --require dotenv/config server/config/reset.js"
   },
   "dependencies": {
-    "@picocss/pico": "^1.5.7",
-    "@supabase/auth-ui-react": "^0.4.7",
-    "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.46.1",
     "concurrently": "^7.6.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "nodemon": "^3.1.7",
-    "pg": "^8.10.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-modal": "^3.16.1",
-    "react-router-dom": "^6.9.0",
-    "serve-favicon": "^2.5.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.11",
-    "@vitejs/plugin-react": "^3.1.0",
-    "vite": "^4.2.0"
+    "pg": "^8.10.0"
   }
 }
