@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRouter from "./routes/auth.js";
+import budgetRouter from "./routes/budget.js";
+import expenseRouter from "./routes/expenses.js";
 
 dotenv.config();
 
@@ -13,6 +15,8 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api/budget", budgetRouter);
+app.use("/api/expense", expenseRouter);
 app.use("/", (req, res) => {
     res.send("gobudget API");
 });
