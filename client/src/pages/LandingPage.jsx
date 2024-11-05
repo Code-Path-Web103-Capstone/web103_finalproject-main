@@ -1,6 +1,7 @@
 import HeaderSection from "../components/HeaderSection";
 import ContentSection from "../components/ContentSection";
 import ImageSection from "../components/ImageSection";
+import Footer from "../components/Footer";
 
 const LandingPage = () => {
   return (
@@ -11,6 +12,7 @@ const LandingPage = () => {
           <ContentSection />
           <ImageSection />
         </div>
+      <Footer />
       </div>
     </div>
   );

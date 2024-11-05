@@ -13,7 +13,7 @@ const ContentSection = () => {
         </p>
         <Link
           to="/signup"
-          className="flex w-4/6 items-center justify-center rounded-lg bg-[#A5A5A5] px-4 py-5 text-3xl font-semibold text-[#D9D9D9] hover:cursor-pointer hover:bg-[#777777]"
+          className="flex w-4/6 items-center justify-center rounded-lg bg-[#778DA9] px-4 py-5 text-3xl font-semibold text-[#D9D9D9] hover:cursor-pointer hover:bg-[#3A405A]"
         >
           Action Button
         </Link>
