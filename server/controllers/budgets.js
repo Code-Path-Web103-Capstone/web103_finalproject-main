@@ -77,18 +77,85 @@ const deleteBudget = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const { data, error } = await supabase
+    // Delete related expenses in expenses_actual
+    let { error } = await supabase
+      .from('expenses_actual')
+      .delete()
+      .eq('budget_id', id);
+
+    if (error) {
+      console.error("Error deleting related expenses_actual:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    // Delete related expenses in expenses_predicted
+    ({ error } = await supabase
+      .from('expenses_predicted')
+      .delete()
+      .eq('budget_id', id));
+
+    if (error) {
+      console.error("Error deleting related expenses_predicted:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    // Delete related expenses in expenses_recurrent
+    ({ error } = await supabase
+      .from('expenses_recurrent')
+      .delete()
+      .eq('budget_id', id));
+
+    if (error) {
+      console.error("Error deleting related expenses_recurrent:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    // Delete related incomes in incomes_actual
+    ({ error } = await supabase
+      .from('incomes_actual')
+      .delete()
+      .eq('budget_id', id));
+
+    if (error) {
+      console.error("Error deleting related incomes_actual:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    // Delete related incomes in incomes_predicted
+    ({ error } = await supabase
+      .from('incomes_predicted')
+      .delete()
+      .eq('budget_id', id));
+
+    if (error) {
+      console.error("Error deleting related incomes_predicted:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    // Delete related incomes in incomes_recurrent
+    ({ error } = await supabase
+      .from('incomes_recurrent')
+      .delete()
+      .eq('budget_id', id));
+
+    if (error) {
+      console.error("Error deleting related incomes_recurrent:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    // Delete the budget
+    const { data, error: deleteError } = await supabase
       .from('budgets')
       .delete()
       .eq('id', id);
 
-    if (error) {
-      console.error("Error deleting budget:", error);
-      return res.status(400).json({ error: error.message });
+    if (deleteError) {
+      console.error("Error deleting budget:", deleteError);
+      return res.status(400).json({ error: deleteError.message });
     }
 
     res.status(200).json({
-      message: "Budget deleted successfully",
+      message: "Budget and related expenses and incomes deleted successfully",
       data,
     });
   } catch (error) {

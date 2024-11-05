@@ -10,7 +10,7 @@ router.post("/add", BudgetController.addBudget);
 router.get("/:id", BudgetController.getBudgets);
 
 // PUT request to update a budget
-router.put("/update/:id", BudgetController.updateBudget);
+router.patch("/update/:id", BudgetController.updateBudget);
 
 // DELETE request to delete a budget
 router.delete("/delete/:id", BudgetController.deleteBudget);
