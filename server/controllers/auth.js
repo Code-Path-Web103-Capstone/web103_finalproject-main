@@ -1,23 +1,39 @@
 import supabase from "../config/supabase.js";
+import bcrypt from 'bcrypt';
 
 // add username functionality
 const createUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
   try {
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    // Sign up the user with Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
 
-    if (error) {
-      console.error("Supabase signup error:", error); // Log detailed error information
-      return res.status(400).json({ error: error.message });
+    if (authError) {
+      console.error("Supabase signup error:", authError);
+      return res.status(400).json({ error: authError.message });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert the user into the users table
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .insert([{ id: authData.user.id, email, username, password: hashedPassword  }]);
+
+    if (userError) {
+      console.error("Error inserting user into users table:", userError);
+      return res.status(400).json({ error: userError.message });
     }
 
     res.status(201).json({
       message: "User created successfully",
-      data,
+      authData,
+      userData,
     });
   } catch (error) {
-    console.error("Server error:", error); // Log server-related issues
+    console.error("Server error:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
