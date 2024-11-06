@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { signUpUser } from "../services/api.js";
+import { loginUser } from "../services/api.js"; // Adjust the path as needed
 
-const SignUpForm = () => {
+const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -14,33 +14,36 @@ const SignUpForm = () => {
     setSuccess(null);
 
     try {
-      const data = await signUpUser(email, password);
-      setSuccess(data.message || "User created successfully");
+      const data = await loginUser(email, password);
+      setSuccess(data.message || "Login successful");
     } catch (err) {
-      setError(err.message || "Sign up failed");
+      setError(err.message || "Login failed");
     }
   };
 
   return (
     <div className="w-full max-w-lg space-y-6 rounded-xl bg-[#D9D9D9] px-8 pb-12 pt-8 shadow-lg">
       {/* Title */}
-      <h2 className="text-center text-4xl font-bold text-gray-800">Sign Up</h2>
-      {/* Link to Login */}
+      <h2 className="text-center text-4xl font-bold text-gray-800">Login</h2>
+      {/* Link to Sign Up */}
       <div className="flex items-center justify-center">
         <p>
-          Have an account?
-          <Link to="/auth/login" className="ml-1 text-blue-600 hover:underline">
-            Login
+          Don’t have an account?
+          <Link
+            to="/auth/signup"
+            className="ml-1 text-blue-600 hover:underline"
+          >
+            Sign Up
           </Link>
         </p>
       </div>
-      {/* Displays if Signup fails */}
+      {/* Displays if Login fails */}
       {error && <p className="text-center text-sm text-red-600">{error}</p>}
-      {/* Displays if Signup is successful */}
+      {/* Displays if Login is successful */}
       {success && (
         <p className="text-center text-sm text-green-600">{success}</p>
       )}
-      {/* Sign Up Form */}
+      {/* Login Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email address input */}
         <div>
@@ -69,7 +72,7 @@ const SignUpForm = () => {
           type="submit"
           className="w-full rounded-md bg-[#3A405A] px-4 py-2 font-medium text-white hover:bg-[#292e40] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
         >
-          Sign Up
+          Log In
         </button>
         {/* Add Divider */}
         <div className="flex h-10 items-center justify-center space-x-2">
@@ -79,21 +82,21 @@ const SignUpForm = () => {
         </div>
         {/* Continue with Google */}
         <button
-          type="submit"
+          type="button"
           className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
         >
-          Sign Up with Google
+          Log In with Google
         </button>
         {/* Continue with Github */}
         <button
-          type="submit"
+          type="button"
           className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
         >
-          Sign Up with Github
+          Log In with Github
         </button>
       </form>
     </div>
   );
 };
 
-export default SignUpForm;
+export default LoginForm;

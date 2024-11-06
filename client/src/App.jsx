@@ -1,5 +1,7 @@
 import { useRoutes } from "react-router-dom";
+import AuthContainer from "./pages/AuthContainer";
 import SignUpForm from "./components/SignUpForm";
+import LoginForm from "./components/LoginForm";
 import LandingPage from "./pages/LandingPage";
 
 function App() {
@@ -9,8 +11,18 @@ function App() {
       element: <LandingPage />,
     },
     {
-      path: "/signup",
-      element: <SignUpForm />,
+      path: "/auth",
+      element: <AuthContainer />,
+      children: [
+        {
+          path: "signup",
+          element: <SignUpForm />,
+        },
+        {
+          path: "login",
+          element: <LoginForm />,
+        },
+      ],
     },
   ];
 
