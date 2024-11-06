@@ -81,10 +81,8 @@ CREATE TABLE IF NOT EXISTS incomes_recurrent (
   description VARCHAR NOT NULL,
   date_posted TIMESTAMP,
   amount FLOAT,
-  category VARCHAR,
-  budget_id INTEGER NOT NULL,
-  FOREIGN KEY (budget_id) REFERENCES budgets(id)
-);
+  category VARCHAR
+  );
 
 -- Create expenses_recurrent table
 CREATE TABLE IF NOT EXISTS expenses_recurrent (
@@ -92,20 +90,18 @@ CREATE TABLE IF NOT EXISTS expenses_recurrent (
   description VARCHAR NOT NULL,
   date_posted TIMESTAMP,
   amount FLOAT,
-  category VARCHAR,
-  budget_id INTEGER NOT NULL,
-  FOREIGN KEY (budget_id) REFERENCES budgets(id)
+  category VARCHAR
 );
 
 -- Add additional references
-ALTER TABLE expenses_recurrent
-ADD CONSTRAINT fk_expenses_actual FOREIGN KEY (id) REFERENCES expenses_actual(id);
-
-ALTER TABLE expenses_recurrent
-ADD CONSTRAINT fk_expenses_predicted FOREIGN KEY (id) REFERENCES expenses_predicted(id);
-
-ALTER TABLE incomes_recurrent
-ADD CONSTRAINT fk_incomes_actual FOREIGN KEY (id) REFERENCES incomes_actual(id);
-
-ALTER TABLE incomes_recurrent
-ADD CONSTRAINT fk_incomes_predicted FOREIGN KEY (id) REFERENCES incomes_predicted(id);
+-- ALTER TABLE expenses_recurrent
+-- ADD CONSTRAINT fk_expenses_actual FOREIGN KEY (id) REFERENCES expenses_actual(id);
+--
+-- ALTER TABLE expenses_recurrent
+-- ADD CONSTRAINT fk_expenses_predicted FOREIGN KEY (id) REFERENCES expenses_predicted(id);
+--
+-- ALTER TABLE incomes_recurrent
+-- ADD CONSTRAINT fk_incomes_actual FOREIGN KEY (id) REFERENCES incomes_actual(id);
+--
+-- ALTER TABLE incomes_recurrent
+-- ADD CONSTRAINT fk_incomes_predicted FOREIGN KEY (id) REFERENCES incomes_predicted(id);

@@ -24,9 +24,7 @@ const addIncomeActual = async (req, res) => {
 };
 
 const getIncomesActual = async (req, res) => {
-  const { id: budget_id } = req.params; // Access budget_id from req.params
-
-  console.log("Received budget_id:", budget_id); // Log the received budget_id
+  const { budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
@@ -39,8 +37,6 @@ const getIncomesActual = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    console.log("Query result:", data); // Log the query result
-
     res.status(200).json(data);
   } catch (error) {
     console.error("Server error:", error);
@@ -49,14 +45,14 @@ const getIncomesActual = async (req, res) => {
 };
 
 const updateIncomeActual = async (req, res) => {
-  const { id } = req.params;
-  const { description, date_posted, amount, category, budget_id } = req.body;
+  const { id, description, date_posted, amount, category, budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('incomes_actual')
       .update({ description, date_posted, amount, category, budget_id })
-      .eq('id', id);
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error updating income:", error);
@@ -74,13 +70,14 @@ const updateIncomeActual = async (req, res) => {
 };
 
 const deleteIncomeActual = async (req, res) => {
-  const { id } = req.params;
+  const { id, budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('incomes_actual')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error deleting income:", error);
@@ -121,7 +118,7 @@ const addIncomePredicted = async (req, res) => {
 };
 
 const getIncomesPredicted = async (req, res) => {
-  const { id: budget_id } = req.params;
+  const { budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
@@ -142,14 +139,14 @@ const getIncomesPredicted = async (req, res) => {
 };
 
 const updateIncomePredicted = async (req, res) => {
-  const { id } = req.params;
-  const { description, date_posted, amount, category, budget_id } = req.body;
+  const { id, description, date_posted, amount, category, budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('incomes_predicted')
       .update({ description, date_posted, amount, category, budget_id })
-      .eq('id', id);
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error updating income:", error);
@@ -167,13 +164,14 @@ const updateIncomePredicted = async (req, res) => {
 };
 
 const deleteIncomePredicted = async (req, res) => {
-  const { id } = req.params;
+  const { id, budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('incomes_predicted')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error deleting income:", error);
@@ -191,12 +189,12 @@ const deleteIncomePredicted = async (req, res) => {
 };
 
 const addIncomeRecurrent = async (req, res) => {
-  const { description, date_posted, amount, category, budget_id } = req.body;
+  const { description, date_posted, amount, category } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('incomes_recurrent')
-      .insert([{ description, date_posted, amount, category, budget_id }]);
+      .insert([{ description, date_posted, amount, category }]);
 
     if (error) {
       console.error("Error inserting income:", error);
@@ -214,13 +212,11 @@ const addIncomeRecurrent = async (req, res) => {
 };
 
 const getIncomesRecurrent = async (req, res) => {
-  const { id: budget_id } = req.params;
 
   try {
     const { data, error } = await supabase
       .from('incomes_recurrent')
       .select('*')
-      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error fetching incomes:", error);
@@ -235,14 +231,13 @@ const getIncomesRecurrent = async (req, res) => {
 };
 
 const updateIncomeRecurrent = async (req, res) => {
-  const { id } = req.params;
-  const { description, date_posted, amount, category, budget_id } = req.body;
+  const { id, description, date_posted, amount, category } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('incomes_recurrent')
       .update({ description, date_posted, amount, category, budget_id })
-      .eq('id', id);
+      .eq('id', id)
 
     if (error) {
       console.error("Error updating income:", error);
@@ -260,13 +255,13 @@ const updateIncomeRecurrent = async (req, res) => {
 };
 
 const deleteIncomeRecurrent = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('incomes_recurrent')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
 
     if (error) {
       console.error("Error deleting income:", error);

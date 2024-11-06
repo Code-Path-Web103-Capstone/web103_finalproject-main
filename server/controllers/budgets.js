@@ -24,7 +24,7 @@ const addBudget = async (req, res) => {
 };
 
 const getBudgets = async (req, res) => {
-  const { id: user_id } = req.params; // Access user_id from req.params
+  const { user_id } = req.body; // Access user_id from req.body
 
   console.log("Received user_id:", user_id); // Log the received user_id
 
@@ -49,8 +49,7 @@ const getBudgets = async (req, res) => {
 };
 
 const updateBudget = async (req, res) => {
-  const { id } = req.params;
-  const { user_id, plan } = req.body;
+  const { id, user_id, plan } = req.body;
 
   try {
     const { data, error } = await supabase
@@ -74,7 +73,7 @@ const updateBudget = async (req, res) => {
 };
 
 const deleteBudget = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
 
   try {
     // Delete related expenses in expenses_actual

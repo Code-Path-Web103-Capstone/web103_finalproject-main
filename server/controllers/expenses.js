@@ -24,9 +24,7 @@ const addExpenseActual = async (req, res) => {
 };
 
 const getExpensesActual = async (req, res) => {
-  const { id: budget_id } = req.params; // Access budget_id from req.params
-
-  console.log("Received budget_id:", budget_id); // Log the received budget_id
+  const { budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
@@ -39,8 +37,6 @@ const getExpensesActual = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    console.log("Query result:", data); // Log the query result
-
     res.status(200).json(data);
   } catch (error) {
     console.error("Server error:", error);
@@ -49,14 +45,14 @@ const getExpensesActual = async (req, res) => {
 };
 
 const updateExpenseActual = async (req, res) => {
-  const { id } = req.params;
-  const { description, date_posted, amount, category, budget_id } = req.body;
+  const { id, description, date_posted, amount, category, budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('expenses_actual')
       .update({ description, date_posted, amount, category, budget_id })
-      .eq('id', id);
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error updating expense:", error);
@@ -74,13 +70,14 @@ const updateExpenseActual = async (req, res) => {
 };
 
 const deleteExpenseActual = async (req, res) => {
-  const { id } = req.params;
+  const { id, budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('expenses_actual')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error deleting expense:", error);
@@ -121,9 +118,7 @@ const addExpensePredicted = async (req, res) => {
 };
 
 const getExpensesPredicted = async (req, res) => {
-  const { id: budget_id } = req.params; // Access budget_id from req.params
-
-  console.log("Received budget_id:", budget_id); // Log the received budget_id
+  const { budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
@@ -136,8 +131,6 @@ const getExpensesPredicted = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    console.log("Query result:", data); // Log the query result
-
     res.status(200).json(data);
   } catch (error) {
     console.error("Server error:", error);
@@ -146,14 +139,14 @@ const getExpensesPredicted = async (req, res) => {
 };
 
 const updateExpensePredicted = async (req, res) => {
-  const { id } = req.params;
-  const { description, date_posted, amount, category, budget_id } = req.body;
+  const { id, description, date_posted, amount, category, budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('expenses_predicted')
       .update({ description, date_posted, amount, category, budget_id })
-      .eq('id', id);
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error updating expense:", error);
@@ -171,13 +164,14 @@ const updateExpensePredicted = async (req, res) => {
 };
 
 const deleteExpensePredicted = async (req, res) => {
-  const { id } = req.params;
+  const { id, budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('expenses_predicted')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error deleting expense:", error);
@@ -218,63 +212,60 @@ const addExpenseRecurrent = async (req, res) => {
 };
 
 const getExpensesRecurrent = async (req, res) => {
-    const { id: budget_id } = req.params; // Access budget_id from req.params
+  const { budget_id } = req.body;
 
-    console.log("Received budget_id:", budget_id); // Log the received budget_id
+  try {
+    const { data, error } = await supabase
+      .from('expenses_recurrent')
+      .select('*')
+      .eq('budget_id', budget_id);
 
-    try {
-        const { data, error } = await supabase
-        .from('expenses_recurrent')
-        .select('*')
-        .eq('budget_id', budget_id);
-
-        if (error) {
-        console.error("Error fetching expenses:", error);
-        return res.status(400).json({ error: error.message });
-        }
-
-        console.log("Query result:", data); // Log the query result
-
-        res.status(200).json(data);
-    } catch (error) {
-        console.error("Server error:", error);
-        res.status(500).json({ error: "Server error" });
+    if (error) {
+      console.error("Error fetching expenses:", error);
+      return res.status(400).json({ error: error.message });
     }
-}
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 const updateExpenseRecurrent = async (req, res) => {
-    const { id } = req.params;
-    const { description, date_posted, amount, category, budget_id } = req.body;
+  const { id, description, date_posted, amount, category, budget_id } = req.body;
 
-    try {
-        const { data, error } = await supabase
-        .from('expenses_recurrent')
-        .update({ description, date_posted, amount, category, budget_id })
-        .eq('id', id);
+  try {
+    const { data, error } = await supabase
+      .from('expenses_recurrent')
+      .update({ description, date_posted, amount, category, budget_id })
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
-        if (error) {
-        console.error("Error updating expense:", error);
-        return res.status(400).json({ error: error.message });
-        }
-
-        res.status(200).json({
-        message: "Expense updated successfully",
-        data,
-        });
-    } catch (error) {
-        console.error("Server error:", error);
-        res.status(500).json({ error: "Server error" });
+    if (error) {
+      console.error("Error updating expense:", error);
+      return res.status(400).json({ error: error.message });
     }
-}
+
+    res.status(200).json({
+      message: "Expense updated successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 const deleteExpenseRecurrent = async (req, res) => {
-  const { id } = req.params;
+  const { id, budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('expenses_recurrent')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error deleting expense:", error);
