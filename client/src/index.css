@@ -7,3 +7,88 @@
 * {
   box-sizing: border-box;
 }
+
+/* Anonymous Pro Font */
+
+@font-face {
+  font-family: "Anonymous Pro";
+  src: url("./assets/fonts/AnonymousPro-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Anonymous Pro";
+  src: url("./assets/fonts/AnonymousPro-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Anonymous Pro";
+  src: url("./assets/fonts/AnonymousPro-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Anonymous Pro";
+  src: url("./assets/fonts/AnonymousPro-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* Manrope Font */
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./assets/fonts/Manrope-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./assets/fonts/Manrope-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./assets/fonts/Manrope-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./assets/fonts/Manrope-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./assets/fonts/Manrope-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./assets/fonts/Manrope-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./assets/fonts/Manrope-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+body {
+  background-color: #201c1c;
+}

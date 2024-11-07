@@ -2,7 +2,12 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        anonymous: ['"Anonymous Pro"', "monospace"],
+        manrope: ['"Manrope"', "sans-serif"],
+      },
+    },
   },
   plugins: [],
 };

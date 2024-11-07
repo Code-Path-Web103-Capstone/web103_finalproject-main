@@ -2,14 +2,15 @@ import { useRoutes } from "react-router-dom";
 import AuthContainer from "./pages/AuthContainer";
 import SignUpForm from "./components/SignUpForm";
 import LoginForm from "./components/LoginForm";
-import LandingPage from "./pages/LandingPage";
+import Homepage from "./pages/Homepage.jsx";
+import CreateBudget from "./pages/CreateBudget";
 import { UserProvider } from "./services/context.jsx";
 
 function App() {
   const routes = [
     {
       path: "/",
-      element: <LandingPage />,
+      element: <Homepage />,
     },
     {
       path: "/auth",
@@ -24,6 +25,10 @@ function App() {
           element: <LoginForm />,
         },
       ],
+    },
+    {
+      path: "/createBudget",
+      element: <CreateBudget />,
     },
   ];
 
