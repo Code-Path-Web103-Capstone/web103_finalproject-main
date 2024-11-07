@@ -2,6 +2,8 @@
 
 This document should be completed and submitted during **Unit 7** of this course. You **must** check off all completed tasks in this document in order to receive credit for your work.
 
+![milestone3.gif](..%2Fgifs%2Fmilestone3.gif)
+
 ## Checklist
 
 This unit, be sure to complete all tasks listed below. To complete a task, place an `x` between the brackets.
