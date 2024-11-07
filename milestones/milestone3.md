@@ -14,7 +14,7 @@ You will need to reference the GitHub Project Management guide in the course por
   - [X] Make sure to add the issues to your project board and to the appropriate milestones
 - [X] Update the status of issues in your project board as you complete them
 - [X] In `readme.md`, check off the features you have completed in this unit by adding a ✅ emoji in front of their title
-  - [] Under each feature you have completed, **include a GIF** showing feature functionality
+  - [X] Under each feature you have completed, **include a GIF** showing feature functionality
 - [X] In this document, complete the **Reflection** section below
 
 ## Reflection
