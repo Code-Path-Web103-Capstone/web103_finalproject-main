@@ -5,7 +5,7 @@ const router = express.Router();
 
 //ACTUAL EXPENESES
 // POST request to add a new expense
-router.post("/actual", ExpenseController.addExpenseActual);
+router.post("/actual/add", ExpenseController.addExpenseActual);
 
 // GET request to fetch all expenses for a specific budget_id
 router.get("/actual", ExpenseController.getExpensesActual);
