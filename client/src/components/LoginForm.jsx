@@ -20,7 +20,8 @@ const LoginForm = () => {
       const data = await loginUser(email, password);
       setSuccess(data.message || "Login successful");
       //   Store user data in the context
-      login(data);
+      const userData = data.authData.user;
+      login(userData);
       navigate("/");
     } catch (err) {
       setError(err.message || "Login failed");

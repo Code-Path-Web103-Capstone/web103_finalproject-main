@@ -1,5 +1,5 @@
 import supabase from "../config/supabase.js";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 // add username functionality
 const createUser = async (req, res) => {
@@ -7,7 +7,10 @@ const createUser = async (req, res) => {
 
   try {
     // Sign up the user with Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+    });
 
     if (authError) {
       console.error("Supabase signup error:", authError);
@@ -19,8 +22,10 @@ const createUser = async (req, res) => {
 
     // Insert the user into the users table
     const { data: userData, error: userError } = await supabase
-      .from('users')
-      .insert([{ id: authData.user.id, email, username, password: hashedPassword  }]);
+      .from("users")
+      .insert([
+        { id: authData.user.id, email, username, password: hashedPassword },
+      ]);
 
     if (userError) {
       console.error("Error inserting user into users table:", userError);
@@ -38,25 +43,43 @@ const createUser = async (req, res) => {
   }
 };
 
-// add login by username or email
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    // Determine the identifier (email or username) for finding the user
+    const identifier = username ? { username } : { email };
 
-    if (error) {
-      return res.status(400).json({ error: error.message });
+    // Fetch user by email or username
+    const { data: userResult, error: fetchError } = await supabase
+      .from("users")
+      .select("*")
+      .eq(username ? "username" : "email", username || email)
+      .single();
+
+    if (fetchError || !userResult) {
+      return res.status(400).json({ error: "User not found" });
     }
 
+    // Authenticate with Supabase using the user's email
+    const { data: authData, error: authError } =
+      await supabase.auth.signInWithPassword({
+        email: userResult.email,
+        password,
+      });
+
+    if (authError) {
+      return res.status(400).json({ error: authError.message });
+    }
+
+    // Respond with the unified structure
     res.status(200).json({
       message: "Login successful",
-      data, // Contains the user session details
+      authData,
+      userData: userResult, // Return the user data as part of the response
     });
   } catch (error) {
+    console.error("Server error:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
