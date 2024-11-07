@@ -98,17 +98,6 @@ const deleteBudget = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    // Delete related expenses in expenses_recurrent
-    ({ error } = await supabase
-      .from('expenses_recurrent')
-      .delete()
-      .eq('budget_id', id));
-
-    if (error) {
-      console.error("Error deleting related expenses_recurrent:", error);
-      return res.status(400).json({ error: error.message });
-    }
-
     // Delete related incomes in incomes_actual
     ({ error } = await supabase
       .from('incomes_actual')
@@ -128,17 +117,6 @@ const deleteBudget = async (req, res) => {
 
     if (error) {
       console.error("Error deleting related incomes_predicted:", error);
-      return res.status(400).json({ error: error.message });
-    }
-
-    // Delete related incomes in incomes_recurrent
-    ({ error } = await supabase
-      .from('incomes_recurrent')
-      .delete()
-      .eq('budget_id', id));
-
-    if (error) {
-      console.error("Error deleting related incomes_recurrent:", error);
       return res.status(400).json({ error: error.message });
     }
 
