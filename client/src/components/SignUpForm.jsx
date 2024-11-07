@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { signUpUser } from "../services/api.js";
+import { useUser } from "../services/context.jsx";
 
 const SignUpForm = () => {
+  const { login } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -14,8 +17,12 @@ const SignUpForm = () => {
     setSuccess(null);
 
     try {
-      const data = await signUpUser(email, password);
+      const data = await signUpUser(username, email, password);
+      console.log(data);
       setSuccess(data.message || "User created successfully");
+      // Store user data in the context
+      const userData = data.authData.user;
+      login(userData); // Populate context with user data
     } catch (err) {
       setError(err.message || "Sign up failed");
     }
@@ -42,6 +49,17 @@ const SignUpForm = () => {
       )}
       {/* Sign Up Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Username  input */}
+        <div>
+          <input
+            placeholder="Username:"
+            type="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
+          />
+        </div>
         {/* Email address input */}
         <div>
           <input

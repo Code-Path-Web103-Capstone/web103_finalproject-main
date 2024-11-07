@@ -1,13 +1,13 @@
 const API_URL = "http://localhost:3000";
 
-export const signUpUser = async (email, password) => {
+export const signUpUser = async (username, email, password) => {
   try {
     const response = await fetch(`${API_URL}/api/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, email, password }),
     });
     const data = await response.json();
 
@@ -32,6 +32,7 @@ export const loginUser = async (email, password) => {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
+    console.log(data);
 
     if (!response.ok) {
       throw new Error(data.error || "Failed to log in");

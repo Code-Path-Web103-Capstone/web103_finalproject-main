@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { loginUser } from "../services/api.js"; // Adjust the path as needed
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../services/api.js";
+import { useUser } from "../services/context.jsx";
 
 const LoginForm = () => {
+  const { login } = useUser();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -16,6 +19,9 @@ const LoginForm = () => {
     try {
       const data = await loginUser(email, password);
       setSuccess(data.message || "Login successful");
+      //   Store user data in the context
+      login(data);
+      navigate("/");
     } catch (err) {
       setError(err.message || "Login failed");
     }
