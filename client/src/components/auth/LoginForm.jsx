@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../services/api.js";
-import { useUser } from "../services/context.jsx";
+import { loginUser } from "../../services/api.js";
+import { useUser } from "../../services/context.jsx";
 
 const LoginForm = () => {
   const { login } = useUser();

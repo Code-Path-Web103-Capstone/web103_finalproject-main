@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { signUpUser } from "../services/api.js";
-import { useUser } from "../services/context.jsx";
+import { signUpUser } from "../../services/api.js";
+import { useUser } from "../../services/context.jsx";
 
 const SignUpForm = () => {
   const { login } = useUser();

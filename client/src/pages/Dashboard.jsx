@@ -1,9 +1,11 @@
-const StatementInput = () => {
+import React from "react";
+
+const Dashboard = () => {
   return (
     <main className="flex h-auto w-full flex-col items-center border-2 border-red-600 bg-[#D9D9D9]">
-      Statement Input
+      Dashboard
     </main>
   );
 };
 
-export default StatementInput;
+export default Dashboard;
