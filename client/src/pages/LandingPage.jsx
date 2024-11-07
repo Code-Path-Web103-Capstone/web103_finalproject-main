@@ -1,19 +1,19 @@
 import HeaderSection from "../components/HeaderSection";
 import ContentSection from "../components/ContentSection";
-import ImageSection from "../components/ImageSection";
 import Footer from "../components/Footer";
+import SideNav from "../components/SideNav";
 
 const LandingPage = () => {
   return (
-    <div className="flex w-full flex-grow bg-[#D9D9D9]">
-      <div className="flex w-full flex-col items-center">
-        <HeaderSection />
-        <div className="m-10 flex h-full w-5/6">
+    <div className="flex min-h-screen w-full flex-col bg-[#D9D9D9]">
+      <div className="flex justify-between">
+        <SideNav />
+        <div className="flex flex-grow flex-col items-center">
+          <HeaderSection />
           <ContentSection />
-          <ImageSection />
         </div>
-      <Footer />
       </div>
+      <Footer />
     </div>
   );
 };

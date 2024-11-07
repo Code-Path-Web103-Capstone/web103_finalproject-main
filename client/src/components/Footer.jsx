@@ -3,8 +3,8 @@ import FooterItem from "./FooterItem";
 
 const Footer = () => {
   return (
-    <footer className="flex h-96 w-full items-center justify-center bg-[#A5A5A5]">
-      <div className="grid grid-cols-4 grid-rows-2 place-items-center">
+    <footer className="flex h-80 w-full items-center justify-center bg-[#A5A5A5]">
+      <div className="grid grid-cols-4 grid-rows-2 place-items-center border-2">
         {/* Stay Connected */}
         <div className="flex h-16 w-80 items-center justify-center text-[#3A405A]">
           <p className="w-11/12 border text-2xl font-bold">
