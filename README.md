@@ -26,7 +26,7 @@ Backend:
 
 ### Baseline Features
 
-- [ ] The web app includes an Express backend app and a React frontend app.
+- [X] The web app includes an Express backend app and a React frontend app.
 - [ ] The web app includes dynamic routes for both frontend and backend apps.
 - [ ] The web app is deployed on Railway with all pages and features working.
 
@@ -36,8 +36,8 @@ Backend:
 - * [ ] One-to-one
 - * [ ] many-to-many with a join table
 - [ ] The web app implements a well-designed RESTful API that:
--  * [ ] Can respond to at least one of each type of request: GET, POST, PATCH, and DELETE.
-- * [ ] Implements proper naming conventions for routes.
+-  * [X] Can respond to at least one of each type of request: GET, POST, PATCH, and DELETE.
+- * [X] Implements proper naming conventions for routes.
 - [ ] The web app implements the ability to reset the database to its default state.
 - [ ] The web app implements the ability to reset the database to its default state.
 
