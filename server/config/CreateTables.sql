@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS budgets (
   id BIGSERIAL PRIMARY KEY,
   create_at TIMESTAMP,
   user_id TEXT NOT NULL,
+  budget_name TEXT NOT NULL,
   plan VARCHAR,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );

@@ -236,7 +236,7 @@ const updateIncomeRecurrent = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('incomes_recurrent')
-      .update({ description, date_posted, amount, category, budget_id })
+      .update({ description, date_posted, amount, category })
       .eq('id', id)
 
     if (error) {

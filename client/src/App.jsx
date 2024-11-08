@@ -11,6 +11,7 @@ import NavBar from "./components/nav/NavBar.jsx";
 import Overview from "./pages/Overview.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import StatementInput from "./pages/StatementInput.jsx";
+import ActualIncomesExpenses from "./pages/ActualIncomesExpenses.jsx";
 
 function App() {
   const routes = [
@@ -35,6 +36,10 @@ function App() {
     {
       path: "/account",
       element: <AccountSettings />,
+    },
+    {
+      path: "/actual-incomes-expenses",
+        element: <ActualIncomesExpenses />,
     },
     {
       path: "/overview",

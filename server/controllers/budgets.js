@@ -1,12 +1,12 @@
 import supabase from "../config/supabase.js";
 
 const addBudget = async (req, res) => {
-  const { user_id, plan } = req.body;
+  const { user_id, plan, budget_name } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('budgets')
-      .insert([{ user_id, plan, create_at: new Date() }]);
+      .insert([{ user_id, plan, budget_name, create_at: new Date() }]);
 
     if (error) {
       console.error("Error inserting budget:", error);
@@ -24,9 +24,9 @@ const addBudget = async (req, res) => {
 };
 
 const getBudgets = async (req, res) => {
-  const { user_id } = req.body; // Access user_id from req.body
+  const { user_id } = req.body;
 
-  console.log("Received user_id:", user_id); // Log the received user_id
+  console.log("Received user_id:", user_id);
 
   try {
     const { data, error } = await supabase
@@ -39,7 +39,7 @@ const getBudgets = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    console.log("Query result:", data); // Log the query result
+    console.log("Query result:", data);
 
     res.status(200).json(data);
   } catch (error) {
@@ -49,12 +49,12 @@ const getBudgets = async (req, res) => {
 };
 
 const updateBudget = async (req, res) => {
-  const { id, user_id, plan } = req.body;
+  const { id, user_id, plan, budget_name } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('budgets')
-      .update({ user_id, plan })
+      .update({ user_id, plan, budget_name })
       .eq('id', id);
 
     if (error) {
@@ -82,7 +82,7 @@ const deleteBudget = async (req, res) => {
       .delete()
       .eq('budget_id', id);
 
-    if (error) {
+    if (error && error.code !== 'PGRST116') {
       console.error("Error deleting related expenses_actual:", error);
       return res.status(400).json({ error: error.message });
     }
@@ -93,10 +93,11 @@ const deleteBudget = async (req, res) => {
       .delete()
       .eq('budget_id', id));
 
-    if (error) {
+    if (error && error.code !== 'PGRST116') {
       console.error("Error deleting related expenses_predicted:", error);
       return res.status(400).json({ error: error.message });
     }
+
 
     // Delete related incomes in incomes_actual
     ({ error } = await supabase
@@ -104,7 +105,7 @@ const deleteBudget = async (req, res) => {
       .delete()
       .eq('budget_id', id));
 
-    if (error) {
+    if (error && error.code !== 'PGRST116') {
       console.error("Error deleting related incomes_actual:", error);
       return res.status(400).json({ error: error.message });
     }
@@ -115,7 +116,7 @@ const deleteBudget = async (req, res) => {
       .delete()
       .eq('budget_id', id));
 
-    if (error) {
+    if (error && error.code !== 'PGRST116') {
       console.error("Error deleting related incomes_predicted:", error);
       return res.status(400).json({ error: error.message });
     }

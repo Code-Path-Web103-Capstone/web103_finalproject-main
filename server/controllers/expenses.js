@@ -189,12 +189,12 @@ const deleteExpensePredicted = async (req, res) => {
 };
 
 const addExpenseRecurrent = async (req, res) => {
-  const { description, date_posted, amount, category, budget_id } = req.body;
+  const { description, date_posted, amount, category } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('expenses_recurrent')
-      .insert([{ description, date_posted, amount, category, budget_id }]);
+      .insert([{ description, date_posted, amount, category }]);
 
     if (error) {
       console.error("Error inserting expense:", error);
@@ -212,13 +212,11 @@ const addExpenseRecurrent = async (req, res) => {
 };
 
 const getExpensesRecurrent = async (req, res) => {
-  const { budget_id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('expenses_recurrent')
       .select('*')
-      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error fetching expenses:", error);
@@ -233,14 +231,13 @@ const getExpensesRecurrent = async (req, res) => {
 };
 
 const updateExpenseRecurrent = async (req, res) => {
-  const { id, description, date_posted, amount, category, budget_id } = req.body;
+  const { id, description, date_posted, amount, category } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('expenses_recurrent')
-      .update({ description, date_posted, amount, category, budget_id })
+      .update({ description, date_posted, amount, category })
       .eq('id', id)
-      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error updating expense:", error);
@@ -258,14 +255,13 @@ const updateExpenseRecurrent = async (req, res) => {
 };
 
 const deleteExpenseRecurrent = async (req, res) => {
-  const { id, budget_id } = req.body;
+  const { id } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('expenses_recurrent')
       .delete()
       .eq('id', id)
-      .eq('budget_id', budget_id);
 
     if (error) {
       console.error("Error deleting expense:", error);
