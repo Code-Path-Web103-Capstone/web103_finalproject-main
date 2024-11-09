@@ -6,16 +6,20 @@ const addBudget = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('budgets')
-      .insert([{ user_id, plan, budget_name, create_at: new Date() }]);
+      .insert([{ user_id, plan, budget_name, create_at: new Date() }])
+      .select('id');
 
     if (error) {
       console.error("Error inserting budget:", error);
       return res.status(400).json({ error: error.message });
     }
 
+    const budgetId = data[0].id;
+
     res.status(201).json({
       message: "Budget added successfully",
-      data,
+      user_id,
+      id: budgetId,
     });
   } catch (error) {
     console.error("Server error:", error);
@@ -24,7 +28,7 @@ const addBudget = async (req, res) => {
 };
 
 const getBudgets = async (req, res) => {
-  const { user_id } = req.body;
+  const { user_id } = req.params;
 
   console.log("Received user_id:", user_id);
 

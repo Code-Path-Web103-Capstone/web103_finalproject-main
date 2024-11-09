@@ -12,6 +12,7 @@ import Overview from "./pages/Overview.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import StatementInput from "./pages/StatementInput.jsx";
 import ActualIncomesExpenses from "./pages/ActualIncomesExpenses.jsx";
+import Budgets from "./pages/Budgets.jsx";
 
 function App() {
   const routes = [
@@ -38,8 +39,12 @@ function App() {
       element: <AccountSettings />,
     },
     {
-      path: "/actual-incomes-expenses",
+      path: "/actual-incomes-expenses/:userId/:budgetId",
         element: <ActualIncomesExpenses />,
+    },
+    {
+      path: "/budgets/:userId",
+      element: <Budgets />,
     },
     {
       path: "/overview",
@@ -54,7 +59,7 @@ function App() {
       element: <StatementInput />,
     },
     {
-      path: "/create-budget",
+      path: "/create-budget/:userId",
       element: <CreateBudget />,
     },
   ];

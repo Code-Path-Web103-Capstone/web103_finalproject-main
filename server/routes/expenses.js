@@ -7,8 +7,11 @@ const router = express.Router();
 // POST request to add a new expense
 router.post("/actual/add", ExpenseController.addExpenseActual);
 
+// POST request to add multiple expenses
+router.post("/actual/addbulk", ExpenseController.addExpensesActualBulk);
+
 // GET request to fetch all expenses for a specific budget_id
-router.get("/actual", ExpenseController.getExpensesActual);
+router.get("/actual/:user_id/:budget_id", ExpenseController.getExpensesActual);
 
 // PATCH request to update an expense budget_id
 router.patch("/actual/update", ExpenseController.updateExpenseActual);
@@ -22,7 +25,7 @@ router.delete("/actual/delete", ExpenseController.deleteExpenseActual);
 router.post("/predicted/add", ExpenseController.addExpensePredicted);
 
 // GET request to fetch all expenses for a specific budget_id
-router.get("/predicted", ExpenseController.getExpensesPredicted);
+router.get("/predicted/:user_id/:budget_id", ExpenseController.getExpensesPredicted);
 
 // PATCH request to update an expense
 router.patch("/predicted/update", ExpenseController.updateExpensePredicted);

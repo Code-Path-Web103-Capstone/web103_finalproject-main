@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/add", BudgetController.addBudget);
 
 // GET request to fetch all budgets from this user id
-router.get("/", BudgetController.getBudgets);
+router.get("/:user_id", BudgetController.getBudgets);
 
 // PUT request to update a budget
 router.patch("/update", BudgetController.updateBudget);

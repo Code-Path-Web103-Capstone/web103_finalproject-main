@@ -7,8 +7,11 @@ const router = express.Router();
 // POST request to add a new income
 router.post("/actual/add", IncomeController.addIncomeActual);
 
+// POST request to add multiple incomes
+router.post("/actual/addbulk", IncomeController.addIncomesActualBulk);
+
 // GET request to fetch all incomes for a specific budget_id
-router.get("/actual", IncomeController.getIncomesActual);
+router.get("/actual/:user_id/:budget_id", IncomeController.getIncomesActual);
 
 // PATCH request to update an income by specific income_id
 router.patch("/actual/update", IncomeController.updateIncomeActual);
@@ -21,7 +24,7 @@ router.delete("/actual/delete", IncomeController.deleteIncomeActual);
 router.post("/predicted/add", IncomeController.addIncomePredicted);
 
 // GET request to fetch all incomes for a specific budget_id
-router.get("/predicted", IncomeController.getIncomesPredicted);
+router.get("/predicted/:user_id/:budget_id", IncomeController.getIncomesPredicted);
 
 // PATCH request to update an income by specific income_id
 router.patch("/predicted/update", IncomeController.updateIncomePredicted);
