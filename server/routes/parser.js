@@ -1,8 +1,10 @@
 import express from 'express';
-import handleRequest from '../controllers/statement_parser.js';
+import ParserController from '../controllers/statement_parser.js';
 
 const router = express.Router();
 
-router.post('/execute', handleRequest);
+router.post('/hello', ParserController.handleHelloRequest);
+router.get('/parserpdf', ParserController.handleExecuteParserRequest);
+router.post('/parserjson', ParserController.handleExecuteParserStatement);
 
 export default router;

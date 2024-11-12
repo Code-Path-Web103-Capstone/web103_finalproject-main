@@ -111,10 +111,19 @@ def extract_transactions(documents):
 
     return all_transactions
 
+def save_transactions_to_file(transactions, output_file):
+    try:
+        with open(output_file, 'w') as f:
+            json.dump(transactions, f, indent=4)
+    except Exception as e:
+        print(f"Error saving transactions to file: {e}", file=sys.stderr)
+        sys.exit(1)
+
 if __name__ == '__main__':
     try:
         all_transactions = extract_transactions(documents)
         print(json.dumps(all_transactions, indent=4))
+        save_transactions_to_file(all_transactions, '../data/transactions_output.json')
     except Exception as e:
         print(f"Error extracting transactions: {e}", file=sys.stderr)
         sys.exit(1)
