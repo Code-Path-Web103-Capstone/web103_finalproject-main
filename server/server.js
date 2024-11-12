@@ -5,6 +5,7 @@ import authRouter from "./routes/auth.js";
 import budgetRouter from "./routes/budget.js";
 import expenseRouter from "./routes/expenses.js";
 import incomeRouter from "./routes/incomes.js";
+import parserRouter from "./routes/parser.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/budget", budgetRouter);
 app.use("/api/expense", expenseRouter);
 app.use("/api/income", incomeRouter);
+app.use("/api/parser", parserRouter);
 app.use("/", (req, res) => {
     res.send("gobudget API");
 });
