@@ -36,10 +36,7 @@ const LoginForm = () => {
       <div className="flex items-center justify-center">
         <p>
           Don’t have an account?
-          <Link
-            to="/auth/signup"
-            className="ml-1 text-blue-600 hover:underline"
-          >
+          <Link to="/signup" className="ml-1 text-blue-600 hover:underline">
             Sign Up
           </Link>
         </p>

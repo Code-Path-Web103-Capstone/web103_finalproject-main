@@ -44,3 +44,31 @@ export const loginUser = async (email, password) => {
     throw error;
   }
 };
+
+export const createBudget = async (userId, plan, budgetName) => {
+  const budgetData = {
+    user_id: userId,
+    plan,
+    budget_name: budgetName,
+  };
+
+  try {
+    const response = await fetch(`${API_URL}/api/budget/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(budgetData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const newBudget = await response.json();
+    return newBudget;
+  } catch (error) {
+    console.error("Error creating budget:", error);
+    throw error;
+  }
+};

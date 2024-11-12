@@ -1,67 +1,60 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../services/context";
+import { createBudget } from "../services/api";
 
 const CreateBudget = () => {
-  const [budgetName, setBudgetName] = useState("");
   const [plan, setPlan] = useState("");
-  const { userId } = useParams();
+  const [budgetName, setBudgetName] = useState("");
+  const { user } = useUser(); // Access user ID from context
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const budgetData = {
-      user_id: userId,
-      plan,
-      budget_name: budgetName,
-    };
-
     try {
-      const response = await fetch("http://localhost:3000/api/budget/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(budgetData),
-      });
+      const newBudget = await createBudget(user.id, plan, budgetName);
+      print(newBudget);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const newBudget = await response.json();
       const budgetId = newBudget.id; // Assuming the response contains the new budget ID
-
-      navigate(`/actual-incomes-expenses/${userId}/${budgetId}`);
+      navigate(`/actual-incomes-expenses/${user.id}/${budgetId}`);
     } catch (error) {
       console.error("Error creating budget:", error);
     }
   };
 
   return (
-    <main className="flex h-auto w-full flex-col items-center border-2 border-red-600 bg-[#D9D9D9]">
-      <h2>Create Budget</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label>
-          Budget Name:
+    <main className="flex h-auto w-full flex-grow flex-col items-center border-2 border-red-600 bg-[#D9D9D9]">
+      <h1>USER ON THIS PAGE</h1>
+      <p>{user?.id}</p>
+
+      <div className="container flex w-1/3 flex-col items-center justify-center gap-4 rounded-lg border-2 bg-stone-400 p-10">
+        <h1 className="font-anonymous text-4xl">Create Budget</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
+            placeholder="Budget Name:"
             type="text"
             value={budgetName}
             onChange={(e) => setBudgetName(e.target.value)}
             required
           />
-        </label>
-        <label>
-          Plan:
+
           <input
+            placeholder="Plan:"
             type="text"
             value={plan}
             onChange={(e) => setPlan(e.target.value)}
             required
           />
-        </label>
-        <button type="submit">Create Budget</button>
-      </form>
+
+          <button
+            className="w-full rounded-md bg-[#3A405A] px-4 py-2 font-medium text-white hover:bg-[#292e40] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
+            type="submit"
+          >
+            Create Budget
+          </button>
+        </form>
+      </div>
     </main>
   );
 };

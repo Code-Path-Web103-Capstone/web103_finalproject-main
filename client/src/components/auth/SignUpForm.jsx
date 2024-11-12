@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signUpUser } from "../../services/api.js";
 import { useUser } from "../../services/context.jsx";
 
 const SignUpForm = () => {
+  const navigate = useNavigate();
   const { login } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +24,7 @@ const SignUpForm = () => {
       // Store user data in the context
       const userData = data.authData.user;
       login(userData); // Populate context with user data
+      navigate("/");
     } catch (err) {
       setError(err.message || "Sign up failed");
     }

@@ -13,34 +13,42 @@ import Dashboard from "./pages/Dashboard.jsx";
 import StatementInput from "./pages/StatementInput.jsx";
 import ActualIncomesExpenses from "./pages/ActualIncomesExpenses.jsx";
 import Budgets from "./pages/Budgets.jsx";
+import MainLayout from "./layouts/MainLayout.jsx";
 
 function App() {
   const routes = [
     {
       path: "/",
-      element: <Homepage />,
+      element: <Homepage />, // Home page component
     },
     {
-      path: "/auth",
-      element: <AuthContainer />,
+      path: "/login",
+      element: <AuthContainer />, // Auth layout for login
       children: [
         {
-          path: "signup",
-          element: <SignUpForm />,
-        },
-        {
-          path: "login",
+          path: "",
           element: <LoginForm />,
         },
       ],
     },
+    {
+      path: "/signup",
+      element: <AuthContainer />, // Auth layout for signup
+      children: [
+        {
+          path: "",
+          element: <SignUpForm />,
+        },
+      ],
+    },
+
     {
       path: "/account",
       element: <AccountSettings />,
     },
     {
       path: "/actual-incomes-expenses/:userId/:budgetId",
-        element: <ActualIncomesExpenses />,
+      element: <ActualIncomesExpenses />,
     },
     {
       path: "/budgets/:userId",
@@ -59,23 +67,14 @@ function App() {
       element: <StatementInput />,
     },
     {
-      path: "/create-budget/:userId",
+      path: "/create-budget",
       element: <CreateBudget />,
     },
   ];
 
   const element = useRoutes(routes);
 
-  return (
-    <UserProvider>
-      <main className="flex min-h-screen w-full flex-col items-center">
-        {/* Header and Nav always visible */}
-        <Header />
-        <NavBar />
-        {element}
-      </main>
-    </UserProvider>
-  );
+  return <MainLayout element={element} />;
 }
 
 export default App;

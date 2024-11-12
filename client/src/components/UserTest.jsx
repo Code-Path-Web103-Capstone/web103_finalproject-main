@@ -1,4 +1,8 @@
+import { useUser } from "../services/context.jsx";
+
 const UserTest = () => {
+  const { isLoggedIn, user } = useUser();
+  console.log(user);
   return (
     <div className="m-10 border-2 border-red-600 p-14">
       {isLoggedIn ? (
@@ -13,3 +17,5 @@ const UserTest = () => {
     </div>
   );
 };
+
+export default UserTest;
