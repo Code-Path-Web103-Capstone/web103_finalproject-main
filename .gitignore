@@ -35,5 +35,13 @@ build/
 .DS_Store
 Thumbs.db
 
+# User-specific files
+output.json
+documents_data.json
+transactions_output.json
+
+#pdf files
+*.pdf
+
 # Environment variables
 .env
