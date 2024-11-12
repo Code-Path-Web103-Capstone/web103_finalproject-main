@@ -6,7 +6,7 @@ import Homepage from "./pages/Homepage.jsx";
 import CreateBudget from "./pages/CreateBudget";
 import AccountSettings from "./pages/AccountSettings.jsx";
 import { UserProvider } from "./services/context.jsx";
-import Header from "./components/Header.jsx";
+import Header from "./components/shared/Header.jsx";
 import NavBar from "./components/nav/NavBar.jsx";
 import Overview from "./pages/Overview.jsx";
 import Dashboard from "./pages/Dashboard.jsx";

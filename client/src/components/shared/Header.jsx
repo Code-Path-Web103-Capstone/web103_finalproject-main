@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import LoginButton from "./auth/LoginButton";
+import LoginButton from "../auth/LoginButton";
 
 const Header = () => {
   return (

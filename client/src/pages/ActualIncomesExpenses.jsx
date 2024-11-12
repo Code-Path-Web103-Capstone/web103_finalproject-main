@@ -1,46 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../services/context";
+import useUserFinanceData from "../hooks/useUserFinanceData";
+import IncomesExpensesTable from "../components/budget/IncomesExpensesTable";
 
 function ActualIncomesExpenses() {
-  const [actualIncomes, setActualIncomes] = useState([]);
-  const [actualExpenses, setActualExpenses] = useState([]);
+  const {
+    actualIncomes,
+    setActualIncomes,
+    actualExpenses,
+    setActualExpenses,
+    loading,
+    error,
+  } = useUserFinanceData();
+
   const [deletedRows, setDeletedRows] = useState([]);
   const { user, budgetId } = useUser(); // Get user and budgetId from context instead of passing as a param
-
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(
-        `Fetching data for userId: ${user?.id}, budgetId: ${budgetId}`
-      );
-      try {
-        const [expensesResponse, incomesResponse] = await Promise.all([
-          fetch(
-            `http://localhost:3000/api/expense/actual/${user?.id}/${budgetId}`
-          ),
-          fetch(
-            `http://localhost:3000/api/income/actual/${user?.id}/${budgetId}`
-          ),
-        ]);
-
-        if (!expensesResponse.ok) {
-          throw new Error(`HTTP error! status: ${expensesResponse.status}`);
-        }
-        if (!incomesResponse.ok) {
-          throw new Error(`HTTP error! status: ${incomesResponse.status}`);
-        }
-
-        const expensesData = await expensesResponse.json();
-        const incomesData = await incomesResponse.json();
-
-        setActualExpenses(expensesData);
-        setActualIncomes(incomesData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [user, budgetId]);
 
   const handleAddRow = (setRows) => {
     setRows((prevRows) => [
@@ -142,96 +116,41 @@ function ActualIncomesExpenses() {
     }
   };
 
-  const renderTable = (rows, setRows, type) => (
-    <table>
-      <thead>
-        <tr>
-          <th>Date Posted</th>
-          <th>Description</th>
-          <th>Amount</th>
-          <th>Category</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, index) => (
-          <tr key={row.id}>
-            <td>
-              <input
-                type="date"
-                name="date_posted"
-                value={
-                  row.date_posted
-                    ? new Date(row.date_posted).toISOString().split("T")[0]
-                    : ""
-                }
-                onChange={(e) => handleInputChange(index, e, setRows)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="description"
-                value={row.description}
-                onChange={(e) => handleInputChange(index, e, setRows)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="amount"
-                value={row.amount}
-                onChange={(e) => handleInputChange(index, e, setRows)}
-              />
-            </td>
-            <td>
-              <select
-                name="category"
-                value={row.category}
-                onChange={(e) => handleInputChange(index, e, setRows)}
-              >
-                <option value="">Select Category</option>
-                <option value="food">Food</option>
-                <option value="gift">Gift</option>
-                <option value="transportation">Transportation</option>
-                <option value="personal">Personal</option>
-                <option value="restaurant">Restaurant</option>
-                <option value="travel">Travel</option>
-                <option value="utilities">Utilities</option>
-              </select>
-            </td>
-            <td>
-              <button
-                type="button"
-                onClick={() => handleDeleteRow(index, rows, setRows, type)}
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-
   return (
     <div>
       <h1>USER ON THIS PAGE</h1>
       <p>{user?.id}</p>
       <h1>BUDGET ON THIS PAGE</h1>
       <p>{budgetId}</p>
-      <form onSubmit={handleSubmit}>
-        <h2>Actual Incomes</h2>
-        {renderTable(actualIncomes, setActualIncomes, "income")}
-        <button type="button" onClick={() => handleAddRow(setActualIncomes)}>
-          Add Income Row
-        </button>
 
-        <h2>Actual Expenses</h2>
-        {renderTable(actualExpenses, setActualExpenses, "expense")}
-        <button type="button" onClick={() => handleAddRow(setActualExpenses)}>
-          Add Expense Row
-        </button>
+      <form onSubmit={handleSubmit} className="border-2 border-red-500">
+        <div>
+          <h2>Incomes</h2>
+          <IncomesExpensesTable
+            rows={actualIncomes}
+            setRows={setActualIncomes}
+            type="income"
+            handleInputChange={handleInputChange}
+            handleDeleteRow={handleDeleteRow}
+          />
+          <button type="button" onClick={() => handleAddRow(setActualIncomes)}>
+            Add Income Row
+          </button>
+        </div>
+
+        <div>
+          <h2>Expenses</h2>
+          <IncomesExpensesTable
+            rows={actualExpenses}
+            setRows={setActualExpenses}
+            type="expense"
+            handleInputChange={handleInputChange}
+            handleDeleteRow={handleDeleteRow}
+          />
+          <button type="button" onClick={() => handleAddRow(setActualExpenses)}>
+            Add Expense Row
+          </button>
+        </div>
 
         <button type="submit">Submit</button>
       </form>

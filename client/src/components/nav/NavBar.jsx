@@ -11,7 +11,7 @@ const SideNav = () => {
         <span className="h-5 w-0.5 bg-gray-700"></span>
         <NavItem route="/overview" text="Overview" />
         <span className="h-5 w-0.5 bg-gray-700"></span>
-        <NavItem route="/statement-input" text="Statement Input" />
+        <NavItem route="/actual-incomes-expenses" text="Statement Input" />
         <span className="h-5 w-0.5 bg-gray-700"></span>
         <NavItem route="/create-budget" text="New Budget" />
         <span className="h-5 w-0.5 bg-gray-700"></span>

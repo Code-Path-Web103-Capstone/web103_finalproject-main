@@ -1,7 +1,7 @@
 // components/MainLayout.js
 import React from "react";
 import { useLocation } from "react-router-dom";
-import Header from "../components/Header.jsx";
+import Header from "../components/shared/Header.jsx";
 import NavBar from "../components/nav/NavBar.jsx";
 import { UserProvider } from "../services/context.jsx";
 
