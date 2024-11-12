@@ -47,7 +47,7 @@ function App() {
       element: <AccountSettings />,
     },
     {
-      path: "/actual-incomes-expenses/:userId/:budgetId",
+      path: "/actual-incomes-expenses",
       element: <ActualIncomesExpenses />,
     },
     {

@@ -12,6 +12,9 @@ export const UserProvider = ({ children }) => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
+  const [budgetId, setBudgetId] = useState(() => {
+    return localStorage.getItem("budgetId") || null;
+  });
 
   const login = (userData) => {
     setIsLoggedIn(true);
@@ -24,12 +27,23 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     setIsLoggedIn(false);
     setUser(null);
+    setBudgetId(null);
     // Clear from localStorage
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("user");
+    localStorage.removeItem("budgetId");
   };
 
-  // Keep state in sync with localStorage on updates
+  // Sync budgetId with localStorage
+  useEffect(() => {
+    if (budgetId) {
+      localStorage.setItem("budgetId", budgetId);
+    } else {
+      localStorage.removeItem("budgetId");
+    }
+  }, [budgetId]);
+
+  // Sync other states with localStorage
   useEffect(() => {
     localStorage.setItem("isLoggedIn", isLoggedIn.toString());
   }, [isLoggedIn]);
@@ -43,7 +57,7 @@ export const UserProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <UserContext.Provider value={{ isLoggedIn, user, login, logout }}>
+    <UserContext.Provider value={{ isLoggedIn, user, budgetId, setBudgetId, login, logout }}>
       {children}
     </UserContext.Provider>
   );

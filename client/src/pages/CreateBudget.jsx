@@ -6,7 +6,7 @@ import { createBudget } from "../services/api";
 const CreateBudget = () => {
   const [plan, setPlan] = useState("");
   const [budgetName, setBudgetName] = useState("");
-  const { user } = useUser(); // Access user ID from context
+  const { user, setBudgetId } = useUser(); // Access user ID from context
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -14,10 +14,10 @@ const CreateBudget = () => {
 
     try {
       const newBudget = await createBudget(user.id, plan, budgetName);
-      print(newBudget);
+      const budgetId = newBudget.id;
+      setBudgetId(budgetId);
 
-      const budgetId = newBudget.id; // Assuming the response contains the new budget ID
-      navigate(`/actual-incomes-expenses/${user.id}/${budgetId}`);
+      navigate(`/actual-incomes-expenses`); // redirects to /user.id/budgetId (user logged in // last budget created)
     } catch (error) {
       console.error("Error creating budget:", error);
     }
