@@ -6,6 +6,22 @@ const createUser = async (req, res) => {
   const { email, password, username } = req.body;
 
   try {
+    // Check if the user already exists
+    const { data: existingUser, error: fetchError } = await supabase
+      .from("users")
+      .select("*")
+      .or(`email.eq.${email},username.eq.${username}`)
+      .single();
+
+    if (existingUser) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      console.error("Error fetching user:", fetchError);
+      return res.status(500).json({ error: "Error fetching user" });
+    }
+
     // Sign up the user with Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,

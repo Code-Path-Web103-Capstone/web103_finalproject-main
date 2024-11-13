@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS budgets (
   user_id TEXT NOT NULL,
   budget_name TEXT NOT NULL,
   plan VARCHAR,
+  keep_track BOOLEAN,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
