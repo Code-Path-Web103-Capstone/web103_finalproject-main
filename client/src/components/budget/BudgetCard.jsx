@@ -1,10 +1,18 @@
 import React from "react";
 
 const BudgetCard = ({ budget, variant = "default", onClick }) => {
+  const handleClick = () => {
+    if (variant === "new") {
+      onClick(); // Open the create budget modal or page
+    } else {
+      onClick(budget.id); // Pass the budget id for navigation
+    }
+  };
+
   return (
     <div
-      onClick={variant === "new" ? onClick : undefined}
-      className={`flex h-[220px] w-[400px] items-center justify-center rounded-lg border border-gray-300 ${
+      onClick={handleClick}
+      className={`flex h-[220px] w-[400px] cursor-pointer items-center justify-center rounded-lg border border-gray-300 ${
         variant === "new"
           ? "cursor-pointer bg-gray-100 hover:bg-gray-200"
           : "bg-white"

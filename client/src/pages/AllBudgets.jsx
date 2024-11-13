@@ -5,11 +5,23 @@ import BudgetCard from "../components/budget/BudgetCard";
 import SkeletonCard from "../components/budget/SkeletonCard";
 import Modal from "../components/shared/Modal";
 import CreateBudgetForm from "../components/budget/CreateBudgetForm";
+import { useNavigate } from "react-router-dom";
 
 function AllBudgets() {
-  const { user } = useUser();
+  const { user, setBudgetId } = useUser();
   const { budgets, loading } = useBudgets(user.id);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Handle card click
+  const handleCardClick = (id) => {
+    if (id) {
+      setBudgetId(id); // Set budgetId in context and local storage
+      navigate(`/statement-input`); // Redirect to statement-input page
+    } else {
+      openModal(); // Open modal for new budget
+    }
+  };
 
   // Modal functionality
   const openModal = () => setIsModalOpen(true);
@@ -28,7 +40,11 @@ function AllBudgets() {
                 <SkeletonCard key={index} />
               ))
             : budgets.map((budget) => (
-                <BudgetCard key={budget.id} budget={budget} />
+                <BudgetCard
+                  key={budget.id}
+                  budget={budget}
+                  onClick={handleCardClick}
+                />
               ))}
         </div>
       </div>

@@ -49,10 +49,6 @@ function App() {
       element: <StatementInput />,
     },
     {
-      path: "/budgets/:userId",
-      element: <Budgets />,
-    },
-    {
       path: "/overview",
       element: <Overview />,
     },

@@ -1,4 +1,5 @@
 import React from "react";
+import { HiTrash } from "react-icons/hi";
 
 const IncomesExpensesTable = ({
   rows,
@@ -7,7 +8,8 @@ const IncomesExpensesTable = ({
   handleInputChange,
   handleDeleteRow,
 }) => (
-  <table>
+  <table className="min-w-[500px] rounded-xl border-2 border-blue-600">
+    {/* Headers */}
     <thead>
       <tr>
         <th>Date Posted</th>
@@ -64,12 +66,13 @@ const IncomesExpensesTable = ({
               <option value="utilities">Utilities</option>
             </select>
           </td>
-          <td>
+          <td className="flex items-center justify-center">
             <button
+              className="border-2 text-2xl"
               type="button"
               onClick={() => handleDeleteRow(index, rows, setRows, type)}
             >
-              Delete
+              <HiTrash />
             </button>
           </td>
         </tr>

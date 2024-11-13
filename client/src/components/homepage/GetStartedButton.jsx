@@ -5,7 +5,7 @@ const GetStartedButton = () => {
   const { isLoggedIn } = useUser();
   return (
     <Link
-      to={isLoggedIn ? "/create-budget" : "/auth/login"}
+      to={isLoggedIn ? "/budgets" : "/login"}
       className="flex w-4/6 items-center justify-center rounded-lg bg-[#778DA9] px-4 py-5 text-3xl font-semibold text-[#D9D9D9] hover:cursor-pointer hover:bg-[#3A405A]"
     >
       Get Started
