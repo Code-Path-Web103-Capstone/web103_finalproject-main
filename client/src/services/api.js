@@ -22,7 +22,6 @@ export const signUpUser = async (username, email, password) => {
     throw error;
   }
 };
-
 export const loginUser = async (email, password) => {
   try {
     const response = await fetch(`${API_URL}/api/auth/login`, {
@@ -72,6 +71,25 @@ export const createBudget = async (userId, plan, budgetName) => {
   } catch (error) {
     console.error("Error creating budget:", error);
     throw error;
+  }
+};
+export const getBudgetsByUserId = async (userId) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/budget/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching budgets:", error);
+    throw error; // Rethrow the error so it can be handled by the calling code
   }
 };
 export const fetchIncomes = async (userId, budgetId) => {

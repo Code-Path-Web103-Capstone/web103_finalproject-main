@@ -17,7 +17,7 @@ const CreateBudget = () => {
       const budgetId = newBudget.id;
       setBudgetId(budgetId);
 
-      navigate(`/actual-incomes-expenses`); // redirects to /user.id/budgetId (user logged in // last budget created)
+      navigate(`/statement-input`); // redirects to statement input where user can enter manually or use parser
     } catch (error) {
       console.error("Error creating budget:", error);
     }

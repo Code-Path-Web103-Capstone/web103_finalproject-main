@@ -5,15 +5,13 @@ import LoginForm from "./components/auth/LoginForm";
 import Homepage from "./pages/Homepage.jsx";
 import CreateBudget from "./pages/CreateBudget";
 import AccountSettings from "./pages/AccountSettings.jsx";
-import { UserProvider } from "./services/context.jsx";
-import Header from "./components/shared/Header.jsx";
-import NavBar from "./components/nav/NavBar.jsx";
 import Overview from "./pages/Overview.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import StatementInput from "./pages/StatementInput.jsx";
 import ActualIncomesExpenses from "./pages/ActualIncomesExpenses.jsx";
-import Budgets from "./pages/Budgets.jsx";
+import Budgets from "./pages/AllBudgets.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
+import AllBudgets from "./pages/AllBudgets.jsx";
 
 function App() {
   const routes = [
@@ -69,6 +67,10 @@ function App() {
     {
       path: "/create-budget",
       element: <CreateBudget />,
+    },
+    {
+      path: "/budgets",
+      element: <AllBudgets />,
     },
   ];
 
