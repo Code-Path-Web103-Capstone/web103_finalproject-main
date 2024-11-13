@@ -8,7 +8,7 @@ import AccountSettings from "./pages/AccountSettings.jsx";
 import Overview from "./pages/Overview.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import StatementInput from "./pages/StatementInput.jsx";
-import ActualIncomesExpenses from "./pages/ActualIncomesExpenses.jsx";
+import ActualIncomesExpenses from "./pages/StatementInput.jsx";
 import Budgets from "./pages/AllBudgets.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import AllBudgets from "./pages/AllBudgets.jsx";
@@ -45,8 +45,8 @@ function App() {
       element: <AccountSettings />,
     },
     {
-      path: "/actual-incomes-expenses",
-      element: <ActualIncomesExpenses />,
+      path: "/statement-input",
+      element: <StatementInput />,
     },
     {
       path: "/budgets/:userId",

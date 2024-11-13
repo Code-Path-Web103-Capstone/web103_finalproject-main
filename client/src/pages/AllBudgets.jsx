@@ -1,33 +1,42 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { useUser } from "../services/context";
 import useBudgets from "../hooks/useBudgets";
 import BudgetCard from "../components/budget/BudgetCard";
+import SkeletonCard from "../components/budget/SkeletonCard";
+import Modal from "../components/shared/Modal";
+import CreateBudgetForm from "../components/budget/CreateBudgetForm";
 
 function AllBudgets() {
   const { user } = useUser();
-  const { budgets } = useBudgets(user.id);
-  const navigate = useNavigate();
+  const { budgets, loading } = useBudgets(user.id);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Navigate to the create budget page
-  const handleCreateBudget = () => {
-    navigate(`/create-budget`);
-  };
+  // Modal functionality
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
-    <main className="flex h-auto w-full flex-grow flex-col items-center border-2 border-red-600 bg-[#D9D9D9]">
+    <main className="flex h-auto w-full flex-grow flex-col items-center bg-[#D9D9D9] p-5">
       <div>
-        <h2 className="mb-4 text-2xl font-semibold">Budgets</h2>
         <div className="grid grid-cols-3 gap-4">
           {/* Card for creating a new budget */}
-          <BudgetCard variant="new" onClick={handleCreateBudget} />
+          <BudgetCard variant="new" onClick={openModal} />
 
-          {/* Budget cards */}
-          {budgets.map((budget) => (
-            <BudgetCard key={budget.id} budget={budget} />
-          ))}
+          {/* Render skeleton cards if loading, otherwise show budget cards */}
+          {loading
+            ? Array.from({ length: budgets.length || 3 }).map((_, index) => (
+                <SkeletonCard key={index} />
+              ))
+            : budgets.map((budget) => (
+                <BudgetCard key={budget.id} budget={budget} />
+              ))}
         </div>
       </div>
+
+      {/* Modal for creating a new budget */}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <CreateBudgetForm onClose={closeModal} />
+      </Modal>
     </main>
   );
 }

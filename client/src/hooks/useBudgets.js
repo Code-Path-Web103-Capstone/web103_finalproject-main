@@ -10,7 +10,13 @@ const useBudgets = (userId) => {
     const fetchBudgets = async () => {
       try {
         const data = await getBudgetsByUserId(userId);
-        setBudgets(data);
+
+        // Sort budgets by `create_at` in descending order (most recent first)
+        const sortedBudgets = data.sort(
+          (a, b) => new Date(b.create_at) - new Date(a.create_at)
+        );
+
+        setBudgets(sortedBudgets);
       } catch (err) {
         setError(err.message);
       } finally {

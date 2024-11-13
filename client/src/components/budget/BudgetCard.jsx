@@ -4,10 +4,10 @@ const BudgetCard = ({ budget, variant = "default", onClick }) => {
   return (
     <div
       onClick={variant === "new" ? onClick : undefined}
-      className={`flex items-center justify-center rounded-lg border border-gray-300 p-4 ${
+      className={`flex h-[220px] w-[400px] items-center justify-center rounded-lg border border-gray-300 ${
         variant === "new"
           ? "cursor-pointer bg-gray-100 hover:bg-gray-200"
-          : "bg-white shadow-md"
+          : "bg-white"
       }`}
     >
       {variant === "new" ? (
