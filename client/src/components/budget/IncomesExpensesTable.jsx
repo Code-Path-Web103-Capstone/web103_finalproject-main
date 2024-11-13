@@ -21,7 +21,7 @@ const IncomesExpensesTable = ({
     </thead>
     <tbody>
       {rows.map((row, index) => (
-        <tr key={row.id || index}>
+        <tr key={`${type}-${row.id || index}`}>
           <td>
             <input
               type="date"

@@ -141,6 +141,29 @@ const addExpensePredicted = async (req, res) => {
   }
 };
 
+const addExpensesPredictedBulk = async (req, res) => {
+  const expenses = req.body;
+
+  try {
+    const { data, error } = await supabase
+      .from('expenses_predicted')
+      .insert(expenses);
+
+    if (error) {
+      console.error("Error inserting predicted expenses:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(201).json({
+      message: "Predicted expenses added successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 const getExpensesPredicted = async (req, res) => {
   const { budget_id } = req.params;
 
@@ -302,4 +325,4 @@ const deleteExpenseRecurrent = async (req, res) => {
   }
 };
 
-export default { addExpensesActualBulk, addExpenseRecurrent, getExpensesRecurrent, updateExpenseRecurrent, deleteExpenseRecurrent, addExpenseActual, getExpensesActual, updateExpenseActual, deleteExpenseActual, addExpensePredicted, getExpensesPredicted, updateExpensePredicted, deleteExpensePredicted };
+export default { addExpensesActualBulk, addExpenseRecurrent, addExpensesPredictedBulk, getExpensesRecurrent, updateExpenseRecurrent, deleteExpenseRecurrent, addExpenseActual, getExpensesActual, updateExpenseActual, deleteExpenseActual, addExpensePredicted, getExpensesPredicted, updateExpensePredicted, deleteExpensePredicted };

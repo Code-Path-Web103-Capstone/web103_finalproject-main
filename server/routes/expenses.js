@@ -24,6 +24,9 @@ router.delete("/actual/delete", ExpenseController.deleteExpenseActual);
 // POST request to add a new expense
 router.post("/predicted/add", ExpenseController.addExpensePredicted);
 
+// POST request to add multiple expenses
+router.post("/predicted/addbulk", ExpenseController.addExpensesPredictedBulk);
+
 // GET request to fetch all expenses for a specific budget_id
 router.get("/predicted/:user_id/:budget_id", ExpenseController.getExpensesPredicted);
 

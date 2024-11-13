@@ -92,7 +92,7 @@ export const getBudgetsByUserId = async (userId) => {
     throw error; // Rethrow the error so it can be handled by the calling code
   }
 };
-export const fetchIncomes = async (userId, budgetId) => {
+export const fetchActualIncomes = async (userId, budgetId) => {
   const response = await fetch(
     `${API_URL}/api/income/actual/${userId}/${budgetId}`
   );
@@ -100,11 +100,78 @@ export const fetchIncomes = async (userId, budgetId) => {
     throw new Error(`Error fetching incomes: ${response.status}`);
   return response.json();
 };
-export const fetchExpenses = async (userId, budgetId) => {
+export const fetchActualExpenses = async (userId, budgetId) => {
   const response = await fetch(
     `${API_URL}/api/expense/actual/${userId}/${budgetId}`
   );
   if (!response.ok)
     throw new Error(`Error fetching expenses: ${response.status}`);
   return response.json();
+};
+
+export const fetchExpectedIncomes = async (userId, budgetId) => {
+  const response = await fetch(
+    `${API_URL}/api/income/predicted/${userId}/${budgetId}`
+  );
+  if (!response.ok)
+    throw new Error(`Error fetching expected incomes: ${response.status}`);
+  return response.json();
+};
+
+export const fetchExpectedExpenses = async (userId, budgetId) => {
+  const response = await fetch(
+    `${API_URL}/api/expense/predicted/${userId}/${budgetId}`
+  );
+  if (!response.ok)
+    throw new Error(`Error fetching expected expenses: ${response.status}`);
+  return response.json();
+};
+
+export const processRow = async (row, type, status) => {
+  const isUpdate = row.id && row.id !== "";
+  const url = isUpdate
+    ? `${API_URL}/api/${type}/${status}/update`
+    : `${API_URL}/api/${type}/${status}/addbulk`;
+  const method = isUpdate ? "PATCH" : "POST";
+  const body = {
+    ...row,
+    id: isUpdate ? row.id : undefined, // Remove id for POST requests
+  };
+  const response = await fetch(url, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! status: ${response.status}, response: ${errorText}`
+    );
+  }
+  return response.json();
+};
+
+export const deleteRow = async (row, status) => {
+  const url = `${API_URL}/api/${row.type}/${status}/delete`;
+  const body = {
+    id: row.id,
+    budget_id: row.budget_id,
+  };
+
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! status: ${response.status}, response: ${errorText}`
+    );
+  }
 };

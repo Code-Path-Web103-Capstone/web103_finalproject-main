@@ -23,6 +23,9 @@ router.delete("/actual/delete", IncomeController.deleteIncomeActual);
 // POST request to add a new income
 router.post("/predicted/add", IncomeController.addIncomePredicted);
 
+// POST request to add multiple incomes
+router.post("/predicted/addbulk", IncomeController.addIncomesPredictedBulk);
+
 // GET request to fetch all incomes for a specific budget_id
 router.get("/predicted/:user_id/:budget_id", IncomeController.getIncomesPredicted);
 
