@@ -4,6 +4,8 @@ This document should be completed and submitted during **Unit 8** of this course
 
 ## Checklist
 
+![milestone4.gif](..%2Fgifs%2Fmilestone4.gif)
+
 This unit, be sure to complete all tasks listed below. To complete a task, place an `x` between the brackets.
 
 - [x] Update the status of issues in your project board as you complete them
