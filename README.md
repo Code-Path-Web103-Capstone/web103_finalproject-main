@@ -86,6 +86,8 @@ Backend:
 
 - [X] The user can easily set and update their budget plan, choosing from their custom-created plan or selecting alternative plans.
 
+![createbudget.gif](gifs%2Fcreatebudget.gif)
+
 [gif goes here]
 
 
