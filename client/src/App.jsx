@@ -7,10 +7,9 @@ import AccountSettings from "./pages/AccountSettings.jsx";
 import Overview from "./pages/Overview.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import StatementInput from "./pages/StatementInput.jsx";
-import ActualIncomesExpenses from "./pages/StatementInput.jsx";
-import Budgets from "./pages/AllBudgets.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import AllBudgets from "./pages/AllBudgets.jsx";
+import AuthCallbackPage from "./pages/AuthCallbackPage";
 
 function App() {
   const routes = [
@@ -62,6 +61,10 @@ function App() {
     {
       path: "/budgets",
       element: <AllBudgets />,
+    },
+    {
+      path: "/auth/callback", // Route for OAuth callback
+      element: <AuthCallbackPage />,
     },
   ];
 

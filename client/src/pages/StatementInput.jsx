@@ -3,7 +3,6 @@ import { useUser } from "../services/context";
 import useUserFinanceData from "../hooks/useUserFinanceData";
 import IncomesExpensesTable from "../components/budget/IncomesExpensesTable";
 import { processRow, deleteRow } from "../services/api";
-import { MdAddBox } from "react-icons/md";
 import TableHeader from "../components/budget/TableHeader";
 import UploadPdf from "../components/budget/UploadPdf.jsx";
 import ParseButton from "../components/budget/ParseButton.jsx"; // Import the UploadPdf component

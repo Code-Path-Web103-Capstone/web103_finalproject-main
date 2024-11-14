@@ -175,3 +175,38 @@ export const deleteRow = async (row, status) => {
     );
   }
 };
+
+// GOOGLE AUTH API
+export const parseOAuthFragment = () => {
+  const hash = window.location.hash.substring(1); // Get the URL fragment after '#'
+  const params = new URLSearchParams(hash);
+  const accessToken = params.get("access_token");
+  const refreshToken = params.get("refresh_token");
+
+  return { accessToken, refreshToken };
+};
+
+// Function to handle the OAuth callback
+export const handleOAuthCallback = async (accessToken, refreshToken) => {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/auth/oauth-callback",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ accessToken, refreshToken }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "OAuth callback failed");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error handling OAuth callback:", error);
+    throw error;
+  }
+};
