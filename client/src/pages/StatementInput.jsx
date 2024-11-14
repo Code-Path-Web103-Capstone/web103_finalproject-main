@@ -3,7 +3,6 @@ import { useUser } from "../services/context";
 import useUserFinanceData from "../hooks/useUserFinanceData";
 import IncomesExpensesTable from "../components/budget/IncomesExpensesTable";
 import { processRow, deleteRow } from "../services/api";
-import { MdAddBox } from "react-icons/md";
 import TableHeader from "../components/budget/TableHeader";
 
 function StatementInput() {

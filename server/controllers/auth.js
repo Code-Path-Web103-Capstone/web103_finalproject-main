@@ -1,11 +1,10 @@
-import supabase from "../config/supabase.js";
+import { createSupabaseClient } from "../config/supabase.js";
 import bcrypt from "bcrypt";
-import GoogleStrategy from "passport-google-oidc";
-import { createServerClient } from '@supabase/ssr';
 
 // add username functionality
 const createUser = async (req, res) => {
   const { email, password, username } = req.body;
+  const supabase = createSupabaseClient();
 
   try {
     // Check if the user already exists
@@ -19,7 +18,7 @@ const createUser = async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    if (fetchError && fetchError.code !== 'PGRST116') {
+    if (fetchError && fetchError.code !== "PGRST116") {
       console.error("Error fetching user:", fetchError);
       return res.status(500).json({ error: "Error fetching user" });
     }
@@ -63,6 +62,7 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password, username } = req.body;
+  const supabase = createSupabaseClient();
 
   try {
     // Determine the identifier (email or username) for finding the user
@@ -102,53 +102,15 @@ const loginUser = async (req, res) => {
   }
 };
 
-async function authCallback(req, res) {
-  const hash = req.url.split('#')[1];
-  const params = new URLSearchParams(hash);
-  const accessToken = params.get('access_token');
-  const refreshToken = params.get('refresh_token');
+// Google OAuth Sign-In with callback URL
+export async function SignInWithGoogle(req, res) {
+  const supabase = createSupabaseClient();
 
-  if (accessToken && refreshToken) {
-    const supabase = createServerClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_ANON_KEY
-    );
-
-    // Set the access token
-    supabase.auth.setAuth(accessToken);
-
-    // Fetch the session and user data
-    const { data: session, error: sessionError } = await supabase.auth.getSession();
-    if (sessionError) {
-      return res.status(400).json({ error: sessionError.message });
-    }
-
-    const { data: user, error: userError } = await supabase.auth.getUser();
-    if (userError) {
-      return res.status(400).json({ error: userError.message });
-    }
-
-    // Respond with the unified structure
-    res.status(200).json({
-      message: "Login successful",
-      authData: session,
-      userData: user,
-    });
-
-    // Redirect to the specified URL after successful login
-    return res.redirect('http://localhost:5173/');
-  } else {
-    return res.redirect(303, 'http://localhost:5173/');
-  }
-}
-
-
-async function SignInWithGoogle(req, res) {
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: 'http://localhost:3000/api/auth/callback',
+        redirectTo: "http://localhost:5173/auth/callback",
       },
     });
 
@@ -158,19 +120,77 @@ async function SignInWithGoogle(req, res) {
     }
 
     if (data.url) {
-      // Set CORS headers
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-      // Return the OAuth provider's URL
       return res.status(200).json({ url: data.url });
     }
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("Server error during Google sign-in:", error);
     res.status(500).json({ error: "Server error" });
   }
 }
 
+// Backend function to handle OAuth callback
+export async function handleOAuthCallback(req, res) {
+  const { accessToken, refreshToken } = req.body;
+  const supabase = createSupabaseClient(accessToken);
 
-export default { createUser, loginUser, SignInWithGoogle, authCallback };
+  try {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+      console.error("Error fetching user:", userError);
+      return res.status(400).json({ error: userError.message });
+    }
+
+    // Set placeholders for missing user data
+    const userId = user.id || "unknown-id";
+    const userEmail = user.email || "unknown@example.com";
+    const userName = user.user_metadata?.full_name || "N/A";
+
+    // Check if the user already exists in the database by ID
+    const { data: existingUser, error: fetchError } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", userId)
+      .single();
+
+    if (existingUser) {
+      return res
+        .status(200)
+        .json({ message: "User already exists", user: existingUser });
+    }
+
+    if (fetchError && fetchError.code !== "PGRST116") {
+      console.error("Error fetching user:", fetchError);
+      return res.status(500).json({ error: "Error fetching user" });
+    }
+
+    // Insert the new user into the `users` table if they do not exist
+    const { data: newUser, error: insertError } = await supabase
+      .from("users")
+      .insert([
+        {
+          id: userId,
+          email: userEmail,
+          username: userName,
+          password: "OAuth_User", // Placeholder password for OAuth users
+        },
+      ]);
+
+    if (insertError) {
+      console.error("Error inserting user into users table:", insertError);
+      return res.status(400).json({ error: insertError.message });
+    }
+
+    res
+      .status(201)
+      .json({ message: "User created successfully", user: newUser });
+  } catch (error) {
+    console.error("Server error during OAuth callback:", error);
+    res.status(500).json({ error: "Server error during OAuth callback" });
+  }
+}
+
+export default { createUser, loginUser, SignInWithGoogle, handleOAuthCallback };

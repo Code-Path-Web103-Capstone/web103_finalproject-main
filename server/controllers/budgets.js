@@ -1,7 +1,8 @@
-import supabase from "../config/supabase.js";
+import { createSupabaseClient } from "../config/supabase.js";
 
 const addBudget = async (req, res) => {
   const { user_id, plan, budget_name } = req.body;
+  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -29,6 +30,7 @@ const addBudget = async (req, res) => {
 
 const getBudgets = async (req, res) => {
   const { user_id } = req.params;
+  const supabase = createSupabaseClient();
 
   console.log("Received user_id:", user_id);
 
@@ -54,6 +56,7 @@ const getBudgets = async (req, res) => {
 
 const updateBudget = async (req, res) => {
   const { id, user_id, plan, budget_name } = req.body;
+  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -78,6 +81,7 @@ const updateBudget = async (req, res) => {
 
 const deleteBudget = async (req, res) => {
   const { id } = req.body;
+  const supabase = createSupabaseClient();
 
   try {
     // Delete related expenses in expenses_actual
