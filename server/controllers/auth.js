@@ -1,10 +1,9 @@
-import { createSupabaseClient } from "../config/supabase.js";
 import bcrypt from "bcrypt";
+import supabase from "../config/supabase.js";
 
 // add username functionality
 const createUser = async (req, res) => {
   const { email, password, username } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     // Check if the user already exists
@@ -62,7 +61,6 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password, username } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     // Determine the identifier (email or username) for finding the user
@@ -104,7 +102,6 @@ const loginUser = async (req, res) => {
 
 // Google OAuth Sign-In with callback URL
 export async function SignInWithGoogle(req, res) {
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -131,7 +128,6 @@ export async function SignInWithGoogle(req, res) {
 // Backend function to handle OAuth callback
 export async function handleOAuthCallback(req, res) {
   const { accessToken, refreshToken } = req.body;
-  const supabase = createSupabaseClient(accessToken);
 
   try {
     const {

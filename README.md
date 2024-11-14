@@ -84,14 +84,14 @@ Backend:
 
 #### The user can create a budget plan
 
-- [ ] The user can easily set and update their budget plan, choosing from their custom-created plan or selecting alternative plans.
+- [X] The user can easily set and update their budget plan, choosing from their custom-created plan or selecting alternative plans.
 
 [gif goes here]
 
 
 #### The user has a budget dashboard
 
-- [ ] This dashboard allows the user to see their current budget, expenses, and spending habits divided by time periods (default set to monthly).
+- [] This dashboard allows the user to see their current budget, expenses, and spending habits divided by time periods (default set to monthly).
 
 [gif goes here]
 

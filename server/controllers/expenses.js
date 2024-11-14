@@ -1,8 +1,8 @@
-import { createSupabaseClient } from "../config/supabase.js";
+//import { createSupabaseClient } from "../config/supabase.js";
+import supabase from "../config/supabase.js";
 
 const addExpenseActual = async (req, res) => {
   const { description, date_posted, amount, category, budget_id } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -26,7 +26,6 @@ const addExpenseActual = async (req, res) => {
 
 const addExpensesActualBulk = async (req, res) => {
   const expenses = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -51,7 +50,6 @@ const addExpensesActualBulk = async (req, res) => {
 
 const getExpensesActual = async (req, res) => {
   const { budget_id } = req.params;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -73,7 +71,6 @@ const getExpensesActual = async (req, res) => {
 
 const updateExpenseActual = async (req, res) => {
   const { id, description, date_posted, amount, category, budget_id } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -99,7 +96,6 @@ const updateExpenseActual = async (req, res) => {
 
 const deleteExpenseActual = async (req, res) => {
   const { id, budget_id } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -125,7 +121,6 @@ const deleteExpenseActual = async (req, res) => {
 
 const addExpensePredicted = async (req, res) => {
   const { description, date_posted, amount, category, budget_id } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -149,7 +144,6 @@ const addExpensePredicted = async (req, res) => {
 
 const addExpensesPredictedBulk = async (req, res) => {
   const expenses = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -173,7 +167,6 @@ const addExpensesPredictedBulk = async (req, res) => {
 
 const getExpensesPredicted = async (req, res) => {
   const { budget_id } = req.params;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -195,7 +188,6 @@ const getExpensesPredicted = async (req, res) => {
 
 const updateExpensePredicted = async (req, res) => {
   const { id, description, date_posted, amount, category, budget_id } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -221,7 +213,6 @@ const updateExpensePredicted = async (req, res) => {
 
 const deleteExpensePredicted = async (req, res) => {
   const { id, budget_id } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -247,7 +238,6 @@ const deleteExpensePredicted = async (req, res) => {
 
 const addExpenseRecurrent = async (req, res) => {
   const { description, date_posted, amount, category } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -270,7 +260,6 @@ const addExpenseRecurrent = async (req, res) => {
 };
 
 const getExpensesRecurrent = async (req, res) => {
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -291,7 +280,6 @@ const getExpensesRecurrent = async (req, res) => {
 
 const updateExpenseRecurrent = async (req, res) => {
   const { id, description, date_posted, amount, category } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
@@ -316,7 +304,6 @@ const updateExpenseRecurrent = async (req, res) => {
 
 const deleteExpenseRecurrent = async (req, res) => {
   const { id } = req.body;
-  const supabase = createSupabaseClient();
 
   try {
     const { data, error } = await supabase
