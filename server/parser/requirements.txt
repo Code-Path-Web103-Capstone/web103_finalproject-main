@@ -4,3 +4,4 @@ llama-index-readers-file
 python-dotenv
 fastapi
 starlette
+uvicorn

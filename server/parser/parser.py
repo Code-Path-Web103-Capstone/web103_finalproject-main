@@ -11,7 +11,7 @@ import sys
 # set up parser
 parser = LlamaParse(
     result_type="markdown",  # "markdown" and "text" are available
-    premium_mode=True,  # set to True to use premium mode
+    #premium_mode=True,  # set to True to use premium mode
     parsing_instruction="give me a json file with date, amount, description and type of transaction for each transaction divided in two groups: incomes and expenses",
 )
 

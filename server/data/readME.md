@@ -12,6 +12,11 @@ pip install -r requirements.txt
 ```bash
 uvicorn app:app --reload
 ```
+or
+```bash
+python3 -m uvicorn app:app --reload 
+```
+
 4. Now you can use the endpoint http://localhost:3000/api/parser/parserpdf with GET to get the parsed data from the STATEMENT.pdf file
 6. The response will be a json with the parsed data from the pdf file with the name of documents_data.json that is going to be stored in the data folder.
 7. Now for the next endpoint http://127.0.0.1:8000/execute-parser-tdbank with GET to get the parsed data from documents_data.json in a convinient way to be used by the frontend and store it in transactions.json in the data folder.
