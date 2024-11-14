@@ -1,5 +1,7 @@
 import supabase from "../config/supabase.js";
 import bcrypt from "bcrypt";
+import GoogleStrategy from "passport-google-oidc";
+import { createServerClient } from '@supabase/ssr';
 
 // add username functionality
 const createUser = async (req, res) => {
@@ -100,4 +102,75 @@ const loginUser = async (req, res) => {
   }
 };
 
-export default { createUser, loginUser };
+async function authCallback(req, res) {
+  const hash = req.url.split('#')[1];
+  const params = new URLSearchParams(hash);
+  const accessToken = params.get('access_token');
+  const refreshToken = params.get('refresh_token');
+
+  if (accessToken && refreshToken) {
+    const supabase = createServerClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_ANON_KEY
+    );
+
+    // Set the access token
+    supabase.auth.setAuth(accessToken);
+
+    // Fetch the session and user data
+    const { data: session, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) {
+      return res.status(400).json({ error: sessionError.message });
+    }
+
+    const { data: user, error: userError } = await supabase.auth.getUser();
+    if (userError) {
+      return res.status(400).json({ error: userError.message });
+    }
+
+    // Respond with the unified structure
+    res.status(200).json({
+      message: "Login successful",
+      authData: session,
+      userData: user,
+    });
+
+    // Redirect to the specified URL after successful login
+    return res.redirect('http://localhost:5173/');
+  } else {
+    return res.redirect(303, 'http://localhost:5173/');
+  }
+}
+
+
+async function SignInWithGoogle(req, res) {
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: 'http://localhost:3000/api/auth/callback',
+      },
+    });
+
+    if (error) {
+      console.error("Google sign-in error:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    if (data.url) {
+      // Set CORS headers
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+      // Return the OAuth provider's URL
+      return res.status(200).json({ url: data.url });
+    }
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
+
+export default { createUser, loginUser, SignInWithGoogle, authCallback };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/api.js";
 import { useUser } from "../../services/context.jsx";
@@ -27,6 +27,28 @@ const LoginForm = () => {
       setError(err.message || "Login failed");
     }
   };
+
+const handleGoogleLogin = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/auth/logingoogle', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      // Redirect to the OAuth provider's URL
+      window.location.href = data.url;
+    } else {
+      setError(data.error || "Login failed");
+    }
+  } catch (err) {
+    setError(err.message || "Login failed");
+  }
+};
+
 
   return (
     <div className="w-full max-w-lg space-y-6 rounded-xl bg-[#D9D9D9] px-8 pb-12 pt-8 shadow-lg">
@@ -87,6 +109,7 @@ const LoginForm = () => {
         {/* Continue with Google */}
         <button
           type="button"
+          onClick={handleGoogleLogin}
           className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
         >
           Log In with Google
