@@ -3,7 +3,6 @@ import AuthContainer from "./pages/AuthContainer";
 import SignUpForm from "./components/auth/SignUpForm";
 import LoginForm from "./components/auth/LoginForm";
 import Homepage from "./pages/Homepage.jsx";
-import CreateBudget from "./pages/CreateBudget";
 import AccountSettings from "./pages/AccountSettings.jsx";
 import Overview from "./pages/Overview.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -59,10 +58,6 @@ function App() {
     {
       path: "/statement-input",
       element: <StatementInput />,
-    },
-    {
-      path: "/create-budget",
-      element: <CreateBudget />,
     },
     {
       path: "/budgets",

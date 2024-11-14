@@ -7,8 +7,8 @@ const AuthContainer = () => {
         <Link to={"/"}>home</Link>
         {/* 
         Depending on route: 
-        /auth/signup -> SignUpForm
-        /auth/login -> LoginForm
+        /signup -> SignUpForm
+        /login -> LoginForm
         */}
         <Outlet />
       </div>

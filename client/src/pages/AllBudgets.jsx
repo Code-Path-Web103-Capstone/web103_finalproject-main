@@ -9,10 +9,11 @@ import { useNavigate } from "react-router-dom";
 
 function AllBudgets() {
   const { user, setBudgetId } = useUser();
-  const { budgets, loading } = useBudgets(user.id);
+  const { budgets, loading } = useBudgets(user?.id);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Redirect to login if not logged i
   // Handle card click
   const handleCardClick = (id) => {
     if (id) {
