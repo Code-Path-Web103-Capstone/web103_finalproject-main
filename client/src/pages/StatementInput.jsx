@@ -5,7 +5,10 @@ import IncomesExpensesTable from "../components/budget/IncomesExpensesTable";
 import { processRow, deleteRow } from "../services/api";
 import TableHeader from "../components/budget/TableHeader";
 import UploadPdf from "../components/budget/UploadPdf.jsx";
-import ParseButton from "../components/budget/ParseButton.jsx"; // Import the UploadPdf component
+import ParseButton from "../components/budget/ParseButton.jsx";
+import SimpleParseButton from "../components/budget/ParseButton.jsx";
+import TDParser from "../components/budget/TDParser.jsx";
+import PostParser from "../components/budget/PostParser.jsx"; // Import the UploadPdf component
 
 function StatementInput() {
   const {
@@ -201,7 +204,9 @@ function StatementInput() {
 
       {/* Render the UploadPdf component as a button */}
       <UploadPdf />
-      <ParseButton />
+      <SimpleParseButton />
+      <TDParser />
+      <PostParser />
 
     </div>
   );
