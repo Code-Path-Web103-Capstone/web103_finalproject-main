@@ -115,42 +115,28 @@ function StatementInput() {
   };
 
   return (
-    <div>
+    <div className="mx-40 flex flex-col border-2 border-cyan-400">
       {/* Form for Actual Incomes and Expenses */}
-      <form
-        onSubmit={handleActualSubmit}
-        className="border-2 border-red-500 p-4"
-      >
-        <div>
-          <TableHeader
-            handleAddRow={handleAddRow}
-            setRows={setActualIncomes}
-            title="Actual Incomes"
-          />
-          <IncomesExpensesTable
-            rows={actualIncomes}
-            setRows={setActualIncomes}
-            type="income_actual"
-            handleInputChange={handleInputChange}
-            handleDeleteRow={handleDeleteRow}
-          />
-        </div>
-
-        <div>
-          <TableHeader
-            handleAddRow={handleAddRow}
-            setRows={setActualExpenses}
-            title="Actual Expenses"
-          />
-          <IncomesExpensesTable
-            rows={actualExpenses}
-            setRows={setActualExpenses}
-            type="expense_actual"
-            handleInputChange={handleInputChange}
-            handleDeleteRow={handleDeleteRow}
-          />
-        </div>
-
+      <form onSubmit={handleActualSubmit} className="border-2 p-4">
+        <IncomesExpensesTable
+          title="Actual Incomes"
+          handleAddRow={handleAddRow}
+          rows={actualIncomes}
+          setRows={setActualIncomes}
+          type="income_actual"
+          handleInputChange={handleInputChange}
+          handleDeleteRow={handleDeleteRow}
+        />
+        <IncomesExpensesTable
+          title="Actual Expenses"
+          handleAddRow={handleAddRow}
+          rows={actualExpenses}
+          setRows={setActualExpenses}
+          type="expense_actual"
+          handleInputChange={handleInputChange}
+          handleDeleteRow={handleDeleteRow}
+        />
+        {/* Submit Actual Incomes to DB */}
         <button
           type="submit"
           className="mt-4 rounded bg-blue-500 p-2 text-white"
@@ -158,42 +144,28 @@ function StatementInput() {
           Submit Actuals
         </button>
       </form>
-
       {/* Form for Expected Incomes and Expenses */}
-      <form
-        onSubmit={handleExpectedSubmit}
-        className="mt-6 border-2 border-blue-500 p-4"
-      >
-        <div>
-          <TableHeader
-            handleAddRow={handleAddRow}
-            setRows={setExpectedIncomes}
-            title="Expected Incomes"
-          />
-          <IncomesExpensesTable
-            rows={expectedIncomes}
-            setRows={setExpectedIncomes}
-            type="income_predicted"
-            handleInputChange={handleInputChange}
-            handleDeleteRow={handleDeleteRow}
-          />
-        </div>
+      <form onSubmit={handleExpectedSubmit} className="border-2 p-4">
+        <IncomesExpensesTable
+          handleAddRow={handleAddRow}
+          title="Expected Incomes"
+          rows={expectedIncomes}
+          setRows={setExpectedIncomes}
+          type="income_predicted"
+          handleInputChange={handleInputChange}
+          handleDeleteRow={handleDeleteRow}
+        />
 
-        <div>
-          <TableHeader
-            handleAddRow={handleAddRow}
-            setRows={setExpectedExpenses}
-            title="Expected Expenses"
-          />
-          <IncomesExpensesTable
-            rows={expectedExpenses}
-            setRows={setExpectedExpenses}
-            type="expense_predicted"
-            handleInputChange={handleInputChange}
-            handleDeleteRow={handleDeleteRow}
-          />
-        </div>
-
+        <IncomesExpensesTable
+          title="Expected Expenses"
+          handleAddRow={handleAddRow}
+          rows={expectedExpenses}
+          setRows={setExpectedExpenses}
+          type="expense_predicted"
+          handleInputChange={handleInputChange}
+          handleDeleteRow={handleDeleteRow}
+        />
+        {/* Submit Expected Incomes to DB */}
         <button
           type="submit"
           className="mt-4 rounded bg-green-500 p-2 text-white"
@@ -207,7 +179,6 @@ function StatementInput() {
       <SimpleParseButton />
       <TDParser />
       <PostParser />
-
     </div>
   );
 }

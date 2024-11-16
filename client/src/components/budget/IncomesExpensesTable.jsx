@@ -5,6 +5,7 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { HiTrash } from "react-icons/hi";
+import TableHeader from "./TableHeader";
 
 const IncomesExpensesTable = ({
   rows,
@@ -12,6 +13,8 @@ const IncomesExpensesTable = ({
   type,
   handleInputChange,
   handleDeleteRow,
+  handleAddRow,
+  title,
 }) => {
   // Memoize the handleInputChange function to prevent re-renders
   const handleBlurInputChange = useCallback(
@@ -35,6 +38,7 @@ const IncomesExpensesTable = ({
               getValue() ? new Date(getValue()).toISOString().split("T")[0] : ""
             }
             onChange={(e) => handleInputChange(row.index, e, setRows)}
+            className="w-full rounded border p-1"
           />
         ),
       },
@@ -47,6 +51,7 @@ const IncomesExpensesTable = ({
             name="description"
             defaultValue={getValue()}
             onBlur={(e) => handleBlurInputChange(row.index, e)}
+            className="w-full rounded border p-1"
           />
         ),
       },
@@ -59,6 +64,7 @@ const IncomesExpensesTable = ({
             name="amount"
             defaultValue={row.original.amount}
             onBlur={(e) => handleBlurInputChange(row.index, e)}
+            className="w-full rounded border p-1"
           />
         ),
       },
@@ -70,6 +76,7 @@ const IncomesExpensesTable = ({
             name="category"
             defaultValue={getValue()}
             onChange={(e) => handleInputChange(row.index, e, setRows)}
+            className="w-full rounded border p-1"
           >
             <option value="">Select Category</option>
             <option value="food">Food</option>
@@ -86,7 +93,7 @@ const IncomesExpensesTable = ({
         header: "Actions",
         cell: ({ row }) => (
           <button
-            className="border-2 text-2xl"
+            className="text-red-600 hover:text-red-800"
             type="button"
             onClick={() => handleDeleteRow(row.index, rows, setRows, type)}
           >
@@ -113,33 +120,52 @@ const IncomesExpensesTable = ({
   });
 
   return (
-    <table className="min-w-[500px] rounded-xl border-2 border-blue-600">
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id}>
-                {flexRender(
-                  header.column.columnDef.header,
-                  header.getContext()
-                )}
-              </th>
+    <div className="w-full">
+      <TableHeader
+        handleAddRow={handleAddRow}
+        setRows={setRows}
+        title={title}
+      />
+
+      <div className="overflow-x-auto">
+        <table className="w-full table-fixed border-collapse border border-gray-300">
+          <thead className="bg-gray-200 text-gray-700">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className="border-b border-gray-300 p-2 text-left font-semibold"
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row, rowIndex) => (
+              <tr
+                key={row.id}
+                className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"} // Alternating row colors
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={cell.id}
+                    className="border-t border-gray-300 p-2 text-gray-800"
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 
