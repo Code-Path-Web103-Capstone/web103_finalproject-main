@@ -115,64 +115,73 @@ function StatementInput() {
   };
 
   return (
-    <div className="mx-40 flex flex-col border-2 border-cyan-400">
-      {/* Form for Actual Incomes and Expenses */}
-      <form onSubmit={handleActualSubmit} className="border-2 p-4">
-        <IncomesExpensesTable
-          title="Actual Incomes"
-          handleAddRow={handleAddRow}
-          rows={actualIncomes}
-          setRows={setActualIncomes}
-          type="income_actual"
-          handleInputChange={handleInputChange}
-          handleDeleteRow={handleDeleteRow}
-        />
-        <IncomesExpensesTable
-          title="Actual Expenses"
-          handleAddRow={handleAddRow}
-          rows={actualExpenses}
-          setRows={setActualExpenses}
-          type="expense_actual"
-          handleInputChange={handleInputChange}
-          handleDeleteRow={handleDeleteRow}
-        />
-        {/* Submit Actual Incomes to DB */}
-        <button
-          type="submit"
-          className="mt-4 rounded bg-blue-500 p-2 text-white"
+    <div className="mx-32 my-4 flex flex-grow flex-col">
+      {/* Table Container */}
+      <div className="flex gap-2">
+        {/* Form for Actual Incomes and Expenses */}
+        <form
+          onSubmit={handleActualSubmit}
+          className="flex flex-col space-y-3 rounded-xl bg-gray-400 p-4"
         >
-          Submit Actuals
-        </button>
-      </form>
-      {/* Form for Expected Incomes and Expenses */}
-      <form onSubmit={handleExpectedSubmit} className="border-2 p-4">
-        <IncomesExpensesTable
-          handleAddRow={handleAddRow}
-          title="Expected Incomes"
-          rows={expectedIncomes}
-          setRows={setExpectedIncomes}
-          type="income_predicted"
-          handleInputChange={handleInputChange}
-          handleDeleteRow={handleDeleteRow}
-        />
+          <IncomesExpensesTable
+            title="Actual Incomes"
+            handleAddRow={handleAddRow}
+            rows={actualIncomes}
+            setRows={setActualIncomes}
+            type="income_actual"
+            handleInputChange={handleInputChange}
+            handleDeleteRow={handleDeleteRow}
+          />
+          <IncomesExpensesTable
+            title="Actual Expenses"
+            handleAddRow={handleAddRow}
+            rows={actualExpenses}
+            setRows={setActualExpenses}
+            type="expense_actual"
+            handleInputChange={handleInputChange}
+            handleDeleteRow={handleDeleteRow}
+          />
+          {/* Submit Actual Incomes to DB */}
+          <button
+            type="submit"
+            className="mt-4 rounded bg-blue-500 p-2 text-white"
+          >
+            Submit Actuals
+          </button>
+        </form>
+        {/* Form for Expected Incomes and Expenses */}
+        <form
+          onSubmit={handleExpectedSubmit}
+          className="flex flex-col space-y-3 rounded-xl bg-gray-400 p-4"
+        >
+          <IncomesExpensesTable
+            handleAddRow={handleAddRow}
+            title="Expected Incomes"
+            rows={expectedIncomes}
+            setRows={setExpectedIncomes}
+            type="income_predicted"
+            handleInputChange={handleInputChange}
+            handleDeleteRow={handleDeleteRow}
+          />
 
-        <IncomesExpensesTable
-          title="Expected Expenses"
-          handleAddRow={handleAddRow}
-          rows={expectedExpenses}
-          setRows={setExpectedExpenses}
-          type="expense_predicted"
-          handleInputChange={handleInputChange}
-          handleDeleteRow={handleDeleteRow}
-        />
-        {/* Submit Expected Incomes to DB */}
-        <button
-          type="submit"
-          className="mt-4 rounded bg-green-500 p-2 text-white"
-        >
-          Submit Expected
-        </button>
-      </form>
+          <IncomesExpensesTable
+            title="Expected Expenses"
+            handleAddRow={handleAddRow}
+            rows={expectedExpenses}
+            setRows={setExpectedExpenses}
+            type="expense_predicted"
+            handleInputChange={handleInputChange}
+            handleDeleteRow={handleDeleteRow}
+          />
+          {/* Submit Expected Incomes to DB */}
+          <button
+            type="submit"
+            className="mt-4 rounded bg-green-500 p-2 text-white"
+          >
+            Submit Expected
+          </button>
+        </form>
+      </div>
 
       {/* Render the UploadPdf component as a button */}
       <UploadPdf />

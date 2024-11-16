@@ -78,7 +78,7 @@ const IncomesExpensesTable = ({
             onChange={(e) => handleInputChange(row.index, e, setRows)}
             className="w-full rounded border p-1"
           >
-            <option value="">Select Category</option>
+            <option value="">Select</option>
             <option value="food">Food</option>
             <option value="gift">Gift</option>
             <option value="transportation">Transportation</option>
@@ -92,13 +92,18 @@ const IncomesExpensesTable = ({
       {
         header: "Actions",
         cell: ({ row }) => (
-          <button
-            className="text-red-600 hover:text-red-800"
-            type="button"
-            onClick={() => handleDeleteRow(row.index, rows, setRows, type)}
+          <div
+            className="flex justify-center"
+            style={{ width: "50px", minWidth: "50px" }} // Explicit width control
           >
-            <HiTrash />
-          </button>
+            <button
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-800"
+              type="button"
+              onClick={() => handleDeleteRow(row.index, rows, setRows, type)}
+            >
+              <HiTrash />
+            </button>
+          </div>
         ),
       },
     ],
@@ -127,15 +132,31 @@ const IncomesExpensesTable = ({
         title={title}
       />
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-xl">
         <table className="w-full table-fixed border-collapse border border-gray-300">
-          <thead className="bg-gray-200 text-gray-700">
+          {/* Table Head */}
+          <thead className="rounded-lg bg-gray-200 text-gray-700">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
                     className="border-b border-gray-300 p-2 text-left font-semibold"
+                    style={
+                      header.column.columnDef.header === "Actions"
+                        ? {
+                            width: "80px", // Match the Actions column width
+                            minWidth: "80px",
+                            textAlign: "center",
+                            paddingRight: "10px",
+                          }
+                        : header.column.columnDef.header === "Date Posted"
+                          ? {
+                              width: "150px", // Match the Date Posted column width
+                              minWidth: "150px",
+                            }
+                          : {}
+                    }
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -146,6 +167,8 @@ const IncomesExpensesTable = ({
               </tr>
             ))}
           </thead>
+
+          {/* Table Body */}
           <tbody>
             {table.getRowModel().rows.map((row, rowIndex) => (
               <tr
@@ -156,6 +179,15 @@ const IncomesExpensesTable = ({
                   <td
                     key={cell.id}
                     className="border-t border-gray-300 p-2 text-gray-800"
+                    style={
+                      cell.column.columnDef.header === "Actions"
+                        ? {
+                            width: "50px",
+                            minWidth: "50px",
+                            textAlign: "center",
+                          }
+                        : {}
+                    }
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
