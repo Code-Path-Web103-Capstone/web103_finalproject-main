@@ -1,4 +1,6 @@
 import React, { useMemo, useCallback } from "react";
+import IncomeCategoryDropdown from "./CategoryDropdownIncomes";
+import ExpenseCategoryDropdown from "./CategoryDropdownExpenses";
 import {
   useReactTable,
   getCoreRowModel,
@@ -19,10 +21,16 @@ const IncomesExpensesTable = ({
   // Memoize the handleInputChange function to prevent re-renders
   const handleBlurInputChange = useCallback(
     (index, event) => {
-      handleInputChange(index, event, setRows);
+      let { name, value } = event.target;
+      if (name === "amount") {
+        value = parseFloat(value).toFixed(2);
+      }
+      handleInputChange(index, { target: { name, value } }, setRows);
     },
     [handleInputChange, setRows]
   );
+
+  const typePrefix = type.split("_")[0];
 
   // Define columns using TanStack Table (v8) format
   const columns = useMemo(
@@ -34,8 +42,8 @@ const IncomesExpensesTable = ({
           <input
             type="date"
             name="date_posted"
-            value={
-              getValue() ? new Date(getValue()).toISOString().split("T")[0] : ""
+            defaultValue={
+              getValue() ? new Date(getValue()).toISOString().split("T")[0] : new Date().toISOString().split("T")[0]
             }
             onChange={(e) => handleInputChange(row.index, e, setRows)}
             className="w-full rounded border p-1"
@@ -49,9 +57,10 @@ const IncomesExpensesTable = ({
           <input
             type="text"
             name="description"
-            defaultValue={getValue()}
+            defaultValue={getValue() || ""}
             onBlur={(e) => handleBlurInputChange(row.index, e)}
             className="w-full rounded border p-1"
+            placeholder="Enter description"
           />
         ),
       },
@@ -60,11 +69,13 @@ const IncomesExpensesTable = ({
         header: "Amount",
         cell: ({ row }) => (
           <input
-            type="text"
+            type="number"
             name="amount"
-            defaultValue={row.original.amount}
+            step="0.01"
+            defaultValue={isNaN(parseFloat(row.original.amount)) ? "" : parseFloat(row.original.amount).toFixed(2)}
             onBlur={(e) => handleBlurInputChange(row.index, e)}
             className="w-full rounded border p-1"
+            placeholder="Enter amount"
           />
         ),
       },
@@ -72,21 +83,17 @@ const IncomesExpensesTable = ({
         accessorKey: "category",
         header: "Category",
         cell: ({ row, getValue }) => (
-          <select
-            name="category"
-            defaultValue={getValue()}
-            onChange={(e) => handleInputChange(row.index, e, setRows)}
-            className="w-full rounded border p-1"
-          >
-            <option value="">Select</option>
-            <option value="food">Food</option>
-            <option value="gift">Gift</option>
-            <option value="transportation">Transportation</option>
-            <option value="personal">Personal</option>
-            <option value="restaurant">Restaurant</option>
-            <option value="travel">Travel</option>
-            <option value="utilities">Utilities</option>
-          </select>
+          typePrefix === "income" ? (
+            <IncomeCategoryDropdown
+              value={getValue() || ""}
+              onChange={(value) => handleInputChange(row.index, { target: { name: "category", value } }, setRows)}
+            />
+          ) : (
+            <ExpenseCategoryDropdown
+              value={getValue() || ""}
+              onChange={(value) => handleInputChange(row.index, { target: { name: "category", value } }, setRows)}
+            />
+          )
         ),
       },
       {

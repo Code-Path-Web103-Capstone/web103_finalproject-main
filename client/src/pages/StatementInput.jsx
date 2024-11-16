@@ -8,7 +8,7 @@ import UploadPdf from "../components/budget/UploadPdf.jsx";
 import ParseButton from "../components/budget/ParseButton.jsx";
 import SimpleParseButton from "../components/budget/ParseButton.jsx";
 import TDParser from "../components/budget/TDParser.jsx";
-import PostParser from "../components/budget/PostParser.jsx"; // Import the UploadPdf component
+import PostParser from "../components/budget/PostParser.jsx";
 
 function StatementInput() {
   const {
@@ -31,7 +31,7 @@ function StatementInput() {
       ...prevRows,
       {
         id: "",
-        date_posted: "",
+        date_posted: new Date().toISOString().split("T")[0], // Ensure date_posted is not empty
         description: "",
         amount: "",
         category: "",
