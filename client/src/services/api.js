@@ -45,6 +45,28 @@ export const loginUser = async (email, password) => {
   }
 };
 
+export const updateUser = async (userId, updates) => {
+  try {
+    const response = await fetch(`${API_URL}/api/auth/updateUser`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, ...updates }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to update user");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Update user error:", error);
+    throw error;
+  }
+};
+
 // BUDGET API
 export const createBudget = async (userId, plan, budgetName) => {
   const budgetData = {

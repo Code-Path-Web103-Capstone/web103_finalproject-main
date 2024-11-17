@@ -47,7 +47,8 @@ const LoginForm = () => {
     try {
       const data = await loginUser(email, password);
       setSuccess(data.message || "Login successful");
-      const userData = data.authData.user;
+      const userData = data.userData;
+      console.log(userData);
       login(userData);
       navigate("/");
     } catch (err) {

@@ -100,9 +100,62 @@ const loginUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  const { userId, email, password, username } = req.body;
+
+  try {
+    // Check if the email or username is already taken by another user
+    const { data: existingUser, error: fetchError } = await supabase
+      .from("users")
+      .select("*")
+      .or(`email.eq.${email},username.eq.${username}`)
+      .neq("id", userId) // Exclude current user's ID
+      .single();
+
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ error: "Email or username is already taken." });
+    }
+
+    if (fetchError && fetchError.code !== "PGRST116") {
+      console.error("Error checking existing user:", fetchError);
+      return res.status(500).json({ error: "Error checking existing user" });
+    }
+
+    const updates = {};
+    if (email) updates.email = email;
+    if (username) updates.username = username;
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updates.password = hashedPassword;
+    }
+
+    // Update user in the database
+    const { data: updatedUser, error: updateError } = await supabase
+      .from("users")
+      .update(updates)
+      .eq("id", userId)
+      .select("*")
+      .single();
+
+    if (updateError) {
+      console.error("Error updating user:", updateError);
+      return res.status(400).json({ error: updateError.message });
+    }
+
+    res.status(200).json({
+      message: "User updated successfully",
+      updatedUser,
+    });
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 // Google OAuth Sign-In with callback URL
 export async function SignInWithGoogle(req, res) {
-
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -189,4 +242,10 @@ export async function handleOAuthCallback(req, res) {
   }
 }
 
-export default { createUser, loginUser, SignInWithGoogle, handleOAuthCallback };
+export default {
+  createUser,
+  loginUser,
+  updateUser,
+  SignInWithGoogle,
+  handleOAuthCallback,
+};
