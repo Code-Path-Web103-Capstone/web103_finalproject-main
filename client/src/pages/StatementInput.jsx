@@ -9,6 +9,7 @@ import ParseButton from "../components/budget/ParseButton.jsx";
 import SimpleParseButton from "../components/budget/ParseButton.jsx";
 import TDParser from "../components/budget/TDParser.jsx";
 import PostParser from "../components/budget/PostParser.jsx";
+import SubmitStatementButton from "../components/budget/SubmitStatementButton.jsx";
 
 function StatementInput() {
   const {
@@ -117,11 +118,11 @@ function StatementInput() {
   return (
     <div className="mx-32 my-4 flex flex-grow flex-col">
       {/* Table Container */}
-      <div className="flex gap-2">
+      <div className="flex w-full gap-2">
         {/* Form for Actual Incomes and Expenses */}
         <form
           onSubmit={handleActualSubmit}
-          className="flex flex-col space-y-3 rounded-xl bg-gray-400 p-4"
+          className="bg-budgetblue flex w-1/2 flex-col space-y-3 rounded-xl p-4"
         >
           <IncomesExpensesTable
             title="Actual Incomes"
@@ -142,17 +143,12 @@ function StatementInput() {
             handleDeleteRow={handleDeleteRow}
           />
           {/* Submit Actual Incomes to DB */}
-          <button
-            type="submit"
-            className="mt-4 rounded bg-blue-500 p-2 text-white"
-          >
-            Submit Actuals
-          </button>
+          <SubmitStatementButton text="Submit Actuals" />
         </form>
         {/* Form for Expected Incomes and Expenses */}
         <form
           onSubmit={handleExpectedSubmit}
-          className="flex flex-col space-y-3 rounded-xl bg-gray-400 p-4"
+          className="bg-budgetblue flex w-1/2 flex-col space-y-3 rounded-xl p-4"
         >
           <IncomesExpensesTable
             handleAddRow={handleAddRow}
@@ -174,12 +170,7 @@ function StatementInput() {
             handleDeleteRow={handleDeleteRow}
           />
           {/* Submit Expected Incomes to DB */}
-          <button
-            type="submit"
-            className="mt-4 rounded bg-green-500 p-2 text-white"
-          >
-            Submit Expected
-          </button>
+          <SubmitStatementButton text="Submit Expected" />
         </form>
       </div>
 
