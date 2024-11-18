@@ -216,28 +216,40 @@ async function SignInWithGoogleCallback(req, res) {
     const isNewUser = !userResult;
 
     if (isNewUser) {
-      // Generate random and unique values for password and username
-      const randomPassword = uuidv4();
-      const randomUsername = uuidv4();
+        // Generate random and unique values for password and username
+        const randomPassword = uuidv4();
+        const randomUsername = uuidv4();
 
-      // Insert the new user into the users table
-      const { data: newUser, error: insertError } = await supabase
-        .from("users")
-        .insert([
-          { id: user.user.id, email: user.user.email, username: randomUsername, password: randomPassword },
-        ]);
+        // Insert the new user into the users table
+        const { data: newUser, error: insertError } = await supabase
+          .from("users")
+          .insert([
+            { id: user.user.id, email: user.user.email, username: randomUsername, password: randomPassword },
+          ]);
 
-      if (insertError) {
-        console.error("Error inserting new user into users table:", insertError);
-        return res.status(400).json({ error: insertError.message });
+        if (insertError) {
+          console.error("Error inserting new user into users table:", insertError);
+          return res.status(400).json({ error: insertError.message });
+        }
+
+        // Fetch the newly inserted user
+        const { data: userResult, error: fetchError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", user.user.id)
+          .single();
+
+        if (fetchError) {
+          console.error("Error fetching new user data from database:", fetchError);
+          return res.status(400).json({ error: fetchError.message });
+        }
+
+        return res.status(201).json({
+          message: "User created successfully",
+          authData: user.user,
+          userData: userResult,
+        });
       }
-
-      return res.status(201).json({
-        message: "User created successfully",
-        authData: user.user,
-        userData: newUser,
-      });
-    }
 
     // Respond with the unified structure for existing users
     res.status(200).json({
