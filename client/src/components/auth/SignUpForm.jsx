@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signUpUser } from "../../services/api.js";
 import { useUser } from "../../services/context.jsx";
@@ -29,9 +29,64 @@ const SignUpForm = () => {
     }
   };
 
-  const handleGoogleSignUp = () => {
-  window.location.href = 'http://localhost:3000/api/auth/logingoogle';
-};
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/auth/logingoogle",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        window.location.href = data.url; // Redirect to the OAuth provider's URL
+      } else {
+        setError(data.error || "Login failed");
+      }
+    } catch (err) {
+      setError(err.message || "Login failed");
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    const hash = window.location.hash.substring(1); // Get the URL fragment after #
+    const params = new URLSearchParams(hash);
+    const accessToken = params.get("access_token");
+    const refreshToken = params.get("refresh_token");
+
+    if (accessToken && refreshToken) {
+      // Send tokens to backend
+      const response = await fetch("http://localhost:3000/api/auth/callback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ accessToken, refreshToken }),
+      });
+
+      const data = await response.json();
+      console.log("Server response:", data);
+
+      if (response.ok) {
+        const userData = data.userData;
+        login(userData); // Call the login function with userData
+        navigate("/"); // Redirect to the home page
+      }
+
+      // Clear the hash from the URL
+      window.history.replaceState(null, null, window.location.pathname);
+    }
+  };
+
+  useEffect(() => {
+    if (window.location.hash.includes("access_token")) {
+      handleGoogleSignUp();
+    }
+  }, []);
 
   return (
     <div className="w-full max-w-lg space-y-6 rounded-xl bg-[#D9D9D9] px-8 pb-12 pt-8 shadow-lg">
@@ -91,15 +146,15 @@ const SignUpForm = () => {
           <hr className="h-0.5 w-1/2 bg-[#3A405A]" />
         </div>
         <button
-            type="button"
-            onClick={handleGoogleSignUp}
-            className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
+          type="button"
+          onClick={handleGoogleLogin}
+          className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
         >
           Sign Up with Google
         </button>
         <button
-            type="button"
-            className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
+          type="button"
+          className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
         >
           Sign Up with Github
         </button>

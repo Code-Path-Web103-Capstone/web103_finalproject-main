@@ -12,7 +12,7 @@ const LoginForm = () => {
   const [success, setSuccess] = useState(null);
 
   // Function to handle Google OAuth callback
-  async function handleGoogleCallback() {
+    async function handleGoogleCallback() {
     const hash = window.location.hash.substring(1); // Get the URL fragment after #
     const params = new URLSearchParams(hash);
     const accessToken = params.get("access_token");
@@ -20,13 +20,22 @@ const LoginForm = () => {
 
     if (accessToken && refreshToken) {
       // Send tokens to backend
-      await fetch("http://localhost:3000/api/auth/oauth-callback", {
+      const response = await fetch("http://localhost:3000/api/auth/callback", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ accessToken, refreshToken }),
       });
+
+      const data = await response.json();
+      console.log("Server response:", data);
+
+      if (response.ok) {
+        const userData = data.userData;
+        login(userData); // Call the login function with userData
+        navigate("/"); // Redirect to the home page
+      }
 
       // Clear the hash from the URL
       window.history.replaceState(null, null, window.location.pathname);

@@ -22,7 +22,8 @@
     "passport": "^0.7.0",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oidc": "^0.1.0",
-    "pg": "^8.10.0"
+    "pg": "^8.10.0",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"

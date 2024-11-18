@@ -29,7 +29,7 @@ Backend:
 - [X] The web app includes an Express backend app and a React frontend app.
 
 ![reactexpress.gif](gifs%2Freactexpress.gif)
-- [ ] The web app includes dynamic routes for both frontend and backend apps.
+- [X] The web app includes dynamic routes for both frontend and backend apps.
 - [ ] The web app is deployed on Railway with all pages and features working.
 
 #### Backend Features 
@@ -70,17 +70,16 @@ Backend:
 
 #### The user can create an account through various auth options
 
-- [ ] The user can create an account through email:password or sign-in through a GitHub account.
+- [X] The user can create an account through email:password or sign-in through a Google.
 
-[gif goes here]
+
 
 
 #### The user can input a PDF Bank/Credit Statement 
 
-- [ ] The user should be able to upload their bank statement in PDF format and the site will parse and input their spending automatically. 
+- [X] The user should be able to upload their bank statement in PDF format and the site will parse and input their spending automatically. 
 
-[gif goes here]
-
+![loginwithgoogle.gif](gifs%2Floginwithgoogle.gif)
 
 #### The user can create a budget plan
 

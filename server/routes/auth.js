@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/signup", AuthController.createUser);
 router.post("/login", AuthController.loginUser);
 router.get("/logingoogle", AuthController.SignInWithGoogle);
-router.post("/oauth-callback", AuthController.handleOAuthCallback);
 router.put("/updateUser", AuthController.updateUser);
+router.post("/callback", AuthController.SignInWithGoogleCallback);
 
 export default router;
