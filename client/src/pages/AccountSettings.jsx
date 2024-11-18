@@ -3,8 +3,8 @@ import UserSettingsForm from "../components/auth/UserSettingsForm";
 
 const AccountSettings = () => {
   return (
-    <main className="flex h-auto w-full flex-col items-center border-2 border-red-600 bg-[#D9D9D9]">
-      <div className="container mx-auto my-8">
+    <main className="mt-10 flex h-auto w-full flex-grow flex-col items-center border-t border-gray-500 bg-[#D9D9D9] p-5">
+      <div className="container mx-auto p-20">
         <UserSettingsForm />
       </div>
     </main>

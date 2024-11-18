@@ -29,8 +29,8 @@ function AllBudgets() {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <main className="flex h-auto w-full flex-grow flex-col items-center bg-[#D9D9D9] p-5">
-      <div>
+    <main className="mt-10 flex h-auto w-full flex-grow flex-col items-center border-t border-gray-500 bg-[#D9D9D9] p-5">
+      <div className="p-20">
         <div className="grid grid-cols-3 gap-4">
           {/* Card for creating a new budget */}
           <BudgetCard variant="new" onClick={openModal} />

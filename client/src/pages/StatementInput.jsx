@@ -116,9 +116,9 @@ function StatementInput() {
   };
 
   return (
-    <div className="mx-32 my-4 flex flex-grow flex-col">
+    <div className="mt-10 flex h-auto w-full flex-grow flex-col items-center border-t border-gray-500 bg-[#D9D9D9] p-5">
       {/* Table Container */}
-      <div className="flex w-full gap-2">
+      <div className="flex w-full gap-2 p-20">
         {/* Form for Actual Incomes and Expenses */}
         <form
           onSubmit={handleActualSubmit}
