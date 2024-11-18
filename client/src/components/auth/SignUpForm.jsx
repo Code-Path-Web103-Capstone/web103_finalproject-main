@@ -89,7 +89,7 @@ const SignUpForm = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-lg space-y-6 rounded-xl bg-[#D9D9D9] px-8 pb-12 pt-8 shadow-lg">
+    <div className="w-full max-w-lg space-y-6 rounded-xl bg-[] px-8 pb-12 pt-8 shadow-lg">
       <h2 className="text-center text-4xl font-bold text-gray-800">Sign Up</h2>
       <div className="flex items-center justify-center">
         <p>
