@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Bar, Pie } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-} from "chart.js";
-import PageLayout from "../../layouts/PageLayout";
+  Card,
+  CardHeader,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "../ui/Card";
+import { BarChart, Bar, CartesianGrid, XAxis, Tooltip } from "recharts";
 import {
   getBudgetsByUserId,
   fetchActualIncomes,
@@ -19,16 +16,6 @@ import {
   fetchExpectedExpenses,
 } from "../../services/api";
 import { useUser } from "../../services/context";
-
-// Register Chart.js modules
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement
-);
 
 const Breakdown = () => {
   const { year, month } = useParams();
@@ -41,13 +28,13 @@ const Breakdown = () => {
   const [expensesPredicted, setExpensesPredicted] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeChart, setActiveChart] = useState("actual");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        // Fetch budgets
         const budgetsData = await getBudgetsByUserId(user.id);
         const filteredBudgets = budgetsData.filter(
           (budget) =>
@@ -60,7 +47,6 @@ const Breakdown = () => {
         if (filteredBudgets.length > 0) {
           const budgetId = filteredBudgets[0].id;
 
-          // Fetch incomes and expenses
           const [
             actualIncomes,
             actualExpenses,
@@ -90,117 +76,107 @@ const Breakdown = () => {
     }
   }, [user, year, month]);
 
-  // Prepare chart data
-  const incomeExpenseData = {
-    labels: [
-      "Actual Income",
-      "Predicted Income",
-      "Actual Expense",
-      "Predicted Expense",
-    ],
-    datasets: [
-      {
-        label: "Amount ($)",
-        data: [
-          incomesActual.reduce((sum, item) => sum + item.amount, 0),
-          incomesPredicted.reduce((sum, item) => sum + item.amount, 0),
-          expensesActual.reduce((sum, item) => sum + item.amount, 0),
-          expensesPredicted.reduce((sum, item) => sum + item.amount, 0),
-        ],
-        backgroundColor: ["#4CAF50", "#2196F3", "#FF5722", "#FFC107"],
-        borderWidth: 1,
-      },
-    ],
-  };
+  const chartData = [
+    {
+      name: "Actual Income",
+      value: incomesActual.reduce((sum, item) => sum + item.amount, 0),
+      fill: "#23C436",
+    },
+    {
+      name: "Actual Expense",
+      value: expensesActual.reduce((sum, item) => sum + item.amount, 0),
+      fill: "#FF5E5E",
+    },
+    {
+      name: "Predicted Income",
+      value: incomesPredicted.reduce((sum, item) => sum + item.amount, 0),
+      fill: "#23C436",
+    },
+    {
+      name: "Predicted Expense",
+      value: expensesPredicted.reduce((sum, item) => sum + item.amount, 0),
+      fill: "#FF5E5E",
+    },
+  ];
 
-  const categoryData = {
-    labels: Array.from(
-      new Set([
-        ...expensesActual.map((item) => item.category),
-        ...expensesPredicted.map((item) => item.category),
-      ])
-    ),
-    datasets: [
-      {
-        label: "Category Distribution",
-        data: Array.from(
-          new Set([
-            ...expensesActual.map((item) => item.category),
-            ...expensesPredicted.map((item) => item.category),
-          ])
-        ).map(
-          (category) =>
-            expensesActual
-              .filter((item) => item.category === category)
-              .reduce((sum, item) => sum + item.amount, 0) +
-            expensesPredicted
-              .filter((item) => item.category === category)
-              .reduce((sum, item) => sum + item.amount, 0)
-        ),
-        backgroundColor: [
-          "#FF5722",
-          "#FFC107",
-          "#2196F3",
-          "#4CAF50",
-          "#9C27B0",
-        ],
-        borderWidth: 1,
-      },
-    ],
+  const totalData = {
+    actual: chartData[0].value - chartData[1].value,
+    predicted: chartData[2].value - chartData[3].value,
+  };
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const { name, value } = payload[0].payload; // Access name from payload object
+      return (
+        <div className="rounded bg-white p-2 shadow-md">
+          <p className="text-sm font-medium">{name}</p>
+          <p className="text-xs text-gray-700">${value.toLocaleString()}</p>
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
-    <PageLayout>
-      <div className="mx-auto max-w-3xl p-6">
-        <h1 className="mb-6 text-center text-2xl font-semibold text-gray-700">
-          Breakdown for {month.charAt(0).toUpperCase() + month.slice(1)} {year}
-        </h1>
-
-        {loading ? (
-          <p className="text-center text-gray-500">Loading...</p>
-        ) : error ? (
-          <p className="text-center text-red-500">{error}</p>
-        ) : budgets.length === 0 ? (
-          <p className="text-center text-gray-500">No budgets found.</p>
-        ) : (
-          <div className="space-y-6">
-            {/* Budget Information */}
-            {budgets.map((budget) => (
-              <div
-                key={budget.id}
-                className="rounded-lg border border-gray-300 bg-white p-4 shadow"
-              >
-                <h2 className="text-lg font-semibold text-gray-700">
-                  {budget.budget_name}
-                </h2>
-                <p className="text-sm text-gray-500">
-                  Plan: {budget.plan || "N/A"}
-                </p>
-                <p className="text-sm text-gray-500">
-                  Keep Track: {budget.keep_track ? "Yes" : "No"}
-                </p>
-              </div>
-            ))}
-
-            {/* Income vs Expense Chart */}
-            <div className="rounded-lg bg-white p-4 shadow">
-              <h3 className="text-lg font-semibold text-gray-700">
-                Income vs Expense
-              </h3>
-              <Bar data={incomeExpenseData} />
+    <div className="min-w-max rounded-lg border-2 bg-white">
+      {loading ? (
+        <p className="text-center text-gray-500">Loading...</p>
+      ) : error ? (
+        <p className="text-center text-red-500">{error}</p>
+      ) : (
+        <Card className="flex flex-col items-center justify-center">
+          <CardHeader className="flex w-[800px] items-stretch border-b border-gray-500 sm:flex-row">
+            <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5">
+              <CardTitle>
+                {activeChart === "actual" ? "Actual Data" : "Predicted Data"}
+              </CardTitle>
+              <CardDescription>
+                {activeChart === "actual"
+                  ? "Showing total actual (income and expenses)"
+                  : "Showing total predicted (income and expenses)"}
+              </CardDescription>
             </div>
-
-            {/* Expense Category Distribution */}
-            <div className="rounded-lg bg-white p-4 shadow">
-              <h3 className="text-lg font-semibold text-gray-700">
-                Expense Category Distribution
-              </h3>
-              <Pie data={categoryData} />
+            <div className="flex">
+              {["actual", "predicted"].map((key) => (
+                <button
+                  key={key}
+                  data-active={activeChart === key}
+                  className={`relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left sm:px-8 sm:py-6 ${
+                    activeChart === key ? "bg-gray-100" : ""
+                  }`}
+                  onClick={() => setActiveChart(key)}
+                >
+                  <span className="text-muted-foreground text-xs">
+                    {key === "actual" ? "Actual" : "Predicted"}
+                  </span>
+                  <span className="text-lg font-bold leading-none sm:text-3xl">
+                    ${totalData[key].toLocaleString()}
+                  </span>
+                </button>
+              ))}
             </div>
-          </div>
-        )}
-      </div>
-    </PageLayout>
+          </CardHeader>
+          <CardContent className="px-2 sm:p-6">
+            <BarChart
+              width={600}
+              height={300}
+              data={chartData.filter((data) =>
+                activeChart === "actual"
+                  ? ["Actual Income", "Actual Expense"].includes(data.name)
+                  : ["Predicted Income", "Predicted Expense"].includes(
+                      data.name
+                    )
+              )}
+              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <Tooltip content={<CustomTooltip />} />
+              <Bar dataKey="value" />
+            </BarChart>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 };
 

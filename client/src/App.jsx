@@ -10,7 +10,7 @@ import StatementInput from "./pages/StatementInput.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import AllBudgets from "./pages/AllBudgets.jsx";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
-import Breakdown from "./components/overview/Breakdown.jsx";
+import MonthBreakdown from "./pages/MonthBreakdown.jsx";
 
 function App() {
   const routes = [
@@ -69,7 +69,7 @@ function App() {
     },
     {
       path: "/breakdown/:year/:month",
-      element: <Breakdown />,
+      element: <MonthBreakdown />,
     },
   ];
 
