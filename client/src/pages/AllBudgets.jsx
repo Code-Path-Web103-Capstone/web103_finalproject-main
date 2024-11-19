@@ -6,6 +6,7 @@ import SkeletonCard from "../components/budget/SkeletonCard";
 import Modal from "../components/shared/Modal";
 import CreateBudgetForm from "../components/budget/CreateBudgetForm";
 import { useNavigate } from "react-router-dom";
+import PageLayout from "../layouts/PageLayout";
 
 function AllBudgets() {
   const { user, setBudgetId } = useUser();
@@ -29,7 +30,7 @@ function AllBudgets() {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <main className="mt-10 flex h-auto w-full flex-grow flex-col items-center border-t border-gray-500 bg-[#D9D9D9] p-5">
+    <PageLayout>
       <div className="p-20">
         <div className="grid grid-cols-3 gap-4">
           {/* Card for creating a new budget */}
@@ -54,7 +55,7 @@ function AllBudgets() {
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <CreateBudgetForm onClose={closeModal} />
       </Modal>
-    </main>
+    </PageLayout>
   );
 }
 

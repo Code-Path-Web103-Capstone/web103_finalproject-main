@@ -10,6 +10,7 @@ import SimpleParseButton from "../components/budget/ParseButton.jsx";
 import TDParser from "../components/budget/TDParser.jsx";
 import PostParser from "../components/budget/PostParser.jsx";
 import SubmitStatementButton from "../components/budget/SubmitStatementButton.jsx";
+import PageLayout from "../layouts/PageLayout.jsx";
 
 function StatementInput() {
   const {
@@ -116,7 +117,7 @@ function StatementInput() {
   };
 
   return (
-    <div className="mt-10 flex h-auto w-full flex-grow flex-col items-center border-t border-gray-500 bg-[#D9D9D9] p-5">
+    <PageLayout>
       {/* Table Container */}
       <div className="flex w-full gap-2 p-20">
         {/* Form for Actual Incomes and Expenses */}
@@ -179,7 +180,7 @@ function StatementInput() {
       <SimpleParseButton />
       <TDParser />
       <PostParser />
-    </div>
+    </PageLayout>
   );
 }
 

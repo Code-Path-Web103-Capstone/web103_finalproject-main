@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PageLayout from "../layouts/PageLayout";
 
 const Overview = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Overview = () => {
   };
 
   return (
-    <main className="mt-10 flex h-auto w-full flex-grow flex-col items-center border-t border-gray-500 bg-[#D9D9D9] p-5">
+    <PageLayout>
       <div className="mx-auto max-w-3xl p-6">
         <h1 className="mb-6 text-center text-2xl font-semibold text-gray-700">
           Select a Month and Year
@@ -75,7 +76,7 @@ const Overview = () => {
           ))}
         </div>
       </div>
-    </main>
+    </PageLayout>
   );
 };
 
