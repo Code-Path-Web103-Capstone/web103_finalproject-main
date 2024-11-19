@@ -4,13 +4,13 @@ import CreatableSelect from "react-select/creatable";
 const ExpenseCategoryDropdown = ({ value, onChange }) => {
   // Predefined options
   const options = [
-    { value: "food", label: "Food" },
-    { value: "gift", label: "Gift" },
+    { value: "food_and_drink", label: "Food and Drink" },
+    { value: "shopping", label: "Shopping" },
     { value: "transportation", label: "Transportation" },
-    { value: "personal", label: "Personal" },
-    { value: "restaurant", label: "Restaurant" },
+    { value: "entertainment", label: "Entertainment" },
     { value: "travel", label: "Travel" },
-    { value: "utilities", label: "Utilities" },
+    { value: "services", label: "Services" },
+    { value: "health", label: "Health" },
   ];
 
   const handleChange = (selectedOption) => {

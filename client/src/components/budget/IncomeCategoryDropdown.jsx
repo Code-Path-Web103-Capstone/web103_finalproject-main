@@ -5,9 +5,11 @@ const IncomeCategoryDropdown = ({ value, onChange }) => {
   // Predefined options
   const options = [
     { value: "salary", label: "Salary" },
+    { value: "freelance", label: "Freelance" },
     { value: "bonus", label: "Bonus" },
     { value: "investment", label: "Investment" },
     { value: "gift", label: "Gift" },
+    { value: "other", label: "Other" },
   ];
 
   const handleChange = (selectedOption) => {

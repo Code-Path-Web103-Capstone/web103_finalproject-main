@@ -110,8 +110,20 @@ export const getBudgetsByUserId = async (userId) => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    const data = await response.json();
 
-    return await response.json();
+    // Log the fetched budgets to inspect month and year
+    console.log(
+      "Fetched Budgets:",
+      data.map((budget) => ({
+        id: budget.id,
+        name: budget.budget_name,
+        month: budget.month,
+        year: budget.year,
+      }))
+    );
+
+    return data;
   } catch (error) {
     console.error("Error fetching budgets:", error);
     throw error; // Rethrow the error so it can be handled by the calling code
