@@ -18,6 +18,8 @@ router.patch("/actual/update", ExpenseController.updateExpenseActual);
 
 // DELETE request to delete an expense budget_id
 router.delete("/actual/delete", ExpenseController.deleteExpenseActual);
+// DELETE BUlK request to delete an expense budget_id
+router.delete("/actual/deletebulk", ExpenseController.deleteExpensesActualBulk);
 
 
 // PREDICTED EXPENESES
@@ -35,6 +37,9 @@ router.patch("/predicted/update", ExpenseController.updateExpensePredicted);
 
 // DELETE request to delete an expense
 router.delete("/predicted/delete", ExpenseController.deleteExpensePredicted);
+
+// DELETE BUlK request to delete an expense
+router.delete("/predicted/deletebulk", ExpenseController.deleteExpensesPredictedBulk);
 
 
 // RECURRENT EXPENESES

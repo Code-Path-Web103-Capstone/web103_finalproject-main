@@ -18,6 +18,8 @@ router.patch("/actual/update", IncomeController.updateIncomeActual);
 
 // DELETE request to delete an income by specific income_id
 router.delete("/actual/delete", IncomeController.deleteIncomeActual);
+// Delete bulk request to delete an income by specific income_id
+router.delete("/actual/deletebulk", IncomeController.deleteIncomesActualBulk);
 
 // PREDICTED INCOMES
 // POST request to add a new income
@@ -34,6 +36,9 @@ router.patch("/predicted/update", IncomeController.updateIncomePredicted);
 
 // DELETE request to delete an income by specific income_id
 router.delete("/predicted/delete", IncomeController.deleteIncomePredicted);
+
+// Delete bulk request to delete an income by specific income_id
+router.delete("/predicted/deletebulk", IncomeController.deleteIncomesPredictedBulk);
 
 // RECURRENT INCOMES
 // POST request to add a new income

@@ -72,14 +72,14 @@ Backend:
 
 - [X] The user can create an account through email:password or sign-in through a Google.
 
-
+![loginwithgoogle.gif](gifs%2Floginwithgoogle.gif)
 
 
 #### The user can input a PDF Bank/Credit Statement 
 
 - [X] The user should be able to upload their bank statement in PDF format and the site will parse and input their spending automatically. 
 
-![loginwithgoogle.gif](gifs%2Floginwithgoogle.gif)
+![parserfull.gif](gifs%2Fparserfull.gif)
 
 #### The user can create a budget plan
 

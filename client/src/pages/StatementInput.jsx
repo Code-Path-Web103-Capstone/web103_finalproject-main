@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useUser } from "../services/context";
 import useUserFinanceData from "../hooks/useUserFinanceData";
 import IncomesExpensesTable from "../components/budget/IncomesExpensesTable";
-import { processRow, deleteRow } from "../services/api";
+import { processRow, deleteRow, deleteExpensesActualBulk, deleteIncomesActualBulk, deleteIncomesPredictedBulk, deleteExpensesPredictedBulk } from "../services/api";
 import TableHeader from "../components/budget/TableHeader";
 import UploadPdf from "../components/budget/UploadPdf.jsx";
 import ParseButton from "../components/budget/ParseButton.jsx";
@@ -65,56 +65,75 @@ function StatementInput() {
   };
 
   // Submit data for actual incomes and expenses
-  const handleActualSubmit = async (event) => {
-    event.preventDefault();
+const handleActualSubmit = async (event) => {
+  event.preventDefault();
 
-    try {
-      const incomeResults = await Promise.all(
-        actualIncomes.map((income) => processRow(income, "income", "actual"))
-      );
-      const expenseResults = await Promise.all(
-        actualExpenses.map((expense) =>
-          processRow(expense, "expense", "actual")
-        )
-      );
+  try {
+    const incomeResults = await Promise.all(
+      actualIncomes.map((income) => processRow(income, "income", "actual"))
+    );
+    const expenseResults = await Promise.all(
+      actualExpenses.map((expense) => processRow(expense, "expense", "actual"))
+    );
 
-      for (const row of deletedRows) {
-        await deleteRow(row, "actual");
-      }
+    const incomeIdsToDelete = deletedRows
+      .filter((row) => row.type === "income")
+      .map((row) => row.id);
+    const expenseIdsToDelete = deletedRows
+      .filter((row) => row.type === "expense")
+      .map((row) => row.id);
 
-      console.log("Income Responses:", incomeResults);
-      console.log("Expense Responses:", expenseResults);
-    } catch (error) {
-      console.error("Error:", error);
+    if (incomeIdsToDelete.length > 0) {
+      await deleteIncomesActualBulk(incomeIdsToDelete, budgetId);
     }
-  };
 
-  // Submit data for expected incomes and expenses
-  const handleExpectedSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const expectedIncomeResults = await Promise.all(
-        expectedIncomes.map((income) =>
-          processRow(income, "income", "predicted")
-        )
-      );
-      const expectedExpenseResults = await Promise.all(
-        expectedExpenses.map((expense) =>
-          processRow(expense, "expense", "predicted")
-        )
-      );
-
-      for (const row of deletedRows) {
-        await deleteRow(row, "predicted");
-      }
-
-      console.log("Expected Income Responses:", expectedIncomeResults);
-      console.log("Expected Expense Responses:", expectedExpenseResults);
-    } catch (error) {
-      console.error("Error:", error);
+    if (expenseIdsToDelete.length > 0) {
+      await deleteExpensesActualBulk(expenseIdsToDelete, budgetId);
     }
-  };
+
+    console.log("Income Responses:", incomeResults);
+    console.log("Expense Responses:", expenseResults);
+  } catch (error) {
+    console.error("Error:", error);
+  } finally {
+    window.location.reload();
+  }
+};
+
+const handleExpectedSubmit = async (event) => {
+  event.preventDefault();
+
+  try {
+    const expectedIncomeResults = await Promise.all(
+      expectedIncomes.map((income) => processRow(income, "income", "predicted"))
+    );
+    const expectedExpenseResults = await Promise.all(
+      expectedExpenses.map((expense) => processRow(expense, "expense", "predicted"))
+    );
+
+    const incomeIdsToDelete = deletedRows
+      .filter((row) => row.type === "income")
+      .map((row) => row.id);
+    const expenseIdsToDelete = deletedRows
+      .filter((row) => row.type === "expense")
+      .map((row) => row.id);
+
+    if (incomeIdsToDelete.length > 0) {
+      await deleteIncomesPredictedBulk(incomeIdsToDelete, budgetId);
+    }
+
+    if (expenseIdsToDelete.length > 0) {
+      await deleteExpensesPredictedBulk(expenseIdsToDelete, budgetId);
+    }
+
+    console.log("Expected Income Responses:", expectedIncomeResults);
+    console.log("Expected Expense Responses:", expectedExpenseResults);
+  } catch (error) {
+    console.error("Error:", error);
+  } finally {
+    window.location.reload();
+  }
+};
 
   return (
     <PageLayout>
@@ -177,9 +196,6 @@ function StatementInput() {
 
       {/* Render the UploadPdf component as a button */}
       <UploadPdf />
-      <SimpleParseButton />
-      <TDParser />
-      <PostParser />
     </PageLayout>
   );
 }

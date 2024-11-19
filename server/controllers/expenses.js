@@ -69,6 +69,31 @@ const getExpensesActual = async (req, res) => {
   }
 };
 
+const deleteExpensesActualBulk = async (req, res) => {
+  const { ids, budget_id } = req.body;
+
+  try {
+    const { data, error } = await supabase
+      .from('expenses_actual')
+      .delete()
+      .in('id', ids)
+      .eq('budget_id', budget_id);
+
+    if (error) {
+      console.error("Error deleting expenses:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(200).json({
+      message: "Expenses deleted successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 const updateExpenseActual = async (req, res) => {
   const { id, description, date_posted, amount, category, budget_id } = req.body;
 
@@ -326,4 +351,46 @@ const deleteExpenseRecurrent = async (req, res) => {
   }
 };
 
-export default { addExpensesActualBulk, addExpenseRecurrent, addExpensesPredictedBulk, getExpensesRecurrent, updateExpenseRecurrent, deleteExpenseRecurrent, addExpenseActual, getExpensesActual, updateExpenseActual, deleteExpenseActual, addExpensePredicted, getExpensesPredicted, updateExpensePredicted, deleteExpensePredicted };
+const deleteExpensesPredictedBulk = async (req, res) => {
+  const { ids, budget_id } = req.body;
+
+  try {
+    const { data, error } = await supabase
+      .from('expenses_predicted')
+      .delete()
+      .in('id', ids)
+      .eq('budget_id', budget_id);
+
+    if (error) {
+      console.error("Error deleting predicted expenses:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(200).json({
+      message: "Predicted expenses deleted successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+export default {
+  addExpensesActualBulk,
+  addExpenseRecurrent,
+  addExpensesPredictedBulk,
+  getExpensesRecurrent,
+  updateExpenseRecurrent,
+  deleteExpenseRecurrent,
+  addExpenseActual,
+  getExpensesActual,
+  updateExpenseActual,
+  deleteExpenseActual,
+  addExpensePredicted,
+  getExpensesPredicted,
+  updateExpensePredicted,
+  deleteExpensePredicted,
+  deleteExpensesActualBulk,
+  deleteExpensesPredictedBulk
+}

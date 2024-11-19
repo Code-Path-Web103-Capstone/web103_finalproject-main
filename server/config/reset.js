@@ -13,4 +13,6 @@ const deleteUserRows = async () => {
   }
 };
 
+const deletedata
+
 deleteUserRows();

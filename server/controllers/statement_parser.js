@@ -7,6 +7,7 @@ import path from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const dataFolderPath = path.join(__dirname, '../data');
 
 const handleHelloRequest = async (req, res) => {
   try {
@@ -68,4 +69,41 @@ const handleExecuteParserStatement = async (req, res) => {
   });
 };
 
-export default { handleHelloRequest, handleExecuteParserRequest, handleExecuteParserStatement };
+const DeleteDataExpected = async (req, res) => {
+  try {
+    fs.readdir(dataFolderPath, (err, files) => {
+      if (err) {
+        console.error('Error reading data folder:', err);
+        return res.status(500).json({ error: 'Failed to read data folder' });
+      }
+
+      const deletePromises = files.map((file) => {
+        return new Promise((resolve, reject) => {
+          fs.unlink(path.join(dataFolderPath, file), (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+      });
+
+      Promise.all(deletePromises)
+        .then(() => {
+          res.status(200).json({ message: 'All files deleted successfully' });
+        })
+        .catch((err) => {
+          console.error('Error deleting some files:', err);
+          res.status(500).json({ error: 'Failed to delete some files', details: err });
+        });
+    });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+
+
+export default { handleHelloRequest, handleExecuteParserRequest, handleExecuteParserStatement, DeleteDataExpected };

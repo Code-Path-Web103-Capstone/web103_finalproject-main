@@ -1,5 +1,4 @@
 import supabase from "../config/supabase.js";
-
 const addBudget = async (req, res) => {
   const { user_id, plan, budget_name, keep_track, month, year } = req.body;
 

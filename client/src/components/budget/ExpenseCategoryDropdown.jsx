@@ -56,7 +56,7 @@ const ExpenseCategoryDropdown = ({ value, onChange }) => {
   };
 
   return (
-    <div className>
+    <div className="expense-category-dropdown">
       <CreatableSelect
         value={
           options.find((option) => option.value === value) || {

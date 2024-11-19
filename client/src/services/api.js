@@ -237,3 +237,103 @@ export const handleOAuthCallback = async (accessToken, refreshToken) => {
     throw error;
   }
 };
+
+export const deleteIncomesActualBulk = async (ids, budgetId) => {
+  const url = `${API_URL}/api/income/actual/deletebulk`;
+  const body = {
+    ids,
+    budget_id: budgetId,
+  };
+
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! status: ${response.status}, response: ${errorText}`
+    );
+  }
+
+  return response.json();
+};
+
+export const deleteExpensesActualBulk = async (ids, budgetId) => {
+  const url = `${API_URL}/api/expense/actual/deletebulk`;
+  const body = {
+    ids,
+    budget_id: budgetId,
+  };
+
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! status: ${response.status}, response: ${errorText}`
+    );
+  }
+
+  return response.json();
+};
+
+export const deleteIncomesPredictedBulk = async (ids, budgetId) => {
+  const url = `${API_URL}/api/income/predicted/deletebulk`;
+  const body = {
+    ids,
+    budget_id: budgetId,
+  };
+
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! status: ${response.status}, response: ${errorText}`
+    );
+  }
+
+  return response.json();
+};
+
+export const deleteExpensesPredictedBulk = async (ids, budgetId) => {
+  const url = `${API_URL}/api/expense/predicted/deletebulk`;
+  const body = {
+    ids,
+    budget_id: budgetId,
+  };
+
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! status: ${response.status}, response: ${errorText}`
+    );
+  }
+
+  return response.json();
+};
