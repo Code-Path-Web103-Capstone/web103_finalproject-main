@@ -68,11 +68,13 @@ export const updateUser = async (userId, updates) => {
 };
 
 // BUDGET API
-export const createBudget = async (userId, plan, budgetName) => {
+export const createBudget = async (userId, plan, budgetName, month, year) => {
   const budgetData = {
     user_id: userId,
     plan,
     budget_name: budgetName,
+    month,
+    year,
   };
 
   try {
@@ -95,6 +97,7 @@ export const createBudget = async (userId, plan, budgetName) => {
     throw error;
   }
 };
+
 export const getBudgetsByUserId = async (userId) => {
   try {
     const response = await fetch(`http://localhost:3000/api/budget/${userId}`, {
@@ -114,6 +117,7 @@ export const getBudgetsByUserId = async (userId) => {
     throw error; // Rethrow the error so it can be handled by the calling code
   }
 };
+
 export const fetchActualIncomes = async (userId, budgetId) => {
   const response = await fetch(
     `${API_URL}/api/income/actual/${userId}/${budgetId}`
@@ -122,6 +126,7 @@ export const fetchActualIncomes = async (userId, budgetId) => {
     throw new Error(`Error fetching incomes: ${response.status}`);
   return response.json();
 };
+
 export const fetchActualExpenses = async (userId, budgetId) => {
   const response = await fetch(
     `${API_URL}/api/expense/actual/${userId}/${budgetId}`

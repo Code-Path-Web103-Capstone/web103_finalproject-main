@@ -6,6 +6,8 @@ import { createBudget } from "../../services/api";
 const CreateBudgetForm = ({ onClose }) => {
   const [plan, setPlan] = useState("");
   const [budgetName, setBudgetName] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState(new Date().getFullYear());
   const { user, setBudgetId } = useUser();
   const navigate = useNavigate();
 
@@ -13,7 +15,13 @@ const CreateBudgetForm = ({ onClose }) => {
     e.preventDefault();
 
     try {
-      const newBudget = await createBudget(user.id, plan, budgetName);
+      const newBudget = await createBudget(
+        user.id,
+        plan,
+        budgetName,
+        month,
+        year
+      );
       const budgetId = newBudget.id;
       setBudgetId(budgetId);
 
@@ -23,6 +31,21 @@ const CreateBudgetForm = ({ onClose }) => {
       console.error("Error creating budget:", error);
     }
   };
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -42,6 +65,35 @@ const CreateBudgetForm = ({ onClose }) => {
           type="text"
           value={plan}
           onChange={(e) => setPlan(e.target.value)}
+          required
+          className="w-full rounded-md border border-gray-300 p-2"
+        />
+
+        {/* Month Selector */}
+        <select
+          value={month}
+          onChange={(e) => setMonth(e.target.value)}
+          required
+          className="w-full rounded-md border border-gray-300 p-2"
+        >
+          <option value="" disabled>
+            Select Month
+          </option>
+          {months.map((m, index) => (
+            <option key={index} value={m}>
+              {m}
+            </option>
+          ))}
+        </select>
+
+        {/* Year Input */}
+        <input
+          placeholder="Year:"
+          type="number"
+          min="2000"
+          max="2100"
+          value={year}
+          onChange={(e) => setYear(e.target.value)}
           required
           className="w-full rounded-md border border-gray-300 p-2"
         />
