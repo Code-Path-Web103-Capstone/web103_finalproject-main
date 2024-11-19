@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { useUser } from "../services/context";
 import useUserFinanceData from "../hooks/useUserFinanceData";
 import IncomesExpensesTable from "../components/budget/IncomesExpensesTable";
-import { processRow, deleteRow, deleteExpensesActualBulk, deleteIncomesActualBulk, deleteIncomesPredictedBulk, deleteExpensesPredictedBulk } from "../services/api";
+import {
+  processRow,
+  deleteRow,
+  deleteExpensesActualBulk,
+  deleteIncomesActualBulk,
+  deleteIncomesPredictedBulk,
+  deleteExpensesPredictedBulk,
+} from "../services/api";
 import TableHeader from "../components/budget/TableHeader";
 import UploadPdf from "../components/budget/UploadPdf.jsx";
 import ParseButton from "../components/budget/ParseButton.jsx";
@@ -65,75 +72,81 @@ function StatementInput() {
   };
 
   // Submit data for actual incomes and expenses
-const handleActualSubmit = async (event) => {
-  event.preventDefault();
+  const handleActualSubmit = async (event) => {
+    event.preventDefault();
 
-  try {
-    const incomeResults = await Promise.all(
-      actualIncomes.map((income) => processRow(income, "income", "actual"))
-    );
-    const expenseResults = await Promise.all(
-      actualExpenses.map((expense) => processRow(expense, "expense", "actual"))
-    );
+    try {
+      const incomeResults = await Promise.all(
+        actualIncomes.map((income) => processRow(income, "income", "actual"))
+      );
+      const expenseResults = await Promise.all(
+        actualExpenses.map((expense) =>
+          processRow(expense, "expense", "actual")
+        )
+      );
 
-    const incomeIdsToDelete = deletedRows
-      .filter((row) => row.type === "income")
-      .map((row) => row.id);
-    const expenseIdsToDelete = deletedRows
-      .filter((row) => row.type === "expense")
-      .map((row) => row.id);
+      const incomeIdsToDelete = deletedRows
+        .filter((row) => row.type === "income")
+        .map((row) => row.id);
+      const expenseIdsToDelete = deletedRows
+        .filter((row) => row.type === "expense")
+        .map((row) => row.id);
 
-    if (incomeIdsToDelete.length > 0) {
-      await deleteIncomesActualBulk(incomeIdsToDelete, budgetId);
+      if (incomeIdsToDelete.length > 0) {
+        await deleteIncomesActualBulk(incomeIdsToDelete, budgetId);
+      }
+
+      if (expenseIdsToDelete.length > 0) {
+        await deleteExpensesActualBulk(expenseIdsToDelete, budgetId);
+      }
+
+      console.log("Income Responses:", incomeResults);
+      console.log("Expense Responses:", expenseResults);
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      window.location.reload();
     }
+  };
 
-    if (expenseIdsToDelete.length > 0) {
-      await deleteExpensesActualBulk(expenseIdsToDelete, budgetId);
+  const handleExpectedSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const expectedIncomeResults = await Promise.all(
+        expectedIncomes.map((income) =>
+          processRow(income, "income", "predicted")
+        )
+      );
+      const expectedExpenseResults = await Promise.all(
+        expectedExpenses.map((expense) =>
+          processRow(expense, "expense", "predicted")
+        )
+      );
+
+      const incomeIdsToDelete = deletedRows
+        .filter((row) => row.type === "income")
+        .map((row) => row.id);
+      const expenseIdsToDelete = deletedRows
+        .filter((row) => row.type === "expense")
+        .map((row) => row.id);
+
+      if (incomeIdsToDelete.length > 0) {
+        await deleteIncomesPredictedBulk(incomeIdsToDelete, budgetId);
+      }
+
+      if (expenseIdsToDelete.length > 0) {
+        await deleteExpensesPredictedBulk(expenseIdsToDelete, budgetId);
+      }
+
+      console.log("Expected Income Responses:", expectedIncomeResults);
+      console.log("Expected Expense Responses:", expectedExpenseResults);
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      window.location.reload();
     }
-
-    console.log("Income Responses:", incomeResults);
-    console.log("Expense Responses:", expenseResults);
-  } catch (error) {
-    console.error("Error:", error);
-  } finally {
-    window.location.reload();
-  }
-};
-
-const handleExpectedSubmit = async (event) => {
-  event.preventDefault();
-
-  try {
-    const expectedIncomeResults = await Promise.all(
-      expectedIncomes.map((income) => processRow(income, "income", "predicted"))
-    );
-    const expectedExpenseResults = await Promise.all(
-      expectedExpenses.map((expense) => processRow(expense, "expense", "predicted"))
-    );
-
-    const incomeIdsToDelete = deletedRows
-      .filter((row) => row.type === "income")
-      .map((row) => row.id);
-    const expenseIdsToDelete = deletedRows
-      .filter((row) => row.type === "expense")
-      .map((row) => row.id);
-
-    if (incomeIdsToDelete.length > 0) {
-      await deleteIncomesPredictedBulk(incomeIdsToDelete, budgetId);
-    }
-
-    if (expenseIdsToDelete.length > 0) {
-      await deleteExpensesPredictedBulk(expenseIdsToDelete, budgetId);
-    }
-
-    console.log("Expected Income Responses:", expectedIncomeResults);
-    console.log("Expected Expense Responses:", expectedExpenseResults);
-  } catch (error) {
-    console.error("Error:", error);
-  } finally {
-    window.location.reload();
-  }
-};
+  };
 
   return (
     <PageLayout>
@@ -142,7 +155,7 @@ const handleExpectedSubmit = async (event) => {
         {/* Form for Actual Incomes and Expenses */}
         <form
           onSubmit={handleActualSubmit}
-          className="bg-budgetblue flex w-1/2 flex-col space-y-3 rounded-xl p-4"
+          className="flex w-1/2 flex-col space-y-3 rounded-xl p-4"
         >
           <IncomesExpensesTable
             title="Actual Incomes"
@@ -168,7 +181,7 @@ const handleExpectedSubmit = async (event) => {
         {/* Form for Expected Incomes and Expenses */}
         <form
           onSubmit={handleExpectedSubmit}
-          className="bg-budgetblue flex w-1/2 flex-col space-y-3 rounded-xl p-4"
+          className="flex w-1/2 flex-col space-y-3 rounded-xl p-4"
         >
           <IncomesExpensesTable
             handleAddRow={handleAddRow}
