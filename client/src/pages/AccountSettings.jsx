@@ -1,13 +1,14 @@
 import React from "react";
 import UserSettingsForm from "../components/auth/UserSettingsForm";
+import PageLayout from "../layouts/PageLayout";
 
 const AccountSettings = () => {
   return (
-    <main className="flex h-auto w-full flex-col items-center border-2 border-red-600 bg-[#D9D9D9]">
-      <div className="container mx-auto my-8">
+    <PageLayout>
+      <div className="container mx-auto p-20">
         <UserSettingsForm />
       </div>
-    </main>
+    </PageLayout>
   );
 };
 

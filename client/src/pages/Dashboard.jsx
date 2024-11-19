@@ -1,11 +1,8 @@
 import React from "react";
+import PageLayout from "../layouts/PageLayout";
 
 const Dashboard = () => {
-  return (
-    <main className="flex h-auto w-full flex-col items-center border-2 border-red-600 bg-[#D9D9D9]">
-      Dashboard
-    </main>
-  );
+  return <PageLayout>Dashboard</PageLayout>;
 };
 
 export default Dashboard;

@@ -36,7 +36,7 @@ const UserSettingsForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto max-w-md space-y-6 rounded border bg-gray-50 p-4"
+      className="mx-auto max-w-lg space-y-6 rounded border bg-gray-50 p-4"
     >
       <h2 className="text-2xl font-semibold text-gray-700">
         Update Your Settings
