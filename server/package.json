@@ -3,8 +3,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --verbose --require dotenv/config server.js",
-    "start": "cd server && node server",
-    "build": "cd client && vite build",
+    "start": "nodemon --verbose --require dotenv/config server.js",
+    "build": "cd ../client && vite build",
     "reset": "node --require dotenv/config config/reset.js"
   },
   "dependencies": {
