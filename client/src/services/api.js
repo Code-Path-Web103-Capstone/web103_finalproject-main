@@ -4,8 +4,8 @@
 
 // for Production
 
-const API_URL = process.env.NODE_ENV === 'production' ? 'gobudget-production.up.railway.app' : ''
-const API_PYTHON_URL = "parser-production-c8da.up.railway.app";
+const API_URL = process.env.NODE_ENV === 'production' ? 'http://gobudget-production.up.railway.app' : ''
+const API_PYTHON_URL = "http://parser-production-c8da.up.railway.app";
 
 // AUTH API
 export const signUpUser = async (username, email, password) => {
