@@ -2,7 +2,7 @@ import GetStartedButton from "./GetStartedButton.jsx";
 
 const ContentSection = () => {
   return (
-    <div className="container my-5 flex">
+    <div className="container flex">
       <ContentText />
       <ContentImage />
     </div>
@@ -12,7 +12,7 @@ const ContentSection = () => {
 const ContentText = () => {
   return (
     <div className="flex w-1/2 items-center justify-center">
-      <section className="items-left m-8 flex flex-col justify-between space-y-12">
+      <section className="items-left m-8 flex flex-col justify-between space-y-10">
         <h2 className="font-manrope text-6xl">
           <span className="font-light"> Money, </span>
           <span className="font-bold">Simplified</span>{" "}
@@ -32,7 +32,7 @@ const ContentText = () => {
 const ContentImage = () => {
   return (
     <div className="flex w-1/2 items-center justify-center">
-      <div className="m-20 aspect-square w-full overflow-hidden rounded-xl">
+      <div className="m-20 h-[460px] w-[460px] overflow-hidden rounded-xl">
         <img
           src="https://images.pexels.com/photos/5909813/pexels-photo-5909813.jpeg?auto=compress&cs=tinysrgb&w=1200"
           className="h-full w-full object-cover"

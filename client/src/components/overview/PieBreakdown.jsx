@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardTitle,
 } from "../ui/Card";
-import { fetchActualExpenses } from "../../services/api";
+import { fetchActualExpenses, getBudgetsByUserId } from "../../services/api";
 import { useUser } from "../../services/context";
 
 const COLORS = {
@@ -34,7 +34,9 @@ const CATEGORY_NAMES = {
 
 const PieBreakdown = () => {
   const { year, month } = useParams();
-  const { user, budgetId } = useUser();
+  const { user } = useUser();
+
+  const [budgets, setBudgets] = useState([]);
   const [expensesByCategory, setExpensesByCategory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,23 +45,47 @@ const PieBreakdown = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        // Fetch all budgets for the user
+        const budgetsData = await getBudgetsByUserId(user.id);
+        // Filter budgets by year and month match and if keep track is true
+        const filteredBudgets = budgetsData.filter(
+          (budget) =>
+            budget.year === parseInt(year, 10) &&
+            budget.month.toLowerCase() === month.toLowerCase() &&
+            budget.keep_track === true
+        );
+        // Set the filtered budgets to the state
+        setBudgets(filteredBudgets);
 
-        const actualExpenses = await fetchActualExpenses(user.id, budgetId);
+        // Check if there are any budgets for the selected month and year
+        if (filteredBudgets.length > 0) {
+          // Get the budget ID
+          const budgetId = filteredBudgets[0].id;
 
-        const categoryData = actualExpenses.reduce((acc, expense) => {
-          const category = expense.category || "Uncategorized";
-          if (!acc[category]) acc[category] = 0;
-          acc[category] += expense.amount;
-          return acc;
-        }, {});
+          // Fetch expenses for the selected budget
+          const actualExpenses = await fetchActualExpenses(user.id, budgetId);
 
-        const chartData = Object.keys(categoryData).map((category) => ({
-          category,
-          displayName: CATEGORY_NAMES[category] || category,
-          value: categoryData[category],
-        }));
+          // Aggregate expenses by category
+          const categoryData = actualExpenses.reduce((acc, expense) => {
+            const category = expense.category || "Uncategorized";
+            if (!acc[category]) acc[category] = 0;
+            acc[category] += expense.amount;
+            return acc;
+          }, {});
 
-        setExpensesByCategory(chartData);
+          // Transform the aggregated data into chart-ready format
+          const chartData = Object.keys(categoryData).map((category) => ({
+            category,
+            displayName: CATEGORY_NAMES[category] || category,
+            value: categoryData[category],
+          }));
+
+          // Set the chart data to state
+          setExpensesByCategory(chartData);
+        } else {
+          // Clear expenses if no matching budget
+          setExpensesByCategory([]);
+        }
       } catch (err) {
         setError(err.message || "Failed to fetch data.");
       } finally {
@@ -67,27 +93,16 @@ const PieBreakdown = () => {
       }
     };
 
-    if (user?.id) fetchData();
+    // Fetch data if user is logged in
+    if (user?.id) {
+      fetchData();
+    }
   }, [user, year, month]);
 
   const totalExpenses = expensesByCategory.reduce(
     (acc, curr) => acc + curr.value,
     0
   );
-
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const { name, value } = payload[0];
-      const percentage = ((value / totalExpenses) * 100).toFixed(1);
-      return (
-        <div className="rounded bg-white p-2 shadow-md">
-          <p className="text-sm font-medium">{name}</p>
-          <p className="text-xs text-gray-500">{percentage}% of total</p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <div className="flex flex-col rounded-lg bg-white">
@@ -121,7 +136,7 @@ const PieBreakdown = () => {
                   />
                 ))}
               </Pie>
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip />
             </PieChart>
             <div className="grid grid-cols-2 gap-4 py-10 sm:grid-cols-3">
               {expensesByCategory.map((entry) => (

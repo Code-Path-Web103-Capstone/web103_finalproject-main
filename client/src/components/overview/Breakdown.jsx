@@ -31,22 +31,28 @@ const Breakdown = () => {
   const [activeChart, setActiveChart] = useState("actual");
 
   useEffect(() => {
+    // Fetch data for the selected year and month finances
     const fetchData = async () => {
       try {
         setLoading(true);
-
+        // Get all budgets for the user
         const budgetsData = await getBudgetsByUserId(user.id);
+        // Filter budgets by year and month match and if keep track is true
         const filteredBudgets = budgetsData.filter(
           (budget) =>
             budget.year === parseInt(year, 10) &&
-            budget.month.toLowerCase() === month.toLowerCase()
+            budget.month.toLowerCase() === month.toLowerCase() &&
+            budget.keep_track === true
         );
-
+        // Sets budget for the month and year user selected
         setBudgets(filteredBudgets);
+        console.log(budgets);
 
+        // If there is a budget for the month and year selected
         if (filteredBudgets.length > 0) {
+          // Get the budget ID
           const budgetId = filteredBudgets[0].id;
-
+          // Fetch actual and predicted incomes and expenses
           const [
             actualIncomes,
             actualExpenses,
@@ -59,6 +65,7 @@ const Breakdown = () => {
             fetchExpectedExpenses(user.id, budgetId),
           ]);
 
+          // Set the fetched data to the state
           setIncomesActual(actualIncomes);
           setExpensesActual(actualExpenses);
           setIncomesPredicted(predictedIncomes);
@@ -70,7 +77,7 @@ const Breakdown = () => {
         setLoading(false);
       }
     };
-
+    // Fetch data if user is logged in
     if (user?.id) {
       fetchData();
     }
