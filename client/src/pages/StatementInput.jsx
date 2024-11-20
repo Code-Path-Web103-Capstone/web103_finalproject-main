@@ -280,7 +280,7 @@ function StatementInput() {
 
   return (
     <PageLayout>
-      <div className="m-10 flex h-16 w-full gap-2 px-20">
+      <div className="m-5 flex h-16 w-full gap-2 px-24">
         {/* Name and Plan */}
         <div className="flex grow items-center justify-start gap-2 rounded-lg border-2 bg-white px-5 py-5 text-left">
           <h1 className="font-manrope text-2xl font-bold">{budgetName}</h1>

@@ -16,6 +16,7 @@ import {
   fetchExpectedExpenses,
 } from "../../services/api";
 import { useUser } from "../../services/context";
+import { div } from "three/examples/jsm/nodes/Nodes.js";
 
 const Breakdown = () => {
   const { year, month } = useParams();
@@ -125,8 +126,11 @@ const Breakdown = () => {
 
   return (
     <div className="min-w-max rounded-lg border-2 bg-white">
+      {/* Loading Error and Good Response */}
       {loading ? (
-        <p className="text-center text-gray-500">Loading...</p>
+        <div className="flex w-[800px] items-stretch border-b border-gray-500 sm:flex-row">
+          <p className="text-center text-gray-500">Loading...</p>{" "}
+        </div>
       ) : error ? (
         <p className="text-center text-red-500">{error}</p>
       ) : (

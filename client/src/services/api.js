@@ -356,8 +356,9 @@ export const updateKeepTrack = async (budgetId, userId, keepTrack) => {
   const body = {
     budget_id: budgetId,
     user_id: userId,
-    keep_track: keepTrack,
+    keep_track: !!keepTrack,
   };
+  console.log(body);
 
   const response = await fetch(url, {
     method: "PATCH",
@@ -410,7 +411,9 @@ export const updateBudget = async (budgetId, updates) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
+      throw new Error(
+        `HTTP error! status: ${response.status}, response: ${errorText}`
+      );
     }
 
     return await response.json();

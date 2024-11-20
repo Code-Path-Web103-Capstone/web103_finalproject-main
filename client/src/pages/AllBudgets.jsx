@@ -31,14 +31,14 @@ function AllBudgets() {
 
   return (
     <PageLayout>
-      <div className="p-20">
+      <div className="p-5">
         <div className="grid grid-cols-3 gap-4">
           {/* Card for creating a new budget */}
           <BudgetCard variant="new" onClick={openModal} />
 
           {/* Render skeleton cards if loading, otherwise show budget cards */}
           {loading
-            ? Array.from({ length: budgets.length || 3 }).map((_, index) => (
+            ? Array.from({ length: budgets.length || 8 }).map((_, index) => (
                 <SkeletonCard key={index} />
               ))
             : budgets.map((budget) => (

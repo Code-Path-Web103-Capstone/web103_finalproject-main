@@ -37,7 +37,7 @@ const Overview = () => {
 
   return (
     <PageLayout>
-      <div className="mx-auto max-w-xl p-6">
+      <div className="mx-auto max-w-xl border-2 border-red-500 p-5">
         {/* Year Selector */}
         <div className="relative mb-8 flex items-center justify-center">
           <button
