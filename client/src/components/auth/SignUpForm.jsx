@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signUpUser } from "../../services/api.js";
+import { signUpUser, handleGoogleSignUp, handleGoogleLogin } from "../../services/api.js";
 import { useUser } from "../../services/context.jsx";
 
 const SignUpForm = () => {
@@ -29,64 +29,11 @@ const SignUpForm = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/auth/logingoogle",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-
-      if (response.ok) {
-        window.location.href = data.url; // Redirect to the OAuth provider's URL
-      } else {
-        setError(data.error || "Login failed");
-      }
-    } catch (err) {
-      setError(err.message || "Login failed");
-    }
-  };
-
-  const handleGoogleSignUp = async () => {
-    const hash = window.location.hash.substring(1); // Get the URL fragment after #
-    const params = new URLSearchParams(hash);
-    const accessToken = params.get("access_token");
-    const refreshToken = params.get("refresh_token");
-
-    if (accessToken && refreshToken) {
-      // Send tokens to backend
-      const response = await fetch("http://localhost:3000/api/auth/callback", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ accessToken, refreshToken }),
-      });
-
-      const data = await response.json();
-      console.log("Server response:", data);
-
-      if (response.ok) {
-        const userData = data.userData;
-        login(userData); // Call the login function with userData
-        navigate("/"); // Redirect to the home page
-      }
-
-      // Clear the hash from the URL
-      window.history.replaceState(null, null, window.location.pathname);
-    }
-  };
-
   useEffect(() => {
     if (window.location.hash.includes("access_token")) {
-      handleGoogleSignUp();
+      handleGoogleSignUp(login, navigate, setError);
     }
-  }, []);
+  }, [login, navigate]);
 
   return (
     <div className="w-full max-w-lg space-y-6 rounded-xl bg-[] px-8 pb-12 pt-8 shadow-lg">
@@ -147,7 +94,7 @@ const SignUpForm = () => {
         </div>
         <button
           type="button"
-          onClick={handleGoogleLogin}
+          onClick={() => handleGoogleLogin().catch((err) => setError(err.message))}
           className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
         >
           Sign Up with Google

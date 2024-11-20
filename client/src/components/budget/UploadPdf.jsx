@@ -3,22 +3,15 @@ import { useDropzone } from "react-dropzone";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../../services/context";
 import useUserFinanceData from "../../hooks/useUserFinanceData";
-
-const uploadFile = async (file) => {
-  const formData = new FormData();
-  formData.append("pdf", file);
-
-  const response = await fetch("http://localhost:3000/api/upload/add", {
-    method: "POST",
-    body: formData,
-  });
-
-  if (!response.ok) {
-    throw new Error("Error uploading file");
-  }
-
-  return response.json();
-};
+import {
+  uploadFile,
+  executeParser,
+  executeTDParser,
+  parseJSON,
+  addBulkIncomes,
+  addBulkExpenses,
+  deleteDataFolder,
+} from "../../services/api";
 
 const UploadPdf = () => {
   const { budgetId } = useUser(); // Get the budgetId from the useUser hook
@@ -35,151 +28,57 @@ const UploadPdf = () => {
       setMessage("File uploaded successfully");
       queryClient.invalidateQueries("files");
       try {
-        const response = await fetch("http://127.0.0.1:8000/execute-parser", {
-          method: "GET",
-        });
-        if (response.ok) {
-          setMessage("File uploaded and parser executed successfully");
-          try {
-            const response = await fetch(
-              "http://127.0.0.1:8000/execute-parser-tdtest",
-              {
-                method: "GET",
-              }
-            );
-            if (response.ok) {
-              setMessage("TD Parser executed successfully");
-              try {
-                const response = await fetch(
-                  "http://localhost:3000/api/parser/parserjson",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ option: selectedOption }), // Use selected option here
-                  }
-                );
+        await executeParser();
+        setMessage("File uploaded and parser executed successfully");
+        await executeTDParser();
+        setMessage("TD Parser executed successfully");
+        const data = await parseJSON(selectedOption);
+        setMessage("Parser executed successfully");
+        console.log(data); // Log the result
 
-                const contentType = response.headers.get("content-type");
-                let data;
-                if (contentType && contentType.includes("application/json")) {
-                  data = await response.json();
-                } else {
-                  data = { error: "Server returned non-JSON response" };
-                }
+        const { incomes, expenses } = data.data;
 
-                if (response.ok) {
-                  setMessage("Parser executed successfully");
-                  console.log(data); // Log the result
+        if (incomes && incomes.length > 0) {
+          const newIncomes = incomes.map((income) => ({
+            description: income.description,
+            date_posted: new Date(income.date).toISOString(),
+            amount: income.amount,
+            category: "gift",
+            budget_id: budgetId, // Use the budgetId here
+          }));
 
-                  const { incomes, expenses } = data.data;
+          console.log("New Incomes:", newIncomes);
 
-                  if (incomes && incomes.length > 0) {
-                    const newIncomes = incomes.map((income) => ({
-                      description: income.description,
-                      date_posted: new Date(income.date).toISOString(),
-                      amount: income.amount,
-                      category: "gift",
-                      budget_id: budgetId, // Use the budgetId here
-                    }));
-
-                    console.log("New Incomes:", newIncomes);
-
-                    const incomeResponse = await fetch(
-                      "http://localhost:3000/api/income/actual/addbulk",
-                      {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(newIncomes),
-                      }
-                    );
-
-                    if (incomeResponse.ok) {
-                      setActualIncomes((prevIncomes) => [
-                        ...prevIncomes,
-                        ...newIncomes,
-                      ]);
-                      setMessage("Added to actual incomes");
-                    } else {
-                      setMessage("Failed to add incomes to the database");
-                    }
-                  } else {
-                    setMessage("No incomes found in the provided data");
-                  }
-
-                  if (expenses && expenses.length > 0) {
-                    const newExpenses = expenses.map((expense) => ({
-                      description: expense.description,
-                      date_posted: new Date(expense.date).toISOString(),
-                      amount: expense.amount,
-                      category: "expense",
-                      budget_id: budgetId, // Use the budgetId here
-                    }));
-
-                    const expenseResponse = await fetch(
-                      "http://localhost:3000/api/expense/actual/addbulk",
-                      {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(newExpenses),
-                      }
-                    );
-
-                    if (expenseResponse.ok) {
-                      setActualExpenses((prevExpenses) => [
-                        ...prevExpenses,
-                        ...newExpenses,
-                      ]);
-                      setMessage("Added to actual expenses");
-                    } else {
-                      setMessage("Failed to add expenses to the database");
-                    }
-                  } else {
-                    setMessage("No expenses found in the provided data");
-                  }
-
-                  // Call the endpoint to delete the data folder
-                  try {
-                    const deleteResponse = await fetch(
-                      "http://localhost:3000/api/parser/deletedatafolder",
-                      {
-                        method: "DELETE",
-                      }
-                    );
-
-                    if (deleteResponse.ok) {
-                      setMessage("Data folder deleted successfully");
-                    } else {
-                      setMessage("Failed to delete data folder");
-                    }
-                  } catch (err) {
-                    setMessage("Error deleting data folder");
-                  }
-
-                  // Reload the page
-                  window.location.reload();
-                } else {
-                  setMessage(data.error || "Error executing parser");
-                }
-              } catch (err) {
-                setMessage(err.message || "Error executing parser");
-              }
-            } else {
-              setMessage("File uploaded but failed to execute TD parser");
-            }
-          } catch (error) {
-            setMessage("File uploaded but error executing TD parser");
-          }
+          await addBulkIncomes(newIncomes);
+          setActualIncomes((prevIncomes) => [...prevIncomes, ...newIncomes]);
+          setMessage("Added to actual incomes");
         } else {
-          setMessage("File uploaded but failed to execute parser");
+          setMessage("No incomes found in the provided data");
         }
+
+        if (expenses && expenses.length > 0) {
+          const newExpenses = expenses.map((expense) => ({
+            description: expense.description,
+            date_posted: new Date(expense.date).toISOString(),
+            amount: expense.amount,
+            category: "expense",
+            budget_id: budgetId, // Use the budgetId here
+          }));
+
+          await addBulkExpenses(newExpenses);
+          setActualExpenses((prevExpenses) => [...prevExpenses, ...newExpenses]);
+          setMessage("Added to actual expenses");
+        } else {
+          setMessage("No expenses found in the provided data");
+        }
+
+        await deleteDataFolder();
+        setMessage("Data folder deleted successfully");
+
+        // Reload the page
+        window.location.reload();
       } catch (error) {
-        setMessage("File uploaded but error executing parser");
+        setMessage(error.message || "Error executing parser");
       }
       setLoading(false);
     },

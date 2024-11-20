@@ -1,4 +1,5 @@
 const API_URL = "http://localhost:3000";
+const API_PYTHON_URL = "http://localhost:8000";
 
 // AUTH API
 export const signUpUser = async (username, email, password) => {
@@ -100,7 +101,7 @@ export const createBudget = async (userId, plan, budgetName, month, year) => {
 
 export const getBudgetsByUserId = async (userId) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/budget/${userId}`, {
+    const response = await fetch(`${API_URL}/api/budget/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -230,7 +231,7 @@ export const parseOAuthFragment = () => {
 export const handleOAuthCallback = async (accessToken, refreshToken) => {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/auth/oauth-callback",
+      `${API_URL}/api/auth/oauth-callback`,
       {
         method: "POST",
         headers: {
@@ -418,4 +419,287 @@ export const updateBudget = async (budgetId, updates) => {
     console.error("Error updating budget:", error);
     throw error;
   }
+};
+
+// api.js
+export const handleGoogleLogin = async () => {
+  try {
+    const response = await fetch(`${API_URL}/api/auth/logingoogle`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      window.location.href = data.url; // Redirect to the OAuth provider's URL
+    } else {
+      throw new Error(data.error || "Login failed");
+    }
+  } catch (err) {
+    throw new Error(err.message || "Login failed");
+  }
+};
+
+export const handleGoogleCallback = async (login, navigate) => {
+  const hash = window.location.hash.substring(1); // Get the URL fragment after #
+  const params = new URLSearchParams(hash);
+  const accessToken = params.get("access_token");
+  const refreshToken = params.get("refresh_token");
+
+  if (accessToken && refreshToken) {
+    // Send tokens to backend
+    const response = await fetch(`${API_URL}/api/auth/callback`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ accessToken, refreshToken }),
+    });
+
+    const data = await response.json();
+    console.log("Server response:", data);
+
+    if (response.ok) {
+      const userData = data.userData;
+      login(userData); // Call the login function with userData
+      navigate("/"); // Redirect to the home page
+    }
+
+    // Clear the hash from the URL
+    window.history.replaceState(null, null, window.location.pathname);
+  }
+};
+
+export const handleGoogleSignUp = async (login, navigate, setError) => {
+  const hash = window.location.hash.substring(1); // Get the URL fragment after #
+  const params = new URLSearchParams(hash);
+  const accessToken = params.get("access_token");
+  const refreshToken = params.get("refresh_token");
+
+  if (accessToken && refreshToken) {
+    // Send tokens to backend
+    const response = await fetch(`${API_URL}/api/auth/callback`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ accessToken, refreshToken }),
+    });
+
+    const data = await response.json();
+    console.log("Server response:", data);
+
+    if (response.ok) {
+      const userData = data.userData;
+      login(userData); // Call the login function with userData
+      navigate("/"); // Redirect to the home page
+    } else {
+      setError(data.error || "Sign up failed");
+    }
+
+    // Clear the hash from the URL
+    window.history.replaceState(null, null, window.location.pathname);
+  }
+};
+
+// api.js
+export const handleParse = async (setMessage, setActualIncomes, setActualExpenses, budgetId) => {
+  try {
+    const response = await fetch(`${API_URL}/api/parser/parserjson`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ option: 'td_bank' }),
+    });
+
+    const contentType = response.headers.get('content-type');
+    let data;
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      data = { error: 'Server returned non-JSON response' };
+    }
+
+    if (response.ok) {
+      setMessage('Parser executed successfully');
+      console.log(data); // Log the result
+
+      const { incomes, expenses } = data.data;
+
+      if (incomes && incomes.length > 0) {
+        const newIncomes = incomes.map((income) => ({
+          description: income.description,
+          date_posted: new Date(income.date).toISOString(),
+          amount: income.amount,
+          category: 'gift',
+          budget_id: budgetId,
+        }));
+
+        console.log('New Incomes:', newIncomes);
+
+        const incomeResponse = await fetch(`${API_URL}/api/income/actual/addbulk`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newIncomes),
+        });
+
+        if (incomeResponse.ok) {
+          setActualIncomes((prevIncomes) => [...prevIncomes, ...newIncomes]);
+          setMessage('Added to actual incomes');
+        } else {
+          setMessage('Failed to add incomes to the database');
+        }
+      } else {
+        setMessage('No incomes found in the provided data');
+      }
+
+      if (expenses && expenses.length > 0) {
+        const newExpenses = expenses.map((expense) => ({
+          description: expense.description,
+          date_posted: new Date(expense.date).toISOString(),
+          amount: expense.amount,
+          category: 'expense',
+          budget_id: budgetId,
+        }));
+
+        const expenseResponse = await fetch(`${API_URL}/api/expense/actual/addbulk`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newExpenses),
+        });
+
+        if (expenseResponse.ok) {
+          setActualExpenses((prevExpenses) => [...prevExpenses, ...newExpenses]);
+          setMessage('Added to actual expenses');
+        } else {
+          setMessage('Failed to add expenses to the database');
+        }
+      } else {
+        setMessage('No expenses found in the provided data');
+      }
+
+      // Reload the page
+      window.location.reload();
+    } else {
+      setMessage(data.error || 'Error executing parser');
+    }
+  } catch (err) {
+    setMessage(err.message || 'Error executing parser');
+  }
+};
+
+// Parser.js
+export const uploadFile = async (file) => {
+  const formData = new FormData();
+  formData.append("pdf", file);
+
+  const response = await fetch(`${API_URL}/api/upload/add`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Error uploading file");
+  }
+
+  return response.json();
+};
+
+export const executeParser = async () => {
+  const response = await fetch(`${API_PYTHON_URL}/execute-parser`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error executing parser");
+  }
+
+  return response.json();
+};
+
+export const executeTDParser = async () => {
+  const response = await fetch(`${API_PYTHON_URL}/execute-parser-tdtest`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error executing TD parser");
+  }
+
+  return response.json();
+};
+
+export const parseJSON = async (selectedOption) => {
+  const response = await fetch(`${API_URL}/api/parser/parserjson`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ option: selectedOption }),
+  });
+
+  const contentType = response.headers.get("content-type");
+  let data;
+  if (contentType && contentType.includes("application/json")) {
+    data = await response.json();
+  } else {
+    data = { error: "Server returned non-JSON response" };
+  }
+
+  if (!response.ok) {
+    throw new Error(data.error || "Error executing parser");
+  }
+
+  return data;
+};
+
+export const addBulkIncomes = async (newIncomes) => {
+  const response = await fetch(`${API_URL}/api/income/actual/addbulk`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newIncomes),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add incomes to the database");
+  }
+
+  return response.json();
+};
+
+export const addBulkExpenses = async (newExpenses) => {
+  const response = await fetch(`${API_URL}/api/expense/actual/addbulk`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newExpenses),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add expenses to the database");
+  }
+
+  return response.json();
+};
+
+export const deleteDataFolder = async () => {
+  const response = await fetch(`${API_URL}/api/parser/deletedatafolder`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete data folder");
+  }
+
+  return response.json();
 };
