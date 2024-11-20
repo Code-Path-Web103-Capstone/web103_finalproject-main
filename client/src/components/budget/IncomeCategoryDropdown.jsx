@@ -29,11 +29,11 @@ const IncomeCategoryDropdown = ({ value, onChange }) => {
     }),
     menu: (provided) => ({
       ...provided,
-      zIndex: 9999,
+      zIndex: 10,
     }),
     menuPortal: (base) => ({
       ...base,
-      zIndex: 9999,
+      zIndex: 10,
     }),
     placeholder: (provided) => ({
       ...provided,

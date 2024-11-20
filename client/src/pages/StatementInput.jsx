@@ -21,6 +21,11 @@ import TDParser from "../components/budget/TDParser.jsx";
 import PostParser from "../components/budget/PostParser.jsx";
 import SubmitStatementButton from "../components/budget/SubmitStatementButton.jsx";
 import PageLayout from "../layouts/PageLayout.jsx";
+import Modal from "../components/shared/Modal.jsx";
+import { MdCheckBoxOutlineBlank } from "react-icons/md";
+import { MdCheckBox } from "react-icons/md";
+import { FaSave } from "react-icons/fa";
+import { GoDotFill } from "react-icons/go";
 
 function StatementInput() {
   const {
@@ -39,29 +44,53 @@ function StatementInput() {
   const [keepTrack, setKeepTrack] = useState(false);
   const [budgetYear, setBudgetYear] = useState("");
   const [budgetMonth, setBudgetMonth] = useState("");
+  const [budgetName, setBudgetName] = useState("");
+  const [budgetPlan, setBudgetPlan] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-  const fetchBudget = async () => {
-    try {
-      const data = await getBudgetById(budgetId);
-      if (data) {
-        setKeepTrack(data.keep_track);
-        setBudgetYear(data.year || "");
+  // Modal functionality
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
-        const monthNames = [
-          "January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December"
-        ];
-        const monthIndex = monthNames.indexOf(data.month) + 1;
-        setBudgetMonth(monthIndex || "");
-      }
-    } catch (error) {
-      console.error("Error fetching budget:", error);
-    }
+  const handleParserModal = () => {
+    openModal(); // Open modal for new budget
   };
 
-  fetchBudget();
-}, [budgetId]);
+  useEffect(() => {
+    const fetchBudget = async () => {
+      try {
+        const data = await getBudgetById(budgetId);
+        if (data) {
+          console.log("Budget data:", data);
+          setKeepTrack(data.keep_track);
+          setBudgetYear(data.year || "");
+          setBudgetName(data.budget_name || "");
+          setBudgetPlan(data.plan || "");
+
+          const monthNames = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ];
+          const monthIndex = monthNames.indexOf(data.month) + 1;
+          setBudgetMonth(monthIndex || "");
+        }
+      } catch (error) {
+        console.error("Error fetching budget:", error);
+      }
+    };
+
+    fetchBudget();
+  }, [budgetId]);
 
   const handleAddRow = (setRows) => {
     setRows((prevRows) => [
@@ -193,8 +222,18 @@ function StatementInput() {
           setBudgetYear(data.year || "");
 
           const monthNames = [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
           ];
           const monthIndex = monthNames.indexOf(data.month) + 1;
           setBudgetMonth(monthIndex || "");
@@ -206,8 +245,18 @@ function StatementInput() {
 
     try {
       const monthNames = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
       ];
       const monthName = monthNames[budgetMonth - 1];
 
@@ -231,7 +280,105 @@ function StatementInput() {
 
   return (
     <PageLayout>
-      <div className="flex w-full gap-2 p-20">
+      <div className="m-10 flex h-16 w-full gap-2 px-20">
+        {/* Name and Plan */}
+        <div className="flex grow items-center justify-start gap-2 rounded-lg border-2 bg-white px-5 py-5 text-left">
+          <h1 className="font-manrope text-2xl font-bold">{budgetName}</h1>
+          <span className="h-5 w-0.5 bg-gray-700"></span>
+          <p className="mt-0.5 text-sm text-gray-500">{budgetPlan}</p>
+        </div>
+
+        {/* Changing Month and Year */}
+        <div className="flex items-center justify-center gap-5 rounded-lg border-2 bg-white p-5">
+          <div className="flex items-center justify-center">
+            <select
+              value={budgetMonth}
+              onChange={(e) => setBudgetMonth(e.target.value)}
+              className="rounded border border-gray-300 bg-white p-2 text-gray-700 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select Month</option>
+              {[
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ].map((month, index) => (
+                <option key={month} value={index + 1}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center justify-center">
+            <select
+              value={budgetYear}
+              onChange={(e) => setBudgetYear(e.target.value)}
+              className="rounded border border-gray-300 bg-white p-2 text-gray-700 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select Year</option>
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex justify-center">
+            <FaSave
+              onClick={handleUpdateBudget}
+              className="cursor-pointer text-[#D9D9D9] hover:text-[#3A405A]"
+              size={24} // Adjust size as needed
+              title="Save Changes"
+            />
+          </div>
+        </div>
+
+        {/* Experimental Parser */}
+        <div
+          className="flex cursor-pointer items-center justify-center"
+          onClick={handleParserModal}
+        >
+          <div className="group relative rounded-lg p-[1px]">
+            {/* Animated gradient border (only on hover) */}
+            <div className="absolute inset-0 rounded-lg border bg-gradient-to-r from-sky-500 via-purple-500 to-pink-500 opacity-0 blur-sm transition-opacity duration-300 group-hover:opacity-100"></div>
+
+            {/* Button content */}
+            <div className="relative flex items-center justify-center rounded-lg bg-white p-5">
+              <span className="text-sm font-semibold text-sky-500">
+                Experimental Parser
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <UploadPdf />
+        </Modal>
+
+        {/* Button for Keeping Track */}
+        <button
+          onClick={handleUpdateKeepTrack}
+          className={`flex items-center space-x-2 rounded-lg border-2 p-5 ${
+            keepTrack
+              ? "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-gray-300 text-gray-500"
+          }`}
+        >
+          {keepTrack ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
+          <span>Keep Track</span>
+        </button>
+      </div>
+
+      <main className="flex w-full gap-2 px-20">
         <form
           onSubmit={handleActualSubmit}
           className="flex w-1/2 flex-col space-y-3 rounded-xl p-4"
@@ -281,57 +428,7 @@ function StatementInput() {
           />
           <SubmitStatementButton text="Submit Expected" />
         </form>
-      </div>
-
-      <UploadPdf />
-
-      <div className="mt-4">
-        <button onClick={handleUpdateKeepTrack} className="p-2 bg-blue-500 text-white rounded">
-          {keepTrack ? "Disable Keep Track" : "Enable Keep Track"}
-        </button>
-        <span className="ml-2">Current Keep Track: {keepTrack ? "True" : "False"}</span>
-      </div>
-
-      <div className="mt-4">
-        <label>
-          Budget Year:
-          <select value={budgetYear} onChange={(e) => setBudgetYear(e.target.value)}>
-            <option value="">Select Year</option>
-            {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Budget Month:
-          <select value={budgetMonth} onChange={(e) => setBudgetMonth(e.target.value)}>
-            <option value="">Select Month</option>
-            {[
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December",
-            ].map((month, index) => (
-              <option key={month} value={index + 1}>
-                {month}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button onClick={handleUpdateBudget} className="p-2 bg-green-500 text-white rounded">
-          Edit Budget
-        </button>
-      </div>
+      </main>
     </PageLayout>
   );
 }

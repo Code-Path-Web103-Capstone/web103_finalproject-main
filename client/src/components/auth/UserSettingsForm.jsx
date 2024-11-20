@@ -1,15 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { updateUser } from "../../services/api";
 import { useUser } from "../../services/context";
 
 const UserSettingsForm = () => {
   const { user, login } = useUser();
   console.log(user);
+
+  // State variables for form inputs
   const [email, setEmail] = useState(user?.email || "");
   const [username, setUsername] = useState(user?.username || "");
   const [password, setPassword] = useState("");
+
+  // State for success and error messages
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
+
+  // State to track if any input is modified
+  const [isModified, setIsModified] = useState(false);
+
+  // Effect to check if the user has started typing
+  useEffect(() => {
+    setIsModified(
+      email !== user?.email || username !== user?.username || password !== ""
+    );
+  }, [email, username, password, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,7 +50,7 @@ const UserSettingsForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto max-w-lg space-y-6 rounded border bg-gray-50 p-4"
+      className="container max-w-xl space-y-6 rounded-lg border-2 border-black bg-gray-50 p-4"
     >
       <h2 className="text-2xl font-semibold text-gray-700">
         Update Your Settings
@@ -79,7 +93,12 @@ const UserSettingsForm = () => {
 
       <button
         type="submit"
-        className="w-full rounded bg-blue-500 py-2 text-white hover:bg-blue-600"
+        className={`w-full rounded py-2 text-white ${
+          isModified
+            ? "bg-blue-500 hover:bg-blue-600"
+            : "cursor-not-allowed bg-[#A5A5A5]"
+        }`}
+        disabled={!isModified}
       >
         Save Changes
       </button>

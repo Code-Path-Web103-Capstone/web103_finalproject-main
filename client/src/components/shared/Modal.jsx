@@ -1,10 +1,11 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="relative w-96 rounded-md bg-white p-5 shadow-lg">
         <button
           onClick={onClose}
@@ -14,7 +15,8 @@ const Modal = ({ isOpen, onClose, children }) => {
         </button>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body // Renders the modal at the root level of the DOM
   );
 };
 
