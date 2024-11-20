@@ -4,7 +4,6 @@
   "scripts": {
     "dev": "nodemon --verbose --require dotenv/config server.js",
     "start": "nodemon --verbose --require dotenv/config server.js",
-    "build": "cd ../client && npm run build",
     "reset": "node --require dotenv/config config/reset.js"
   },
   "dependencies": {
