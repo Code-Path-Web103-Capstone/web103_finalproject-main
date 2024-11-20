@@ -4,8 +4,7 @@
   "scripts": {
     "dev": "nodemon --verbose --require dotenv/config server.js",
     "start": "nodemon --verbose --require dotenv/config server.js",
-    "reset": "node --require dotenv/config config/reset.js",
-    "start-parser": "python3 -m uvicorn app:app --reload"
+    "reset": "node --require dotenv/config config/reset.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
