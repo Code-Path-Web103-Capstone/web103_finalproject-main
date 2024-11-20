@@ -4,7 +4,7 @@
 
 // for Production
 
-const API_URL = process.env.NODE_ENV === 'production' ? 'http://gobudget-production.up.railway.app' : ''
+const API_URL = 'http://gobudget-production.up.railway.app'
 const API_PYTHON_URL = "http://parser-production-c8da.up.railway.app";
 
 // AUTH API
