@@ -1,5 +1,11 @@
-const API_URL = "http://localhost:3000";
-const API_PYTHON_URL = "http://localhost:8000";
+// For local DEV
+// const API_URL = "http://localhost:3000";
+// const API_PYTHON_URL = "http://localhost:8000";
+
+// for Production
+
+const API_URL = process.env.NODE_ENV === 'production' ? 'gobudget-production.up.railway.app' : ''
+const API_PYTHON_URL = "parser-production-c8da.up.railway.app";
 
 // AUTH API
 export const signUpUser = async (username, email, password) => {
