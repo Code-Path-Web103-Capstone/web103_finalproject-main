@@ -112,17 +112,18 @@ export const getBudgetsByUserId = async (userId) => {
     }
     const data = await response.json();
 
-    // Log the fetched budgets to inspect month and year
-    console.log(
-      "Fetched Budgets:",
-      data.map((budget) => ({
-        id: budget.id,
-        name: budget.budget_name,
-        month: budget.month,
-        year: budget.year,
-      }))
-    );
-
+    // // Log the fetched budgets to inspect month and year
+    // console.log(
+    //   "Fetched Budgets:",
+    //   data.map((budget) => ({
+    //     id: budget.id,
+    //     name: budget.budget_name,
+    //     month: budget.month,
+    //     year: budget.year,
+    //     track: budget.keep_track,
+    //   }))
+    // );
+    console.log(data);
     return data;
   } catch (error) {
     console.error("Error fetching budgets:", error);

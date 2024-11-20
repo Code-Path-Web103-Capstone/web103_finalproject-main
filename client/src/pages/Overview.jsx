@@ -5,14 +5,8 @@ import PageLayout from "../layouts/PageLayout";
 const Overview = () => {
   const navigate = useNavigate();
 
-  // State for selected year
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
-  // List of years to choose from (you can dynamically generate this if needed)
-  const years = Array.from(
-    { length: 10 },
-    (_, i) => new Date().getFullYear() - i
-  ); // Last 10 years
+  const currentYear = new Date().getFullYear();
 
   const months = [
     "January",
@@ -30,46 +24,61 @@ const Overview = () => {
   ];
 
   const handleMonthClick = (month) => {
-    // Navigate to the detailed breakdown for the selected month and year
     navigate(`/breakdown/${selectedYear}/${month.toLowerCase()}`);
+  };
+
+  const handleYearChange = (increment) => {
+    setSelectedYear((prevYear) => prevYear + increment);
+  };
+
+  const resetToCurrentYear = () => {
+    setSelectedYear(currentYear);
   };
 
   return (
     <PageLayout>
-      <div className="mx-auto max-w-3xl p-6">
-        <h1 className="mb-6 text-center text-2xl font-semibold text-gray-700">
-          Select a Month and Year
-        </h1>
-
+      <div className="mx-auto max-w-xl p-6">
         {/* Year Selector */}
-        <div className="mb-6 flex justify-center">
-          <label
-            htmlFor="year-select"
-            className="mr-4 text-lg font-medium text-gray-700"
+        <div className="relative mb-8 flex items-center justify-center">
+          <button
+            onClick={() => handleYearChange(-1)}
+            className="rounded-full p-2 text-gray-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
           >
-            Year:
-          </label>
-          <select
-            id="year-select"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className="rounded border-gray-300 p-2 shadow focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+            ←
+          </button>
+          <span
+            onClick={resetToCurrentYear}
+            className="relative mx-4 cursor-pointer text-2xl font-bold text-gray-700 hover:underline"
           >
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
+            <div className="group relative">
+              {selectedYear}
+              {selectedYear !== currentYear && (
+                <div className="absolute left-1/2 top-full z-10 hidden w-max -translate-x-1/2 transform whitespace-nowrap rounded-md bg-gray-800 px-3 py-2 text-xs text-white shadow-lg group-hover:block">
+                  Reset to Current Year
+                  <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-full border-x-[6px] border-b-[6px] border-t-0 border-x-transparent border-b-gray-800"></div>
+                </div>
+              )}
+            </div>
+          </span>
+          <button
+            onClick={() => handleYearChange(1)}
+            className="rounded-full p-2 text-gray-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          >
+            →
+          </button>
         </div>
 
         {/* Month Grid */}
-        <div className="grid grid-cols-3 gap-4">
-          {months.map((month) => (
+        <div className="grid grid-cols-3 gap-4 text-center">
+          {months.map((month, index) => (
             <button
-              key={month}
+              key={index}
               onClick={() => handleMonthClick(month)}
-              className="rounded-lg bg-blue-500 p-4 text-white shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className={`rounded-lg p-4 text-sm font-medium text-gray-700 hover:bg-blue-100 ${
+                currentYear === selectedYear && new Date().getMonth() === index
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-50"
+              }`}
             >
               {month}
             </button>

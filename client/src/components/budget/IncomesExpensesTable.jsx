@@ -189,61 +189,70 @@ const IncomesExpensesTable = ({
         title={title}
       />
 
-      <table className="w-full table-auto border-collapse overflow-hidden rounded-lg border border-gray-300 bg-white font-manrope text-sm shadow-md">
-        {/* Table Head */}
-        <thead className="bg-gray-100 text-gray-700">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className="border-b border-gray-300 px-4 py-2 text-left font-semibold uppercase"
-                  style={
-                    header.column.columnDef.header === "Actions"
-                      ? {
-                          width: "80px", // Match the Actions column width
-                          minWidth: "80px",
-                          textAlign: "center",
-                        }
-                      : header.column.columnDef.header === "Date Posted"
+      <div className="w-full overflow-hidden rounded-lg border bg-white shadow-md">
+        {/* Table Header */}
+        <table className="w-full table-auto border-collapse">
+          <thead className="bg-gray-100 text-gray-700">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className="border-b border-gray-300 px-4 py-2 text-left font-semibold uppercase"
+                    style={
+                      header.column.columnDef.header === "Actions"
                         ? {
-                            width: "150px", // Match the Date Posted column width
-                            minWidth: "150px",
+                            width: "80px",
+                            minWidth: "80px",
+                            textAlign: "center",
                           }
-                        : {}
-                  }
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
+                        : header.column.columnDef.header === "Date Posted"
+                          ? {
+                              width: "150px",
+                              minWidth: "150px",
+                            }
+                          : {}
+                    }
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+        </table>
 
-        {/* Table Body */}
-        <tbody>
-          {table.getRowModel().rows.map((row, rowIndex) => (
-            <tr
-              key={row.id}
-              className={`group transition-colors ${
-                rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
-              } hover:bg-gray-100`}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className="border-t border-gray-300 px-4 py-2 text-gray-800"
+        {/* Scrollable Table Body */}
+        <div className="max-h-[350px] overflow-y-auto">
+          <table className="w-full table-auto border-collapse">
+            <tbody>
+              {table.getRowModel().rows.map((row, rowIndex) => (
+                <tr
+                  key={row.id}
+                  className={`group transition-colors ${
+                    rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
+                  } hover:bg-gray-100`}
                 >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="border-t border-gray-300 px-4 py-2 text-gray-800"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
