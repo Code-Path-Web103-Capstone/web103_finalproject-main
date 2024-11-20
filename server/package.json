@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --verbose --require dotenv/config server.js",
-    "build": "npm install && cd parser && apt-get update && python3-pip && pip install -r requirements.txt",
+    "build": "npm install && cd parser && python3-pip && pip install -r requirements.txt",
     "start": "nodemon --verbose --require dotenv/config server.js && python3 -m uvicorn app:app --reload",
     "reset": "node --require dotenv/config config/reset.js",
     "start-parser": "python3 -m uvicorn app:app --reload"
