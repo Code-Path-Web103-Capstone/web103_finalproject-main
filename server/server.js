@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url"; // Add this line
 import authRouter from "./routes/auth.js";
 import budgetRouter from "./routes/budget.js";
 import expenseRouter from "./routes/expenses.js";
@@ -10,7 +12,18 @@ import uploadRouter from "./routes/upload.js";
 
 dotenv.config();
 
+// Define __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
+
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Catch-all route to serve the React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 // CORS configuration
 const corsOptions = {
