@@ -4,8 +4,8 @@
 
 // for Production
 
-const API_URL = 'http://gobudget-production.up.railway.app'
-const API_PYTHON_URL = "http://parser-production-c8da.up.railway.app";
+const API_URL = 'https://gobudget-production.up.railway.app'
+const API_PYTHON_URL = "https://parser-production-c8da.up.railway.app";
 
 // AUTH API
 export const signUpUser = async (username, email, password) => {
