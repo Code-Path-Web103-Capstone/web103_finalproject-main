@@ -1,11 +1,11 @@
 import supabase from "../config/supabase.js";
 const addBudget = async (req, res) => {
-  const { user_id, plan, budget_name, keep_track, month, year } = req.body;
+  const { user_id, plan, budget_name, month, year } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('budgets')
-      .insert([{ user_id, plan, budget_name, keep_track, month, year, create_at: new Date() }])
+      .insert([{ user_id, plan, budget_name, keep_track: false, month, year, create_at: new Date() }])
       .select('id');
 
     if (error) {
@@ -54,10 +54,20 @@ const getBudgets = async (req, res) => {
 const updateBudget = async (req, res) => {
   const { id, user_id, plan, budget_name, keep_track, month, year } = req.body;
 
+  let monthName = month;
+  if (!isNaN(month)) {
+    const monthNumber = parseInt(month, 10);
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    monthName = monthNames[monthNumber - 1];
+  }
+
   try {
     const { data, error } = await supabase
       .from('budgets')
-      .update({ user_id, plan, budget_name, keep_track, month, year })
+      .update({ user_id, plan, budget_name, keep_track, month: monthName, year })
       .eq('id', id);
 
     if (error) {
@@ -144,4 +154,62 @@ const deleteBudget = async (req, res) => {
   }
 };
 
-export default { addBudget, getBudgets, updateBudget, deleteBudget };
+const updateKeepTrack = async (req, res) => {
+  const { budgetId, userId, keepTrack } = req.body;
+
+  try {
+    // Set keep_track to false for all budgets of the user
+    let { error } = await supabase
+      .from('budgets')
+      .update({ keep_track: false })
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error('Error updating budgets:', error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    // If keepTrack is true, set keep_track to true for the specified budget
+    if (keepTrack) {
+      ({ error } = await supabase
+        .from('budgets')
+        .update({ keep_track: true })
+        .eq('id', budgetId));
+
+      if (error) {
+        console.error('Error updating budget:', error);
+        return res.status(400).json({ error: error.message });
+      }
+    }
+
+    res.status(200).json({ message: 'Budget keep_track updated successfully' });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+const getBudgetById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data, error } = await supabase
+      .from('budgets')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching budget:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+export default { addBudget, getBudgets, updateBudget, deleteBudget, updateKeepTrack, getBudgetById };

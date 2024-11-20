@@ -15,4 +15,10 @@ router.patch("/update", BudgetController.updateBudget);
 // DELETE request to delete a budget
 router.delete("/delete", BudgetController.deleteBudget);
 
+// Update keep_track for a budget
+router.patch("/keeptrack", BudgetController.updateKeepTrack);
+
+// GET request to fetch a budget by id
+router.get("/budget/:id", BudgetController.getBudgetById);
+
 export default router;

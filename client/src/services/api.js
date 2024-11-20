@@ -349,3 +349,72 @@ export const deleteExpensesPredictedBulk = async (ids, budgetId) => {
 
   return response.json();
 };
+
+export const updateKeepTrack = async (budgetId, userId, keepTrack) => {
+  const url = `${API_URL}/api/budget/keeptrack`;
+  const body = {
+    budget_id: budgetId,
+    user_id: userId,
+    keep_track: keepTrack,
+  };
+
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! status: ${response.status}, response: ${errorText}`
+    );
+  }
+
+  return response.json();
+};
+
+export const getBudgetById = async (budgetId) => {
+  try {
+    const response = await fetch(`${API_URL}/api/budget/budget/${budgetId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching budget:", error);
+    throw error;
+  }
+};
+
+export const updateBudget = async (budgetId, updates) => {
+  try {
+    const response = await fetch(`${API_URL}/api/budget/update`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ budgetId, ...updates }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating budget:", error);
+    throw error;
+  }
+};

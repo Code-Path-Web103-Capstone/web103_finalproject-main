@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUser } from "../services/context";
 import useUserFinanceData from "../hooks/useUserFinanceData";
 import IncomesExpensesTable from "../components/budget/IncomesExpensesTable";
@@ -9,6 +9,9 @@ import {
   deleteIncomesActualBulk,
   deleteIncomesPredictedBulk,
   deleteExpensesPredictedBulk,
+  updateKeepTrack,
+  getBudgetById,
+  updateBudget,
 } from "../services/api";
 import TableHeader from "../components/budget/TableHeader";
 import UploadPdf from "../components/budget/UploadPdf.jsx";
@@ -33,14 +36,39 @@ function StatementInput() {
 
   const [deletedRows, setDeletedRows] = useState([]);
   const { user, budgetId } = useUser();
+  const [keepTrack, setKeepTrack] = useState(false);
+  const [budgetYear, setBudgetYear] = useState("");
+  const [budgetMonth, setBudgetMonth] = useState("");
 
-  // Add a new empty row
+  useEffect(() => {
+  const fetchBudget = async () => {
+    try {
+      const data = await getBudgetById(budgetId);
+      if (data) {
+        setKeepTrack(data.keep_track);
+        setBudgetYear(data.year || "");
+
+        const monthNames = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        const monthIndex = monthNames.indexOf(data.month) + 1;
+        setBudgetMonth(monthIndex || "");
+      }
+    } catch (error) {
+      console.error("Error fetching budget:", error);
+    }
+  };
+
+  fetchBudget();
+}, [budgetId]);
+
   const handleAddRow = (setRows) => {
     setRows((prevRows) => [
       ...prevRows,
       {
         id: "",
-        date_posted: new Date().toISOString().split("T")[0], // Ensure date_posted is not empty
+        date_posted: new Date().toISOString().split("T")[0],
         description: "",
         amount: "",
         category: "",
@@ -49,7 +77,6 @@ function StatementInput() {
     ]);
   };
 
-  // Delete a row
   const handleDeleteRow = (index, rows, setRows, type) => {
     const row = rows[index];
     if (row.id) {
@@ -61,7 +88,6 @@ function StatementInput() {
     setRows((prevRows) => prevRows.filter((_, i) => i !== index));
   };
 
-  // Handle input change for each row
   const handleInputChange = (index, event, setRows) => {
     const { name, value } = event.target;
     setRows((prevRows) => {
@@ -71,7 +97,6 @@ function StatementInput() {
     });
   };
 
-  // Submit data for actual incomes and expenses
   const handleActualSubmit = async (event) => {
     event.preventDefault();
 
@@ -148,11 +173,65 @@ function StatementInput() {
     }
   };
 
+  const handleUpdateKeepTrack = async () => {
+    try {
+      const newKeepTrack = !keepTrack;
+      const response = await updateKeepTrack(budgetId, user.id, newKeepTrack);
+      console.log(response.message);
+      setKeepTrack(newKeepTrack);
+    } catch (error) {
+      console.error("Error updating keep_track:", error);
+    }
+  };
+
+  const handleUpdateBudget = async () => {
+    const fetchBudget = async () => {
+      try {
+        const data = await getBudgetById(budgetId);
+        if (data) {
+          setKeepTrack(data.keep_track);
+          setBudgetYear(data.year || "");
+
+          const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+          ];
+          const monthIndex = monthNames.indexOf(data.month) + 1;
+          setBudgetMonth(monthIndex || "");
+        }
+      } catch (error) {
+        console.error("Error fetching budget:", error);
+      }
+    };
+
+    try {
+      const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      const monthName = monthNames[budgetMonth - 1];
+
+      const updates = {
+        id: budgetId,
+        user_id: user.id,
+        year: budgetYear,
+        month: budgetMonth,
+        month_name: monthName,
+      };
+      const response = await updateBudget(budgetId, updates);
+      console.log(response.message);
+      await fetchBudget(); // Call fetchBudget after updating the budget
+    } catch (error) {
+      console.error("Error updating budget:", error);
+    }
+  };
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 21 }, (_, i) => currentYear - 10 + i);
+
   return (
     <PageLayout>
-      {/* Table Container */}
       <div className="flex w-full gap-2 p-20">
-        {/* Form for Actual Incomes and Expenses */}
         <form
           onSubmit={handleActualSubmit}
           className="flex w-1/2 flex-col space-y-3 rounded-xl p-4"
@@ -175,10 +254,8 @@ function StatementInput() {
             handleInputChange={handleInputChange}
             handleDeleteRow={handleDeleteRow}
           />
-          {/* Submit Actual Incomes to DB */}
           <SubmitStatementButton text="Submit Actuals" />
         </form>
-        {/* Form for Expected Incomes and Expenses */}
         <form
           onSubmit={handleExpectedSubmit}
           className="flex w-1/2 flex-col space-y-3 rounded-xl p-4"
@@ -202,13 +279,59 @@ function StatementInput() {
             handleInputChange={handleInputChange}
             handleDeleteRow={handleDeleteRow}
           />
-          {/* Submit Expected Incomes to DB */}
           <SubmitStatementButton text="Submit Expected" />
         </form>
       </div>
 
-      {/* Render the UploadPdf component as a button */}
       <UploadPdf />
+
+      <div className="mt-4">
+        <button onClick={handleUpdateKeepTrack} className="p-2 bg-blue-500 text-white rounded">
+          {keepTrack ? "Disable Keep Track" : "Enable Keep Track"}
+        </button>
+        <span className="ml-2">Current Keep Track: {keepTrack ? "True" : "False"}</span>
+      </div>
+
+      <div className="mt-4">
+        <label>
+          Budget Year:
+          <select value={budgetYear} onChange={(e) => setBudgetYear(e.target.value)}>
+            <option value="">Select Year</option>
+            {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Budget Month:
+          <select value={budgetMonth} onChange={(e) => setBudgetMonth(e.target.value)}>
+            <option value="">Select Month</option>
+            {[
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December",
+            ].map((month, index) => (
+              <option key={month} value={index + 1}>
+                {month}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button onClick={handleUpdateBudget} className="p-2 bg-green-500 text-white rounded">
+          Edit Budget
+        </button>
+      </div>
     </PageLayout>
   );
 }
