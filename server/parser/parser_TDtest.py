@@ -2,6 +2,7 @@ from llama_index.core import Document
 from datetime import datetime
 import json
 import sys
+import subprocess
 
 # Load data from the JSON file
 input_file = './app/data/documents_data.json'

@@ -1,6 +1,7 @@
 # bring in our LLAMA_CLOUD_API_KEY
 from dotenv import load_dotenv
 load_dotenv()
+import subprocess
 
 # bring in deps
 from llama_parse import LlamaParse
