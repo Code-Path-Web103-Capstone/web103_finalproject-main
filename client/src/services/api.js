@@ -516,7 +516,7 @@ export const handleGoogleSignUp = async (login, navigate, setError) => {
 // api.js
 export const handleParse = async (setMessage, setActualIncomes, setActualExpenses, budgetId) => {
   try {
-    const response = await fetch(`${API_URL}/api/parser/parserjson`, {
+    const response = await fetch(`${API_PYTHON_URL}/parserjson`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -609,7 +609,7 @@ export const uploadFile = async (file) => {
   const formData = new FormData();
   formData.append("pdf", file);
 
-  const response = await fetch(`${API_URL}/api/upload/add`, {
+  const response = await fetch(`${API_PYTHON_URL}/upload/add`, {
     method: "POST",
     body: formData,
   });
@@ -646,7 +646,7 @@ export const executeTDParser = async () => {
 };
 
 export const parseJSON = async (selectedOption) => {
-  const response = await fetch(`${API_URL}/api/parser/parserjson`, {
+  const response = await fetch(`${API_PYTHON_URL}/parserjson`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -668,6 +668,30 @@ export const parseJSON = async (selectedOption) => {
 
   return data;
 };
+
+// export const parseJSON = async (selectedOption) => {
+//   const response = await fetch(`${API_URL}/api/parser/parserjson`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ option: selectedOption }),
+//   });
+//
+//   const contentType = response.headers.get("content-type");
+//   let data;
+//   if (contentType && contentType.includes("application/json")) {
+//     data = await response.json();
+//   } else {
+//     data = { error: "Server returned non-JSON response" };
+//   }
+//
+//   if (!response.ok) {
+//     throw new Error(data.error || "Error executing parser");
+//   }
+//
+//   return data;
+// };
 
 export const addBulkIncomes = async (newIncomes) => {
   const response = await fetch(`${API_URL}/api/income/actual/addbulk`, {
@@ -702,7 +726,7 @@ export const addBulkExpenses = async (newExpenses) => {
 };
 
 export const deleteDataFolder = async () => {
-  const response = await fetch(`${API_URL}/api/parser/deletedatafolder`, {
+  const response = await fetch(`${API_PYTHON_URL}/deletedatafolder`, {
     method: "DELETE",
   });
 
