@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import subprocess
 import json
+import shutil # to delete
 app = FastAPI()
 
 # Configure CORS

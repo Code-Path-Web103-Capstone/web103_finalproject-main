@@ -45,3 +45,6 @@ transactions_output.json
 
 # Environment variables
 .env
+
+# Cache and logs
+__pycache__/
