@@ -739,11 +739,12 @@ export const deleteDataFolder = async () => {
 
 export const deleteBudget = async (budgetId) => {
   try {
-    const response = await fetch(`${API_URL}/api/budget/${budgetId}`, {
+    const response = await fetch(`${API_URL}/api/budget/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ id: budgetId }),
     });
 
     if (!response.ok) {

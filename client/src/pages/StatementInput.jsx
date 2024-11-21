@@ -305,9 +305,9 @@ function StatementInput() {
         <div className="flex items-center justify-center gap-5 rounded-lg border-2 bg-white p-5">
           <div className="flex items-center justify-center">
             <select
-              value={budgetMonth}
-              onChange={(e) => setBudgetMonth(e.target.value)}
-              className="rounded border border-gray-300 bg-white p-2 text-gray-700 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={budgetMonth}
+                onChange={(e) => setBudgetMonth(e.target.value)}
+                className="rounded border border-gray-300 bg-white p-2 text-gray-700 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Month</option>
               {[
@@ -324,46 +324,47 @@ function StatementInput() {
                 "November",
                 "December",
               ].map((month, index) => (
-                <option key={month} value={index + 1}>
-                  {month}
-                </option>
+                  <option key={month} value={index + 1}>
+                    {month}
+                  </option>
               ))}
             </select>
 
           </div>
           <div className="flex items-center justify-center">
             <select
-              value={budgetYear}
-              onChange={(e) => setBudgetYear(e.target.value)}
-              className="rounded border border-gray-300 bg-white p-2 text-gray-700 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={budgetYear}
+                onChange={(e) => setBudgetYear(e.target.value)}
+                className="rounded border border-gray-300 bg-white p-2 text-gray-700 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Year</option>
               {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
               ))}
             </select>
           </div>
 
           <div className="flex justify-center">
             <FaSave
-              onClick={handleUpdateBudget}
-              className="cursor-pointer text-[#D9D9D9] hover:text-[#3A405A]"
-              size={24} // Adjust size as needed
-              title="Save Changes"
+                onClick={handleUpdateBudget}
+                className="cursor-pointer text-[#D9D9D9] hover:text-[#3A405A]"
+                size={24} // Adjust size as needed
+                title="Save Changes"
             />
           </div>
         </div>
 
         {/* Experimental Parser */}
         <div
-          className="flex cursor-pointer items-center justify-center"
-          onClick={handleParserModal}
+            className="flex cursor-pointer items-center justify-center"
+            onClick={handleParserModal}
         >
           <div className="group relative rounded-lg p-[1px]">
             {/* Animated gradient border (only on hover) */}
-            <div className="absolute inset-0 rounded-lg border bg-gradient-to-r from-sky-500 via-purple-500 to-pink-500 opacity-0 blur-sm transition-opacity duration-300 group-hover:opacity-100"></div>
+            <div
+                className="absolute inset-0 rounded-lg border bg-gradient-to-r from-sky-500 via-purple-500 to-pink-500 opacity-0 blur-sm transition-opacity duration-300 group-hover:opacity-100"></div>
 
             {/* Button content */}
             <div className="relative flex items-center justify-center rounded-lg bg-white p-5">
@@ -375,21 +376,27 @@ function StatementInput() {
         </div>
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <UploadPdf />
+          <UploadPdf/>
         </Modal>
 
         {/* Button for Keeping Track */}
         <button
-          onClick={handleUpdateKeepTrack}
-          className={`flex items-center space-x-2 rounded-lg border-2 p-5 ${
-            keepTrack
-              ? "bg-blue-500 text-white hover:bg-blue-600"
-              : "bg-gray-300 text-gray-500"
-          }`}
+            onClick={handleUpdateKeepTrack}
+            className={`flex items-center space-x-2 rounded-lg border-2 p-5 ${
+                keepTrack
+                    ? "bg-blue-500 text-white hover:bg-blue-600"
+                    : "bg-gray-300 text-gray-500"
+            }`}
         >
-          {keepTrack ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
+          {keepTrack ? <MdCheckBox/> : <MdCheckBoxOutlineBlank/>}
           <span>Keep Track</span>
         </button>
+          <button
+              onClick={handleDeleteBudget}
+              className="flex items-center space-x-2 rounded-lg border-2 p-5 bg-red-500 text-white hover:bg-red-600"
+          >
+            <span>Delete Budget</span>
+          </button>
       </div>
 
       <main className="flex w-full gap-2 px-20">
@@ -442,15 +449,6 @@ function StatementInput() {
           />
           <SubmitStatementButton text="Submit Expected"/>
         </form>
-        <div className="m-5 flex h-16 w-full gap-2 px-24">
-          {/* Button for Deleting Budget */}
-          <button
-              onClick={handleDeleteBudget}
-              className="flex items-center space-x-2 rounded-lg border-2 p-5 bg-red-500 text-white hover:bg-red-600"
-          >
-            <span>Delete Budget</span>
-          </button>
-        </div>
       </main>
     </PageLayout>
   );
