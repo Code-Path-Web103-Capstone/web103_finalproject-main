@@ -187,11 +187,27 @@ const updateKeepTrack = async (req, res) => {
   console.log("Received data:", req.body);
 
   try {
-    // Set keep_track to false for all budgets of the user
+    // Fetch the budget by id to get the month and year
+    const { data: budget, error: fetchError } = await supabase
+      .from("budgets")
+      .select("month, year")
+      .eq("id", budgetId)
+      .single();
+
+    if (fetchError) {
+      console.error("Error fetching budget:", fetchError);
+      return res.status(400).json({ error: fetchError.message });
+    }
+
+    const { month, year } = budget;
+
+    // Set keep_track to false for all budgets of the user for the specified month and year
     let { error } = await supabase
       .from("budgets")
       .update({ keep_track: false })
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .eq("month", month)
+      .eq("year", year);
 
     if (error) {
       console.log("Error updating budgets:", error);

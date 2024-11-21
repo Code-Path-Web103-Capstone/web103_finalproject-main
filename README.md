@@ -42,6 +42,7 @@ Backend: Python and Express
 
 - [X] The web app implements at least one of each of the following database relationship in Postgres:
 - * [X] One-to-many
+![one_to_many.png](gifs%2Fone_to_many.png)
 - * [ ] many-to-many with a join table
 - [X] The web app implements a well-designed RESTful API that:
 -  * [X] Can respond to at least one of each type of request: GET, POST, PATCH, and DELETE.
@@ -94,15 +95,12 @@ Backend: Python and Express
 
 ![createbudget.gif](gifs%2Fcreatebudget.gif)
 
-[gif goes here]
-
 
 #### The user has a budget dashboard
 
-- [] This dashboard allows the user to see their current budget, expenses, and spending habits divided by time periods (default set to monthly).
+- [X] This dashboard allows the user to see their current budget, expenses, and spending habits divided by time periods (default set to monthly).
 
-[gif goes here]
-
+![dashboard.gif](gifs%2Fdashboard.gif)
 
 #### The user can add recurring expenses
 
