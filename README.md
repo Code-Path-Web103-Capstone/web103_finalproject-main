@@ -4,7 +4,7 @@ CodePath WEB103 Final Project
 
 Designed and developed by: Heider Delgado, Juan Gomez
 
-🔗 Link to deployed app:
+🔗 Link to deployed app: https://client-production-b286.up.railway.app/
 
 ## About
 
