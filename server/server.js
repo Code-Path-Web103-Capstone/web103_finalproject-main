@@ -18,6 +18,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
+
+
 // app.use(express.static(path.join(__dirname, 'dist')));
 //
 // // Catch-all route to serve the React app
@@ -44,6 +47,11 @@ app.use("/api/parser", parserRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/", (req, res) => {
     res.send("gobudget API");
+});
+
+// Catch-all route to serve the React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
