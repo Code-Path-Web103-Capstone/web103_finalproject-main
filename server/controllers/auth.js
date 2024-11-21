@@ -162,7 +162,7 @@ async function SignInWithGoogle(req, res) {
     const { data, error } = await supabase.auth.signInWithOAuth({
   provider: 'google',
       options: {
-    redirectTo: 'http://localhost:5173/login',
+    redirectTo: 'https://client-production-b286.up.railway.app/login',
   }
   }
   )
