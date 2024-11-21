@@ -7,7 +7,7 @@ export default defineConfig({
     outDir: 'dist',
   },
   server: {
-    port: 5173,
+    historyApiFallback: true, // Ensures React Router handles SPA routes
   },
   preview: {
     port: 3000,
