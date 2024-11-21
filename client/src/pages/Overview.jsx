@@ -37,53 +37,43 @@ const Overview = () => {
 
   return (
     <PageLayout>
-      <div className="mx-auto max-w-xl border-2 border-red-500 p-5">
-        {/* Year Selector */}
-        <div className="relative mb-8 flex items-center justify-center">
-          <button
-            onClick={() => handleYearChange(-1)}
-            className="rounded-full p-2 text-gray-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
-          >
-            ←
-          </button>
-          <span
-            onClick={resetToCurrentYear}
-            className="relative mx-4 cursor-pointer text-2xl font-bold text-gray-700 hover:underline"
-          >
-            <div className="group relative">
-              {selectedYear}
-              {selectedYear !== currentYear && (
-                <div className="absolute left-1/2 top-full z-10 hidden w-max -translate-x-1/2 transform whitespace-nowrap rounded-md bg-gray-800 px-3 py-2 text-xs text-white shadow-lg group-hover:block">
-                  Reset to Current Year
-                  <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-full border-x-[6px] border-b-[6px] border-t-0 border-x-transparent border-b-gray-800"></div>
-                </div>
-              )}
-            </div>
-          </span>
-          <button
-            onClick={() => handleYearChange(1)}
-            className="rounded-full p-2 text-gray-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
-          >
-            →
-          </button>
-        </div>
+      {/* Year Selector */}
+      <div className="flex items-center justify-between gap-1 px-10 py-5">
+        <button
+          onClick={() => handleYearChange(-1)}
+          className="flex size-8 items-center justify-center rounded-full p-2 text-gray-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        >
+          ←
+        </button>
+        <span
+          onClick={resetToCurrentYear}
+          className="cursor-pointer text-3xl font-bold text-gray-800 hover:underline"
+        >
+          {selectedYear}
+        </span>
+        <button
+          onClick={() => handleYearChange(1)}
+          className="flex size-8 items-center justify-center rounded-full p-2 text-gray-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        >
+          →
+        </button>
+      </div>
 
-        {/* Month Grid */}
-        <div className="grid grid-cols-3 gap-4 text-center">
-          {months.map((month, index) => (
-            <button
-              key={index}
-              onClick={() => handleMonthClick(month)}
-              className={`rounded-lg p-4 text-sm font-medium text-gray-700 hover:bg-blue-100 ${
-                currentYear === selectedYear && new Date().getMonth() === index
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-50"
-              }`}
-            >
-              {month}
-            </button>
-          ))}
-        </div>
+      {/* Month Grid */}
+      <div className="grid grid-cols-6 gap-6 px-10">
+        {months.map((month, index) => (
+          <button
+            key={index}
+            onClick={() => handleMonthClick(month)}
+            className={`flex size-32 items-center justify-center rounded-xl border-2 p-5 text-base font-semibold transition-transform duration-200 hover:scale-105 ${
+              currentYear === selectedYear && new Date().getMonth() === index
+                ? "bg-blue-500 text-white shadow-lg"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            {month}
+          </button>
+        ))}
       </div>
     </PageLayout>
   );

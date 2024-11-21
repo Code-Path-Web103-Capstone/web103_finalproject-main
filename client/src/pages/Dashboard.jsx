@@ -8,6 +8,13 @@ import {
 import { useUser } from "../services/context";
 import BreakdownByMonth from "../components/dashboard/BreakdownByMonth";
 import BreakdownByCategory from "../components/dashboard/BreakdownByCategory";
+import Summary from "../components/dashboard/Summary";
+import Finance from "../assets/finance.png";
+import Modal from "../components/shared/Modal";
+import CreateBudgetForm from "../components/budget/CreateBudgetForm";
+import { IoIosCreate } from "react-icons/io";
+import { IoIosJournal } from "react-icons/io";
+// import Clock from "../components/dashboard/Clock";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -17,6 +24,7 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [YTDIncome, setYTDIncome] = useState(0);
   const [YTDExpenses, setYTDExpenses] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchAndCalculateSavings = async () => {
@@ -82,88 +90,110 @@ const Dashboard = () => {
     const end = username.slice(-4);
     return `${start}...${end}`;
   }
+  // Modal functionality
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleResourceClick = () => {
+    window.open(
+      "https://money.com/budgeting-101-how-to-budget-money/",
+      "_blank"
+    );
+  };
 
   return (
     <PageLayout>
-      <div
-        className="grid h-[80vh] w-full grow grid-cols-3 gap-4 border-2 border-red-500 px-20 py-10"
-        style={{
-          gridTemplateRows: "1fr 2fr", // Two rows with proportionate sizes
-        }}
-      >
-        {/* Column 1: Welcome and Summary */}
-        <div className="col-span-1 flex flex-col gap-4">
+      <div className="grid h-[80vh] w-full grow grid-cols-3 gap-4 px-20 py-8">
+        {/* Column 1: Welcome and Summary and Buttons */}
+        <div className="col-span-1 row-span-2 flex h-full flex-col gap-4">
           {/* Welcome */}
-          <div className="rounded-lg border-2 bg-white p-5">
+          <div className="flex h-1/4 rounded-lg border-2 bg-white p-5 py-10 text-3xl">
+            {/* <Clock /> */}
             <p>
-              Welcome,{" "}
+              Welcome, <br />
               <span className="font-bold">
                 {truncateUsername(user.username)}!
               </span>
             </p>
           </div>
 
-          {/* Summary */}
-          <div className="rounded-lg border-2 bg-white p-5">
-            <h2 className="text-lg font-semibold text-gray-700">Summary</h2>
-            {loading ? (
-              <p>Loading...</p>
-            ) : error ? (
-              <p className="text-red-500">{error}</p>
-            ) : (
-              <>
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-600">
-                    Total Savings
-                  </h3>
-                  <p className="text-2xl font-bold text-green-600">
-                    ${totalSaved.toFixed(2)}
-                  </p>
-                </div>
-                <div className="mt-4">
-                  <h3 className="text-sm font-semibold text-gray-600">
-                    Total Income
-                  </h3>
-                  <p className="text-2xl font-bold text-blue-600">
-                    ${YTDIncome.toFixed(2)}
-                  </p>
-                </div>
-                <div className="mt-4">
-                  <h3 className="text-sm font-semibold text-gray-600">
-                    Total Expenses
-                  </h3>
-                  <p className="text-2xl font-bold text-red-600">
-                    ${YTDExpenses.toFixed(2)}
-                  </p>
-                </div>
-              </>
-            )}
+          <Summary
+            loading={loading}
+            error={error}
+            totalSaved={totalSaved}
+            YTDIncome={YTDIncome}
+            YTDExpenses={YTDExpenses}
+            className={"col-span-1 h-1/2"}
+          />
+
+          <div className="flex h-1/4 gap-4">
+            <div
+              className="flex w-1/2 cursor-pointer items-center justify-center gap-2 rounded-lg border-2 bg-white p-5 hover:bg-gray-100"
+              onClick={openModal}
+            >
+              <div className="flex flex-col items-center justify-center gap-3">
+                <IoIosCreate className="size-16 text-[#3A405A]" />
+                <span className="text-center text-sm font-semibold uppercase text-gray-700">
+                  New Budget
+                </span>
+              </div>
+            </div>
+            {/* Modal */}
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+              <CreateBudgetForm onClose={closeModal} />
+            </Modal>
+            <div
+              onClick={handleResourceClick}
+              className="flex w-1/2 cursor-pointer items-center justify-center gap-2 rounded-lg border-2 bg-white p-5 hover:bg-gray-100"
+            >
+              <div className="flex flex-col items-center justify-center gap-3">
+                <IoIosJournal className="size-16 text-[#3A405A]" />
+                <span className="text-center text-sm font-semibold uppercase text-gray-700">
+                  Resources
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Column 2: Active Budgets */}
         <div className="col-span-1 row-span-2 flex h-full flex-col gap-4">
-          <div className="h-full rounded-lg border-2 bg-white p-5">
-            <h2 className="text-lg font-semibold text-gray-700">
-              Active Budgets
-            </h2>
-            {budgets.length === 0 ? (
-              <p className="text-gray-500">No active budgets found.</p>
-            ) : (
-              <ul className="mt-2 list-disc pl-5">
-                {budgets.map((budget) => (
-                  <li key={budget.id}>
-                    <span className="font-semibold">{budget.budget_name}</span>:{" "}
-                    {budget.year} - {budget.month}
-                  </li>
-                ))}
-              </ul>
-            )}
+          <div className="flex h-full flex-col justify-between rounded-lg border-2 bg-white p-5">
+            {/* Active Budgets Header and Content */}
+            <div>
+              <h2 className="text-lg font-semibold text-gray-700">
+                Active Budgets
+              </h2>
+              {budgets.length === 0 ? (
+                <p className="text-gray-500">No active budgets found.</p>
+              ) : (
+                <div className="mt-4 flex flex-col gap-3">
+                  {budgets.map((budget) => (
+                    <div
+                      key={budget.id}
+                      className="rounded-lg bg-gray-100 p-3 text-sm font-medium text-gray-800"
+                    >
+                      <p>{budget.budget_name}</p>
+                      <p>
+                        {budget.year} - {budget.month}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Image at the Bottom */}
+            <img
+              src={Finance}
+              alt="Finance Illustration"
+              className="mb-0.5 h-44 w-auto object-contain"
+            />
           </div>
         </div>
 
         {/* Column 3: Charts */}
-        <div className="col-span-1 row-span-2 flex h-full flex-col gap-3">
+        <div className="col-span-1 row-span-2 flex h-full flex-col gap-4">
           {/* Breakdown By Month */}
           <BreakdownByMonth className="h-1/2 rounded-lg border-2 bg-white" />
 

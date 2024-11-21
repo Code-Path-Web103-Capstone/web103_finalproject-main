@@ -5,7 +5,7 @@ import PageLayout from "../layouts/PageLayout";
 const AccountSettings = () => {
   return (
     <PageLayout>
-      <div className="flex w-full items-center justify-center border-2 border-red-500 p-5">
+      <div className="flex w-full items-center justify-center p-5">
         <UserSettingsForm />
       </div>
     </PageLayout>

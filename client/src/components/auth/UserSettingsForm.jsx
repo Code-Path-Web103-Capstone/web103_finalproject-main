@@ -50,7 +50,7 @@ const UserSettingsForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="container max-w-xl space-y-6 rounded-lg border-2 border-black bg-gray-50 p-4"
+      className="container max-w-xl space-y-6 rounded-lg border-2 bg-gray-50 p-4"
     >
       <h2 className="text-2xl font-semibold text-gray-700">
         Update Your Settings

@@ -19,7 +19,7 @@ const COLORS = {
   transportation: "#3296FF", // Blue
   entertainment: "#EC72D8", // Pink
   health: "#FF5E5E", // Red
-  Uncategorized: "#CCCCCC", // Gray for uncategorized
+  Uncategorized: "#A2AAAD", // Gray for uncategorized
 };
 
 const CATEGORY_NAMES = {
