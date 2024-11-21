@@ -18,7 +18,7 @@ parser = LlamaParse(
 # use SimpleDirectoryReader to parse our file
 file_extractor = {".pdf": parser}
 try:
-    documents = SimpleDirectoryReader(input_files=['./app/data/STATEMENT.pdf'], file_extractor=file_extractor).load_data()
+    documents = SimpleDirectoryReader(input_files=['./data/STATEMENT.pdf'], file_extractor=file_extractor).load_data()
 except Exception as e:
     print(f"Error loading data: {e}", file=sys.stderr)
     sys.exit(1)
