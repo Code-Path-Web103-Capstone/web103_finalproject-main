@@ -607,7 +607,7 @@ export const handleParse = async (setMessage, setActualIncomes, setActualExpense
 // Parser.js
 export const uploadFile = async (file) => {
   const formData = new FormData();
-  formData.append("pdf", file);
+  formData.append("file", file);  // Ensure the key is 'file' to match FastAPI
 
   const response = await fetch(`${API_PYTHON_URL}/upload/add`, {
     method: "POST",
