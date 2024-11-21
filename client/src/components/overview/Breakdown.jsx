@@ -105,7 +105,7 @@ const Breakdown = () => {
   if (loading)
     return (
       <>
-        <SkeletonChart className="h-[490px] w-[621px] rounded-lg" />{" "}
+        <SkeletonChart className="h-full w-full rounded-lg p-10" />{" "}
       </>
     );
   if (error) return <p className="text-red-500">{error}</p>;

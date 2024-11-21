@@ -13,12 +13,16 @@ function MonthBreakdown() {
 
   return (
     <PageLayout>
-      <div className="my-10">
-        <h1 className="text-3xl font-semibold">
-          Breakdown for {month.charAt(0).toUpperCase() + month.slice(1)} {year}
-        </h1>
-      </div>
-      <div className="flex h-[490px] w-full items-center justify-center gap-2">
+      <div className="grid h-[490px] w-full grid-cols-2 items-center justify-center gap-2 p-10">
+        <div className="px-5">
+          <h1 className="text-3xl font-semibold">
+            Breakdown for {month.charAt(0).toUpperCase() + month.slice(1)}{" "}
+            {year}
+          </h1>
+        </div>
+        <div className="px-5">
+          <h1 className="text-3xl font-semibold"></h1>
+        </div>
         <Breakdown setLoadingChart={setLoadingCharts} />
         <PieBreakdown setLoadingChart={setLoadingCharts} />
       </div>
