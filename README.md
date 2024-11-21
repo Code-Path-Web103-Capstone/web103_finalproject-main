@@ -56,22 +56,27 @@ Backend: Python and Express
 
 - [X] The web app implements at least one redirection. 
 - ![one redirection.gif](gifs%2Fone%20redirection.gif)
-- [ ] The web app implements at least one interaction that the user can initiate and complete on the same page without navigating to a new page.
-- [ ] The web app uses dynamic frontend routes created with React Router.
-- [ ] The web app uses hierarchically designed React components:
-
+- [X] The web app implements at least one interaction that the user can initiate and complete on the same page without navigating to a new page.
+![interaction](https://github.com/user-attachments/assets/b1697ee1-81bd-4b57-be6a-540dff293e03)
+- [X] The web app uses dynamic frontend routes created with React Router.
+- [X] The web app uses hierarchically designed React components:
+![routes](https://github.com/user-attachments/assets/4f25ba85-dc01-4945-91e5-d8191f30c72e)
 - * [X] Components are broken down into categories, including page and component types.
 - * [X] Corresponding container components and presenter components as appropriate.
+![Components](https://github.com/user-attachments/assets/4444be1b-fc23-47c6-8ca2-dc9e66373414)
+
 
 
 #### Custom Features (MUST complete TWO)
 
 - [X] The web app gracefully handles errors.
 - [ ] The web app includes a one-to-one database relationship.
-- [ ] The web app includes a slide-out pane or modal as appropriate for your use case.
+- [x] The web app includes a slide-out pane or modal as appropriate for your use case.
+![modal](https://github.com/user-attachments/assets/80ea0ae3-fdd9-4b06-9d73-9ccd0d196443)
 - [ ] The web app includes a unique field within the join table.
 - [ ] The web app includes a custom non-RESTful route with corresponding controller actions.
-- [ ] The web app allows filtering and/or sorting as appropriate for your use case.
+- [x] The web app allows filtering and/or sorting as appropriate for your use case.
+![filtering](https://github.com/user-attachments/assets/85922e9b-1ba9-4109-87e6-6b201eaedbd5)
 - [ ] Data is automatically generated in response to a certain event or user action. Examples include generating a default inventory for a new user starting a game or creating a starter set of tasks for a user creating a new task app account.
 - [ ] Data submitted via a POST or PATCH request is validated before the database is updated.
 
@@ -103,31 +108,21 @@ Backend: Python and Express
 
 ![dashboard.gif](gifs%2Fdashboard.gif)
 
-#### The user can add recurring expenses
 
-- [ ] Within the budget plan users can set recurring expenses such as rent, subscriptions, traveling fees, or savings account investments.
+#### The user can see spending by category
 
-[gif goes here]
+- [x] The user should be able to see spending categories on a monthly timeframe.
 
-
-#### The user can filter spending by category
-
-- [ ] The user should be able to see spending categories on a daily, weekly, monthly, or yearly timeframe.
-
-[gif goes here]
+![expenses](https://github.com/user-attachments/assets/7d6c405d-3ebf-47c5-8d04-c18a324685bb)
 
 
-#### The user can enable spending limit notifications 
-
-- [ ] User can opt-in to receive SMS or email notifications when spending limits have been exceeded
-
-[gif goes here]
 
 #### The user can see a previous history of it's budgets
 
-- [ ] The user can see a previos history of his created budgets.
+- [x] The user can see a previous history of his created budgets.
 
-[gif goes here]
+![Kapture 2024-11-21 at 02 24 35](https://github.com/user-attachments/assets/32034fa7-f10c-41b6-adb6-2c33ea9443f3)
+
 
 
 ## Installation Instructions
