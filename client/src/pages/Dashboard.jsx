@@ -6,8 +6,8 @@ import {
   fetchActualExpenses,
 } from "../services/api";
 import { useUser } from "../services/context";
-import BreakdownByMonth from "@/components/dashboard/BreakdownByMonth";
-import BreakdownByCategory from "@/components/dashboard/BreakdownByCategory";
+import BreakdownByMonth from "../components/dashboard/BreakdownByMonth";
+import BreakdownByCategory from "../components/dashboard/BreakdownByCategory";
 
 const Dashboard = () => {
   const { user } = useUser();

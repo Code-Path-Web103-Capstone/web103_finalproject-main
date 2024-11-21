@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import {
   Bar,
@@ -18,7 +16,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
+} from "../../components/ui/Card";
 import {
   getBudgetsByUserId,
   fetchActualIncomes,

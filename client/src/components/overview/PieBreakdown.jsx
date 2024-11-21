@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "../../components/ui/Card";
 import { fetchActualExpenses, getBudgetsByUserId } from "../../services/api";
 import { useUser } from "../../services/context";
 
