@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import PageLayout from "../layouts/PageLayout";
 import Breakdown from "../components/overview/Breakdown";
 import PieBreakdown from "../components/overview/PieBreakdown";
+import SkeletonChart from "../components/dashboard/SkeletonChart";
 
 function MonthBreakdown() {
   const { year, month } = useParams();
+
+  // State for loading charts
+  const [loadingCharts, setLoadingCharts] = useState(true);
 
   return (
     <PageLayout>
@@ -14,9 +18,9 @@ function MonthBreakdown() {
           Breakdown for {month.charAt(0).toUpperCase() + month.slice(1)} {year}
         </h1>
       </div>
-      <div className="flex gap-2">
-        <Breakdown />
-        <PieBreakdown />
+      <div className="flex h-[490px] w-full items-center justify-center gap-2">
+        <Breakdown setLoadingChart={setLoadingCharts} />
+        <PieBreakdown setLoadingChart={setLoadingCharts} />
       </div>
     </PageLayout>
   );

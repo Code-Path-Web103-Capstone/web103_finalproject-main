@@ -14,6 +14,7 @@ import Modal from "../components/shared/Modal";
 import CreateBudgetForm from "../components/budget/CreateBudgetForm";
 import { IoIosCreate } from "react-icons/io";
 import { IoIosJournal } from "react-icons/io";
+import SkeletonChart from "../components/dashboard/SkeletonChart";
 // import Clock from "../components/dashboard/Clock";
 
 const Dashboard = () => {
@@ -195,10 +196,18 @@ const Dashboard = () => {
         {/* Column 3: Charts */}
         <div className="col-span-1 row-span-2 flex h-full flex-col gap-4">
           {/* Breakdown By Month */}
-          <BreakdownByMonth className="h-1/2 rounded-lg border-2 bg-white" />
+          {loading ? (
+            <SkeletonChart className="h-1/2" />
+          ) : (
+            <BreakdownByMonth className="h-1/2 rounded-lg border-2 bg-white" />
+          )}
 
           {/* Breakdown By Category */}
-          <BreakdownByCategory className="h-1/2 rounded-lg border-2 bg-white" />
+          {loading ? (
+            <SkeletonChart className="h-1/2" />
+          ) : (
+            <BreakdownByCategory className="h-1/2 rounded-lg border-2 bg-white" />
+          )}
         </div>
       </div>
     </PageLayout>

@@ -23,7 +23,7 @@ const Summary = ({
             <h3 className="text-sm font-semibold text-gray-600">
               Total Savings
             </h3>
-            <p className="text-5xl font-bold text-[#1a8f28]">
+            <p className="text-5xl font-bold text-[#24B283]">
               ${totalSaved.toFixed(2)}
             </p>
           </div>

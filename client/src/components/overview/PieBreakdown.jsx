@@ -10,6 +10,7 @@ import {
 } from "../../components/ui/Card";
 import { fetchActualExpenses, getBudgetsByUserId } from "../../services/api";
 import { useUser } from "../../services/context";
+import SkeletonChart from "../dashboard/SkeletonChart";
 
 const COLORS = {
   travel: "#23C436", // Green
@@ -91,8 +92,16 @@ const PieBreakdown = () => {
     0
   );
 
+  if (loading)
+    return (
+      <>
+        <SkeletonChart className="h-[490px] w-[456.570px] rounded-lg" />
+      </>
+    );
+  if (error) return <p className="text-red-500">{error}</p>;
+
   return (
-    <Card className="flex flex-col">
+    <Card className="flex h-auto flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Expense Breakdown by Category</CardTitle>
         <CardDescription>
