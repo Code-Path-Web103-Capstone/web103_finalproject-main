@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import supabase from "../config/supabase.js";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
 // add username functionality
 const createUser = async (req, res) => {
@@ -157,13 +157,15 @@ const updateUser = async (req, res) => {
 
 // Google OAuth Sign-In with callback URL
 async function SignInWithGoogle(req, res) {
+
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
+  provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/login`,
-      },
-    });
+    redirectTo: 'https://www.gobudget.it/login',
+  }
+  }
+  )
     if (error) {
       console.error("Google sign-in error:", error);
       return res.status(400).json({ error: error.message });
@@ -183,7 +185,7 @@ async function SignInWithGoogleCallback(req, res) {
     const { accessToken } = req.body;
 
     if (!accessToken) {
-      return res.status(400).json({ error: "Token not provided" });
+      return res.status(400).json({ error: 'Token not provided' });
     }
 
     // Use the access token to get the authenticated user's data
@@ -195,7 +197,7 @@ async function SignInWithGoogleCallback(req, res) {
     }
 
     if (!user || !user.user || !user.user.id) {
-      return res.status(400).json({ error: "User ID not found" });
+      return res.status(400).json({ error: 'User ID not found' });
     }
 
     // Fetch additional user data from the database
@@ -214,51 +216,40 @@ async function SignInWithGoogleCallback(req, res) {
     const isNewUser = !userResult;
 
     if (isNewUser) {
-      // Generate random and unique values for password and username
-      const randomPassword = uuidv4();
-      const randomUsername = uuidv4();
+        // Generate random and unique values for password and username
+        const randomPassword = uuidv4();
+        const randomUsername = uuidv4();
 
-      // Insert the new user into the users table
-      const { data: newUser, error: insertError } = await supabase
-        .from("users")
-        .insert([
-          {
-            id: user.user.id,
-            email: user.user.email,
-            username: randomUsername,
-            password: randomPassword,
-          },
-        ]);
+        // Insert the new user into the users table
+        const { data: newUser, error: insertError } = await supabase
+          .from("users")
+          .insert([
+            { id: user.user.id, email: user.user.email, username: randomUsername, password: randomPassword },
+          ]);
 
-      if (insertError) {
-        console.error(
-          "Error inserting new user into users table:",
-          insertError
-        );
-        return res.status(400).json({ error: insertError.message });
+        if (insertError) {
+          console.error("Error inserting new user into users table:", insertError);
+          return res.status(400).json({ error: insertError.message });
+        }
+
+        // Fetch the newly inserted user
+        const { data: userResult, error: fetchError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", user.user.id)
+          .single();
+
+        if (fetchError) {
+          console.error("Error fetching new user data from database:", fetchError);
+          return res.status(400).json({ error: fetchError.message });
+        }
+
+        return res.status(201).json({
+          message: "User created successfully",
+          authData: user.user,
+          userData: userResult,
+        });
       }
-
-      // Fetch the newly inserted user
-      const { data: userResult, error: fetchError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", user.user.id)
-        .single();
-
-      if (fetchError) {
-        console.error(
-          "Error fetching new user data from database:",
-          fetchError
-        );
-        return res.status(400).json({ error: fetchError.message });
-      }
-
-      return res.status(201).json({
-        message: "User created successfully",
-        authData: user.user,
-        userData: userResult,
-      });
-    }
 
     // Respond with the unified structure for existing users
     res.status(200).json({
@@ -272,10 +263,12 @@ async function SignInWithGoogleCallback(req, res) {
   }
 }
 
+
+
 export default {
   createUser,
   loginUser,
   updateUser,
   SignInWithGoogle,
-  SignInWithGoogleCallback,
+  SignInWithGoogleCallback
 };
