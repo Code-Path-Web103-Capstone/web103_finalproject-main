@@ -28,7 +28,7 @@ except Exception as e:
 data_to_save = [doc.to_dict() for doc in documents]
 
 # Save the data to a JSON file
-output_file = '../data/documents_data.json'
+output_file = './data/documents_data.json'
 try:
     with open(output_file, 'w') as f:
         json.dump(data_to_save, f, indent=4)
