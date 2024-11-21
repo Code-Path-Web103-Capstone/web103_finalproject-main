@@ -361,9 +361,9 @@ export const deleteExpensesPredictedBulk = async (ids, budgetId) => {
 export const updateKeepTrack = async (budgetId, userId, keepTrack) => {
   const url = `${API_URL}/api/budget/keeptrack`;
   const body = {
-    budget_id: budgetId,
-    user_id: userId,
-    keep_track: !!keepTrack,
+    budgetId: budgetId,
+    userId: userId,
+    keepTrack: !!keepTrack,
   };
   console.log(body);
 
