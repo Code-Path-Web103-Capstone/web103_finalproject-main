@@ -736,3 +736,23 @@ export const deleteDataFolder = async () => {
 
   return response.json();
 };
+
+export const deleteBudget = async (budgetId) => {
+  try {
+    const response = await fetch(`${API_URL}/api/budget/${budgetId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete budget");
+    }
+
+    console.log("Budget deleted successfully");
+    // Redirect or update the UI as needed after deletion
+  } catch (error) {
+    console.error("Error deleting budget:", error);
+  }
+};

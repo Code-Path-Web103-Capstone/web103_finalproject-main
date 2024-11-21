@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../services/context";
+import { useNavigate } from "react-router-dom";
 import useUserFinanceData from "../hooks/useUserFinanceData";
 import IncomesExpensesTable from "../components/budget/IncomesExpensesTable";
 import {
@@ -12,6 +13,7 @@ import {
   updateKeepTrack,
   getBudgetById,
   updateBudget,
+  deleteBudget,
 } from "../services/api";
 import TableHeader from "../components/budget/TableHeader";
 import UploadPdf from "../components/budget/UploadPdf.jsx";
@@ -28,6 +30,7 @@ import { FaSave } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 
 function StatementInput() {
+  const navigate = useNavigate();
   const {
     actualIncomes,
     setActualIncomes,
@@ -275,6 +278,16 @@ function StatementInput() {
     }
   };
 
+  const handleDeleteBudget = async () => {
+    try {
+      await deleteBudget(budgetId);
+      console.log("Budget deleted successfully");
+      navigate("/budgets");
+    } catch (error) {
+      console.error("Error deleting budget:", error);
+    }
+  };
+
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 21 }, (_, i) => currentYear - 10 + i);
 
@@ -316,6 +329,7 @@ function StatementInput() {
                 </option>
               ))}
             </select>
+
           </div>
           <div className="flex items-center justify-center">
             <select
@@ -380,54 +394,63 @@ function StatementInput() {
 
       <main className="flex w-full gap-2 px-20">
         <form
-          onSubmit={handleActualSubmit}
-          className="flex w-1/2 flex-col space-y-3 rounded-xl p-4"
+            onSubmit={handleActualSubmit}
+            className="flex w-1/2 flex-col space-y-3 rounded-xl p-4"
         >
           <IncomesExpensesTable
-            title="Actual Incomes"
-            handleAddRow={handleAddRow}
-            rows={actualIncomes}
-            setRows={setActualIncomes}
-            type="income_actual"
-            handleInputChange={handleInputChange}
-            handleDeleteRow={handleDeleteRow}
+              title="Actual Incomes"
+              handleAddRow={handleAddRow}
+              rows={actualIncomes}
+              setRows={setActualIncomes}
+              type="income_actual"
+              handleInputChange={handleInputChange}
+              handleDeleteRow={handleDeleteRow}
           />
           <IncomesExpensesTable
-            title="Actual Expenses"
-            handleAddRow={handleAddRow}
-            rows={actualExpenses}
-            setRows={setActualExpenses}
-            type="expense_actual"
-            handleInputChange={handleInputChange}
-            handleDeleteRow={handleDeleteRow}
+              title="Actual Expenses"
+              handleAddRow={handleAddRow}
+              rows={actualExpenses}
+              setRows={setActualExpenses}
+              type="expense_actual"
+              handleInputChange={handleInputChange}
+              handleDeleteRow={handleDeleteRow}
           />
-          <SubmitStatementButton text="Submit Actuals" />
+          <SubmitStatementButton text="Submit Actuals"/>
         </form>
         <form
-          onSubmit={handleExpectedSubmit}
-          className="flex w-1/2 flex-col space-y-3 rounded-xl p-4"
+            onSubmit={handleExpectedSubmit}
+            className="flex w-1/2 flex-col space-y-3 rounded-xl p-4"
         >
           <IncomesExpensesTable
-            handleAddRow={handleAddRow}
-            title="Expected Incomes"
-            rows={expectedIncomes}
-            setRows={setExpectedIncomes}
-            type="income_predicted"
-            handleInputChange={handleInputChange}
-            handleDeleteRow={handleDeleteRow}
+              handleAddRow={handleAddRow}
+              title="Expected Incomes"
+              rows={expectedIncomes}
+              setRows={setExpectedIncomes}
+              type="income_predicted"
+              handleInputChange={handleInputChange}
+              handleDeleteRow={handleDeleteRow}
           />
 
           <IncomesExpensesTable
-            title="Expected Expenses"
-            handleAddRow={handleAddRow}
-            rows={expectedExpenses}
-            setRows={setExpectedExpenses}
-            type="expense_predicted"
-            handleInputChange={handleInputChange}
-            handleDeleteRow={handleDeleteRow}
+              title="Expected Expenses"
+              handleAddRow={handleAddRow}
+              rows={expectedExpenses}
+              setRows={setExpectedExpenses}
+              type="expense_predicted"
+              handleInputChange={handleInputChange}
+              handleDeleteRow={handleDeleteRow}
           />
-          <SubmitStatementButton text="Submit Expected" />
+          <SubmitStatementButton text="Submit Expected"/>
         </form>
+        <div className="m-5 flex h-16 w-full gap-2 px-24">
+          {/* Button for Deleting Budget */}
+          <button
+              onClick={handleDeleteBudget}
+              className="flex items-center space-x-2 rounded-lg border-2 p-5 bg-red-500 text-white hover:bg-red-600"
+          >
+            <span>Delete Budget</span>
+          </button>
+        </div>
       </main>
     </PageLayout>
   );
