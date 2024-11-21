@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PieChart, Pie, Tooltip, Cell } from "recharts";
 import {
-  CardHeader,
+  Card,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle,
-} from "../ui/Card";
+} from "@/components/ui/card";
 import { fetchActualExpenses, getBudgetsByUserId } from "../../services/api";
 import { useUser } from "../../services/context";
 
@@ -36,7 +37,6 @@ const PieBreakdown = () => {
   const { year, month } = useParams();
   const { user } = useUser();
 
-  const [budgets, setBudgets] = useState([]);
   const [expensesByCategory, setExpensesByCategory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,27 +45,18 @@ const PieBreakdown = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Fetch all budgets for the user
         const budgetsData = await getBudgetsByUserId(user.id);
-        // Filter budgets by year and month match and if keep track is true
         const filteredBudgets = budgetsData.filter(
           (budget) =>
             budget.year === parseInt(year, 10) &&
             budget.month.toLowerCase() === month.toLowerCase() &&
             budget.keep_track === true
         );
-        // Set the filtered budgets to the state
-        setBudgets(filteredBudgets);
 
-        // Check if there are any budgets for the selected month and year
         if (filteredBudgets.length > 0) {
-          // Get the budget ID
           const budgetId = filteredBudgets[0].id;
-
-          // Fetch expenses for the selected budget
           const actualExpenses = await fetchActualExpenses(user.id, budgetId);
 
-          // Aggregate expenses by category
           const categoryData = actualExpenses.reduce((acc, expense) => {
             const category = expense.category || "Uncategorized";
             if (!acc[category]) acc[category] = 0;
@@ -73,17 +64,14 @@ const PieBreakdown = () => {
             return acc;
           }, {});
 
-          // Transform the aggregated data into chart-ready format
           const chartData = Object.keys(categoryData).map((category) => ({
             category,
             displayName: CATEGORY_NAMES[category] || category,
             value: categoryData[category],
           }));
 
-          // Set the chart data to state
           setExpensesByCategory(chartData);
         } else {
-          // Clear expenses if no matching budget
           setExpensesByCategory([]);
         }
       } catch (err) {
@@ -93,7 +81,6 @@ const PieBreakdown = () => {
       }
     };
 
-    // Fetch data if user is logged in
     if (user?.id) {
       fetchData();
     }
@@ -105,7 +92,7 @@ const PieBreakdown = () => {
   );
 
   return (
-    <div className="flex flex-col rounded-lg bg-white">
+    <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Expense Breakdown by Category</CardTitle>
         <CardDescription>
@@ -128,6 +115,8 @@ const PieBreakdown = () => {
                 cy="50%"
                 innerRadius={70}
                 outerRadius={140}
+                activeIndex={-1} // Prevent active styling
+                activeShape={() => null} // Disable active shape styling
               >
                 {expensesByCategory.map((entry) => (
                   <Cell
@@ -136,7 +125,25 @@ const PieBreakdown = () => {
                   />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const { displayName, value } = payload[0].payload;
+                    const percentage = ((value / totalExpenses) * 100).toFixed(
+                      2
+                    );
+                    return (
+                      <div className="rounded-lg bg-white p-3 shadow-md dark:bg-neutral-900">
+                        <p className="font-medium">{displayName}</p>
+                        <p className="text-muted-foreground text-sm">
+                          ${value.toLocaleString()} ({percentage}%)
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
             </PieChart>
             <div className="grid grid-cols-2 gap-4 py-10 sm:grid-cols-3">
               {expensesByCategory.map((entry) => (
@@ -153,7 +160,7 @@ const PieBreakdown = () => {
                   />
                   <div>
                     <p className="text-sm font-medium">{entry.displayName}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-muted-foreground text-xs">
                       ${entry.value.toFixed(2)}
                     </p>
                   </div>
@@ -163,7 +170,7 @@ const PieBreakdown = () => {
           </div>
         )}
       </CardContent>
-    </div>
+    </Card>
   );
 };
 
