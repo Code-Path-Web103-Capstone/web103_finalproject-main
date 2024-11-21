@@ -6,6 +6,8 @@ import {
   fetchActualExpenses,
 } from "../services/api";
 import { useUser } from "../services/context";
+import BreakdownByMonth from "@/components/dashboard/BreakdownByMonth";
+import BreakdownByCategory from "@/components/dashboard/BreakdownByCategory";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -17,25 +19,19 @@ const Dashboard = () => {
   const [YTDExpenses, setYTDExpenses] = useState(0);
 
   useEffect(() => {
-    // Fetch all active budgets and calculate total saved, YTD incomes, and YTD expenses
     const fetchAndCalculateSavings = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        // Fetch all budgets for the user
         const budgetsData = await getBudgetsByUserId(user.id);
-
-        // Filter budgets that are active (keep_track is true)
         const activeBudgets = budgetsData.filter(
           (budget) => budget.keep_track === true
         );
 
-        // Initialize YTD income and expense trackers
         let ytdIncome = 0;
         let ytdExpenses = 0;
 
-        // Fetch incomes and expenses for each active budget
         const savings = await Promise.all(
           activeBudgets.map(async (budget) => {
             const [actualIncomes, actualExpenses] = await Promise.all([
@@ -43,7 +39,6 @@ const Dashboard = () => {
               fetchActualExpenses(user.id, budget.id),
             ]);
 
-            // Calculate total income and expenses for the budget
             const totalIncome = actualIncomes.reduce(
               (sum, income) => sum + parseFloat(income.amount || 0),
               0
@@ -53,26 +48,22 @@ const Dashboard = () => {
               0
             );
 
-            // Update YTD totals
             ytdIncome += totalIncome;
             ytdExpenses += totalExpense;
 
-            // Return the savings for this budget
             return totalIncome - totalExpense;
           })
         );
 
-        // Calculate the total saved across all active budgets
         const totalSavings = savings.reduce(
           (sum, budgetSavings) => sum + budgetSavings,
           0
         );
 
-        // Update states
         setBudgets(activeBudgets);
         setTotalSaved(totalSavings);
-        setYTDIncome(ytdIncome); // Set YTD income
-        setYTDExpenses(ytdExpenses); // Set YTD expenses
+        setYTDIncome(ytdIncome);
+        setYTDExpenses(ytdExpenses);
       } catch (err) {
         setError(err.message || "Failed to fetch data.");
       } finally {
@@ -80,66 +71,79 @@ const Dashboard = () => {
       }
     };
 
-    // Fetch data if the user is logged in
     if (user?.id) {
       fetchAndCalculateSavings();
     }
   }, [user]);
 
+  function truncateUsername(username) {
+    if (username.length <= 10) return username;
+    const start = username.slice(0, 3);
+    const end = username.slice(-4);
+    return `${start}...${end}`;
+  }
+
   return (
     <PageLayout>
-      <div className="grid grid-cols-3 grid-rows-2 border-2 border-red-500 p-5">
-        <div className="row-span-2 rounded-lg border-2 bg-white p-5">
-          {/* Header */}
-          <div className="flex items-center justify-start gap-3">
-            <h1 className="text-2xl font-bold text-gray-800">Summary </h1>
-            <span className="h-5 w-0.5 bg-gray-700"></span>
-            <span className="text-xl lowercase text-gray-400">ytd</span>
+      <div
+        className="grid h-[80vh] w-full grow grid-cols-3 gap-4 border-2 border-red-500 px-20 py-10"
+        style={{
+          gridTemplateRows: "1fr 2fr", // Two rows with proportionate sizes
+        }}
+      >
+        {/* Column 1: Welcome and Summary */}
+        <div className="col-span-1 flex flex-col gap-4">
+          {/* Welcome */}
+          <div className="rounded-lg border-2 bg-white p-5">
+            <p>
+              Welcome,{" "}
+              <span className="font-bold">
+                {truncateUsername(user.username)}!
+              </span>
+            </p>
           </div>
 
-          {/* Loading or Error State */}
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <>
-              {/* Total Savings */}
-              <div className="mt-4">
-                <h2 className="text-lg font-semibold text-gray-700">
-                  Total Savings
-                </h2>
-                <p className="text-4xl font-bold text-green-600">
-                  ${totalSaved.toFixed(2)}
-                </p>
-              </div>
-
-              {/* YTD Income */}
-              <div className="mt-4 flex flex-col gap-2">
-                <h2 className="text-lg font-semibold text-gray-700">
-                  Total Income:
-                </h2>
-                <span className="text-xl font-bold text-blue-600">
-                  ${YTDIncome.toFixed(2)}
-                </span>
-              </div>
-              {/* and Expenses */}
-              <div className="mt-4 flex flex-col gap-2">
-                <h2 className="text-lg font-semibold text-gray-700">
-                  Total Expenses:
-                </h2>
-                <span className="text-xl font-bold text-red-600">
-                  ${YTDExpenses.toFixed(2)}
-                </span>
-              </div>
-            </>
-          )}
+          {/* Summary */}
+          <div className="rounded-lg border-2 bg-white p-5">
+            <h2 className="text-lg font-semibold text-gray-700">Summary</h2>
+            {loading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <>
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-600">
+                    Total Savings
+                  </h3>
+                  <p className="text-2xl font-bold text-green-600">
+                    ${totalSaved.toFixed(2)}
+                  </p>
+                </div>
+                <div className="mt-4">
+                  <h3 className="text-sm font-semibold text-gray-600">
+                    Total Income
+                  </h3>
+                  <p className="text-2xl font-bold text-blue-600">
+                    ${YTDIncome.toFixed(2)}
+                  </p>
+                </div>
+                <div className="mt-4">
+                  <h3 className="text-sm font-semibold text-gray-600">
+                    Total Expenses
+                  </h3>
+                  <p className="text-2xl font-bold text-red-600">
+                    ${YTDExpenses.toFixed(2)}
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
-        <div className="rounded-lg border-2 bg-white p-5">
-          {" "}
-          {/* Active Budgets */}
-          <div className="mt-6">
+        {/* Column 2: Active Budgets */}
+        <div className="col-span-1 row-span-2 flex h-full flex-col gap-4">
+          <div className="h-full rounded-lg border-2 bg-white p-5">
             <h2 className="text-lg font-semibold text-gray-700">
               Active Budgets
             </h2>
@@ -156,6 +160,15 @@ const Dashboard = () => {
               </ul>
             )}
           </div>
+        </div>
+
+        {/* Column 3: Charts */}
+        <div className="col-span-1 row-span-2 flex h-full flex-col gap-3">
+          {/* Breakdown By Month */}
+          <BreakdownByMonth className="h-1/2 rounded-lg border-2 bg-white" />
+
+          {/* Breakdown By Category */}
+          <BreakdownByCategory className="h-1/2 rounded-lg border-2 bg-white" />
         </div>
       </div>
     </PageLayout>
