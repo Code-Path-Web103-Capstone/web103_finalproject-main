@@ -2,6 +2,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,7 +12,15 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, '../data');
     console.log('Upload path:', uploadPath); // Log the upload path
-    cb(null, uploadPath);
+
+    // Ensure the directory exists
+    fs.mkdir(uploadPath, { recursive: true }, (err) => {
+      if (err) {
+        console.error('Error creating directory:', err);
+        return cb(err, uploadPath);
+      }
+      cb(null, uploadPath);
+    });
   },
   filename: (req, file, cb) => {
     const fileName = 'STATEMENT.pdf';

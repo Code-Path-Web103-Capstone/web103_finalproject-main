@@ -4,7 +4,7 @@ import json
 import sys
 
 # Load data from the JSON file
-input_file = '../data/documents_data.json'
+input_file = './app/data/documents_data.json'
 try:
     with open(input_file, 'r') as f:
         loaded_data = json.load(f)
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     try:
         all_transactions = extract_transactions(documents)
         print(json.dumps(all_transactions, indent=4))
-        save_transactions_to_file(all_transactions, '../data/transactions_output.json')
+        save_transactions_to_file(all_transactions, './app/data/transactions_output.json')
     except Exception as e:
         print(f"Error extracting transactions: {e}", file=sys.stderr)
         sys.exit(1)
