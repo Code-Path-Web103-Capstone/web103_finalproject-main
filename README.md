@@ -18,9 +18,9 @@ Every month we get a bank statement or a credit statement, and we see how much w
 
 ## Tech Stack
 
-Frontend:
+Frontend: React Vite
 
-Backend:
+Backend: Python and Express
 
 ## Features
 
@@ -30,34 +30,41 @@ Backend:
 
 ![reactexpress.gif](gifs%2Freactexpress.gif)
 - [X] The web app includes dynamic routes for both frontend and backend apps.
-- [ ] The web app is deployed on Railway with all pages and features working.
+
+![dinamic routes.gif](gifs%2Fdinamic%20routes.gif)
+
+- [X] The web app is deployed on Railway with all pages and features working.
+
+![railwai deploy.gif](gifs%2Frailwai%20deploy.gif)
+
 
 #### Backend Features 
 
-- [ ] The web app implements at least one of each of the following database relationship in Postgres:
-- * [ ] One-to-one
+- [X] The web app implements at least one of each of the following database relationship in Postgres:
+- * [X] One-to-many
 - * [ ] many-to-many with a join table
-- [ ] The web app implements a well-designed RESTful API that:
+- [X] The web app implements a well-designed RESTful API that:
 -  * [X] Can respond to at least one of each type of request: GET, POST, PATCH, and DELETE.
+![GETPATCHDELPOST.gif](gifs%2FGETPATCHDELPOST.gif)
 - * [X] Implements proper naming conventions for routes.
 ![GETPATCHDELPOST.gif](gifs%2FGETPATCHDELPOST.gif)
-- [ ] The web app implements the ability to reset the database to its default state.
-- [ ] The web app implements the ability to reset the database to its default state.
+- [X] The web app implements the ability to reset the database to its default state.
 
 #### Frontend Features 
 
-- [ ] The web app implements at least one redirection.
+- [X] The web app implements at least one redirection. 
+- ![one redirection.gif](gifs%2Fone%20redirection.gif)
 - [ ] The web app implements at least one interaction that the user can initiate and complete on the same page without navigating to a new page.
 - [ ] The web app uses dynamic frontend routes created with React Router.
 - [ ] The web app uses hierarchically designed React components:
 
-- * [ ] Components are broken down into categories, including page and component types.
+- * [X] Components are broken down into categories, including page and component types.
 - * [ ] Corresponding container components and presenter components as appropriate.
 
 
 #### Custom Features (MUST complete TWO)
 
-- [ ] The web app gracefully handles errors.
+- [X] The web app gracefully handles errors.
 - [ ] The web app includes a one-to-one database relationship.
 - [ ] The web app includes a slide-out pane or modal as appropriate for your use case.
 - [ ] The web app includes a unique field within the join table.
@@ -125,5 +132,7 @@ Backend:
 
 
 ## Installation Instructions
+
+The deployed app can be found here: https://client-production-b286.up.railway.app/
 
 [instructions go here]
