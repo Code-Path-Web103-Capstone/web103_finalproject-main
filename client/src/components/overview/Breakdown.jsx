@@ -21,6 +21,7 @@ import {
   fetchExpectedExpenses,
 } from "../../services/api";
 import { useUser } from "../../services/context";
+import SkeletonChart from "../dashboard/SkeletonChart";
 
 const Breakdown = () => {
   const { year, month } = useParams();
@@ -101,7 +102,12 @@ const Breakdown = () => {
     }
   }, [user, year, month]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <>
+        <SkeletonChart className="h-[490px] w-[621px] rounded-lg" />{" "}
+      </>
+    );
   if (error) return <p className="text-red-500">{error}</p>;
 
   const total = {
@@ -122,7 +128,7 @@ const Breakdown = () => {
   };
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
           <CardTitle>Bar Chart - Breakdown</CardTitle>

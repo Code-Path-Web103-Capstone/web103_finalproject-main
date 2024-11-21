@@ -31,7 +31,7 @@ function AllBudgets() {
 
   return (
     <PageLayout>
-      <div className="p-5">
+      <div className="px-5 py-8">
         <div className="grid grid-cols-3 gap-4">
           {/* Card for creating a new budget */}
           <BudgetCard variant="new" onClick={openModal} />

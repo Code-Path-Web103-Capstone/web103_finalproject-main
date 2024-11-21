@@ -47,7 +47,7 @@ const IncomesExpensesTable = ({
             name="description"
             defaultValue={getValue() || ""}
             onBlur={(e) => handleBlurInputChange(row.index, e)}
-            className="border-customGray h-[38px] w-full rounded border p-1"
+            className="h-[38px] w-full rounded border border-customGray p-1"
             placeholder="Enter description"
           />
         ),
@@ -96,7 +96,7 @@ const IncomesExpensesTable = ({
                 : parseFloat(row.original.amount).toFixed(2)
             }
             onBlur={(e) => handleBlurInputChange(row.index, e)}
-            className="border-customGray h-[38px] w-full rounded border p-1"
+            className="h-[38px] w-full rounded border border-customGray p-1"
             placeholder="Enter amount"
           />
         ),
@@ -141,7 +141,7 @@ const IncomesExpensesTable = ({
               }
               selected={startDate}
               onChange={handleDateChange}
-              className="border-customGray h-[38px] w-full rounded border p-1"
+              className="h-[38px] w-full rounded border border-customGray p-1"
               dateFormat={"yyyy-MM-dd"}
             />
           );

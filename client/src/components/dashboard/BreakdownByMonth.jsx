@@ -24,6 +24,7 @@ import {
 } from "../../services/api";
 import { useUser } from "../../services/context";
 import { twMerge } from "tailwind-merge";
+import SkeletonChart from "./SkeletonChart";
 
 const BreakdownByMonth = ({ className }) => {
   const { user } = useUser();
@@ -97,7 +98,12 @@ const BreakdownByMonth = ({ className }) => {
 
   console.log("Monthly Data for Chart:", monthlyData);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <>
+        <SkeletonChart />{" "}
+      </>
+    );
   if (error)
     return (
       <p className="text-red-500" role="alert">
