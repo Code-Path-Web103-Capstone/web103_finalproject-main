@@ -31,23 +31,23 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
     - [ ] many-to-many with a join table
   - [X] A well-designed RESTful API
     - [X] The API can respond to at least one of each type of request: GET, POST, PATCH, and DELETE
-    - [ ] Routes follow proper naming conventions
+    - [X] Routes follow proper naming conventions
   - [X] The ability to reset the database to its default state
 - [X] The project includes these frontend-specific features:
   - [X] At least one redirection
-  - [ ] At least one interaction that the user can initiate and complete on the same page without navigating to a new page
-  - [ ] Dynamic frontend routes created with React Router
-  - [ ] Hierarchically designed React components
-    - [ ] Components broken down into categories, including Page and Component types
-    - [ ] Corresponding container components and presenter components as appropriate
-- [ ] The project includes dynamic routes for both frontend and backend apps
-- [ ] The project is deployed on Railway with all pages and features working
+  - [X] At least one interaction that the user can initiate and complete on the same page without navigating to a new page
+  - [X] Dynamic frontend routes created with React Router
+  - [X] Hierarchically designed React components
+    - [X] Components broken down into categories, including Page and Component types
+    - [X] Corresponding container components and presenter components as appropriate
+- [X] The project includes dynamic routes for both frontend and backend apps
+- [X] The project is deployed on Railway with all pages and features working
 
 ### Custom Features
 
 👉🏾👉🏾👉🏾 Check off each completed feature below.
 
-- [ ] The project gracefully handles errors
+- [] The project gracefully handles errors
 - [ ] The project includes a one-to-one database relationship
 - [ ] The project includes a slide-out pane or modal as appropriate for your use case
 - [ ] The project includes a unique field within the join table
