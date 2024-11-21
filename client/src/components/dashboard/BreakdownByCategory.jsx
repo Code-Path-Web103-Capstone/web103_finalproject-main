@@ -17,10 +17,10 @@ import {
   CardTitle,
 } from "../../components/ui/Card";
 
-
 import { fetchActualExpenses, getBudgetsByUserId } from "../../services/api";
 import { useUser } from "../../services/context";
 import { twMerge } from "tailwind-merge";
+import SkeletonChart from "./SkeletonChart";
 
 const PRESET_CATEGORIES = [
   { value: "food_and_drink", label: "Food and Drink" },
@@ -40,7 +40,7 @@ const COLORS = {
   transportation: "#3296FF", // Blue
   entertainment: "#EC72D8", // Pink
   health: "#FF5E5E", // Red
-  other: "#CCCCCC", // Gray for uncategorized
+  other: "#A2AAAD", // Gray for uncategorized
 };
 
 const BreakdownByCategory = ({ className }) => {
@@ -103,7 +103,12 @@ const BreakdownByCategory = ({ className }) => {
     }
   }, [user]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <>
+        <SkeletonChart />{" "}
+      </>
+    );
   if (error)
     return (
       <p className="text-red-500" role="alert">
