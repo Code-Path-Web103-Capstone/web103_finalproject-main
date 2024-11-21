@@ -24,7 +24,7 @@ const handleHelloRequest = async (req, res) => {
 };
 
 const handleExecuteParserRequest = async (req, res) => {
-  const filePath = path.join(__dirname, '../data/documents_data.json');
+  const filePath = path.join(__dirname, './app/data/documents_data.json');
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
@@ -50,7 +50,7 @@ const handleExecuteParserStatement = async (req, res) => {
     return res.status(400).json({ error: 'Invalid option' });
   }
 
-  const filePath = path.join(__dirname, '../data/transactions_output.json');
+  const filePath = path.join(__dirname, './app/data/transactions_output.json');
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
