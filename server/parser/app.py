@@ -41,7 +41,7 @@ def execute_parser_tdbank():
 @app.get("/execute-parser-tdtest")
 def execute_parser_tdtest():
     try:
-        result = subprocess.run(['python', 'parser_tdtest.py'], capture_output=True, text=True)
+        result = subprocess.run(['python', 'parser_TDtest.py'], capture_output=True, text=True)
         if result.returncode != 0:
             raise HTTPException(status_code=500, detail=result.stderr)
         return {"message": "parser_tdtest.py executed successfully", "output": result.stdout}
