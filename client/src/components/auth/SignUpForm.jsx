@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signUpUser, handleGoogleSignUp, handleGoogleLogin } from "../../services/api.js";
+import {
+  signUpUser,
+  handleGoogleSignUp,
+  handleGoogleLogin,
+} from "../../services/api.js";
 import { useUser } from "../../services/context.jsx";
+import { FcGoogle } from "react-icons/fc";
 
 const SignUpForm = () => {
   const navigate = useNavigate();
@@ -36,12 +41,12 @@ const SignUpForm = () => {
   }, [login, navigate]);
 
   return (
-    <div className="w-full max-w-lg space-y-6 rounded-xl bg-[] px-8 pb-12 pt-8 shadow-lg">
+    <div className="w-full max-w-lg space-y-6 rounded-xl bg-[#D9D9D9] px-8 pb-12 pt-8 shadow-lg">
       <h2 className="text-center text-4xl font-bold text-gray-800">Sign Up</h2>
       <div className="flex items-center justify-center">
         <p>
           Have an account?
-          <Link to="/auth/login" className="ml-1 text-blue-600 hover:underline">
+          <Link to="/login" className="ml-1 text-blue-600 hover:underline">
             Login
           </Link>
         </p>
@@ -54,7 +59,7 @@ const SignUpForm = () => {
         <div>
           <input
             placeholder="Username:"
-            type="username"
+            type="Username:"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -63,7 +68,7 @@ const SignUpForm = () => {
         </div>
         <div>
           <input
-            placeholder="Email address:"
+            placeholder="Email:"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -94,16 +99,13 @@ const SignUpForm = () => {
         </div>
         <button
           type="button"
-          onClick={() => handleGoogleLogin().catch((err) => setError(err.message))}
+          onClick={() =>
+            handleGoogleLogin().catch((err) => setError(err.message))
+          }
           className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
         >
+          <FcGoogle className="mb-1 mr-2 inline-block size-5" />
           Sign Up with Google
-        </button>
-        <button
-          type="button"
-          className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
-        >
-          Sign Up with Github
         </button>
       </form>
     </div>

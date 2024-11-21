@@ -8,7 +8,7 @@ const Header = () => {
         <Link to="/"> gobudget.</Link>
       </h1>
       {/* <UserTest /> */}
-      <div className="mb-1">
+      <div className="mx-2">
         <LoginButton />
       </div>
     </div>

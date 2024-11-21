@@ -1,6 +1,6 @@
 import ContentSection from "../components/homepage/ContentSection";
 import Footer from "../components/footer/Footer";
-import FeatureSection from "../components/homepage/FeatureSection";
+// import FeatureSection from "../components/homepage/FeatureSection";
 import PageLayout from "../layouts/PageLayout";
 
 const Homepage = () => {
@@ -8,7 +8,7 @@ const Homepage = () => {
     <>
       <PageLayout>
         <ContentSection />
-        <FeatureSection />
+        {/* <FeatureSection /> */}
       </PageLayout>
       <Footer />
     </>

@@ -11,16 +11,17 @@ import MainLayout from "./layouts/MainLayout.jsx";
 import AllBudgets from "./pages/AllBudgets.jsx";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import MonthBreakdown from "./pages/MonthBreakdown.jsx";
+import ProtectedRoute from "./layouts/ProtectedRoute";
 
 function App() {
   const routes = [
     {
       path: "/",
-      element: <Homepage />, // Home page component
+      element: <Homepage />, // Public route
     },
     {
       path: "/login",
-      element: <AuthContainer />, // Auth layout for login
+      element: <AuthContainer />,
       children: [
         {
           path: "",
@@ -30,7 +31,7 @@ function App() {
     },
     {
       path: "/signup",
-      element: <AuthContainer />, // Auth layout for signup
+      element: <AuthContainer />,
       children: [
         {
           path: "",
@@ -38,38 +39,57 @@ function App() {
         },
       ],
     },
-
     {
       path: "/account",
-      element: <AccountSettings />,
+      element: (
+        <ProtectedRoute>
+          <AccountSettings />
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/statement-input",
-      element: <StatementInput />,
+      element: (
+        <ProtectedRoute>
+          <StatementInput />
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/overview",
-      element: <Overview />,
+      element: (
+        <ProtectedRoute>
+          <Overview />
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/dashboard",
-      element: <Dashboard />,
-    },
-    {
-      path: "/statement-input",
-      element: <StatementInput />,
+      element: (
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/budgets",
-      element: <AllBudgets />,
+      element: (
+        <ProtectedRoute>
+          <AllBudgets />
+        </ProtectedRoute>
+      ),
     },
     {
-      path: "/auth/callback", // Route for OAuth callback
+      path: "/auth/callback",
       element: <AuthCallbackPage />,
     },
     {
       path: "/breakdown/:year/:month",
-      element: <MonthBreakdown />,
+      element: (
+        <ProtectedRoute>
+          <MonthBreakdown />
+        </ProtectedRoute>
+      ),
     },
   ];
 

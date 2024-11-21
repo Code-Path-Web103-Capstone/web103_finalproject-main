@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser, handleGoogleLogin, handleGoogleCallback } from "../../services/api.js";
+import {
+  loginUser,
+  handleGoogleLogin,
+  handleGoogleCallback,
+} from "../../services/api.js";
 import { useUser } from "../../services/context.jsx";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginForm = () => {
   const { login } = useUser();
@@ -13,7 +18,9 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (window.location.hash.includes("access_token")) {
-      handleGoogleCallback(login, navigate).catch((err) => setError(err.message));
+      handleGoogleCallback(login, navigate).catch((err) =>
+        setError(err.message)
+      );
     }
   }, [login, navigate]);
 
@@ -46,11 +53,13 @@ const LoginForm = () => {
         </p>
       </div>
       {error && <p className="text-center text-sm text-red-600">{error}</p>}
-      {success && <p className="text-center text-sm text-green-600">{success}</p>}
+      {success && (
+        <p className="text-center text-sm text-green-600">{success}</p>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <input
-            placeholder="Email address:"
+            placeholder="Email or Username:"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -81,9 +90,12 @@ const LoginForm = () => {
         </div>
         <button
           type="button"
-          onClick={() => handleGoogleLogin().catch((err) => setError(err.message))}
+          onClick={() =>
+            handleGoogleLogin().catch((err) => setError(err.message))
+          }
           className="w-full rounded-md bg-white px-4 py-2 font-medium text-[#3A405A] focus:outline-none focus:ring-2 focus:ring-[#3A405A] focus:ring-offset-0"
         >
+          <FcGoogle className="mb-1 mr-2 inline-block size-5" />
           Log In with Google
         </button>
       </form>
