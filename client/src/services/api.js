@@ -473,7 +473,7 @@ export const handleGoogleCallback = async (login, navigate) => {
     if (response.ok) {
       const userData = data.userData;
       login(userData); // Call the login function with userData
-      navigate("/"); // Redirect to the home page
+      window.location.href = "https://client-production-b286.up.railway.app/login"; // Redirect to the login page
     }
 
     // Clear the hash from the URL
