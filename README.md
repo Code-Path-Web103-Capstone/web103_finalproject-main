@@ -50,6 +50,7 @@ Backend: Python and Express
 - * [X] Implements proper naming conventions for routes.
 ![GETPATCHDELPOST.gif](gifs%2FGETPATCHDELPOST.gif)
 - [X] The web app implements the ability to reset the database to its default state.
+![reset database.gif](gifs%2Freset%20database.gif)
 
 #### Frontend Features 
 
@@ -60,7 +61,7 @@ Backend: Python and Express
 - [ ] The web app uses hierarchically designed React components:
 
 - * [X] Components are broken down into categories, including page and component types.
-- * [ ] Corresponding container components and presenter components as appropriate.
+- * [X] Corresponding container components and presenter components as appropriate.
 
 
 #### Custom Features (MUST complete TWO)
