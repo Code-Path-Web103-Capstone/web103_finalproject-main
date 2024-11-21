@@ -71,7 +71,7 @@ async def handle_execute_parser_statement(request: Request):
     if option != 'td_bank':
         raise HTTPException(status_code=400, detail="Invalid option")
 
-    file_path = './app/data/transactions_output.json'
+    file_path = './data/transactions_output.json'
 
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File does not exist")
